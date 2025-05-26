@@ -1,19 +1,77 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import String, Boolean
-from sqlalchemy.orm import Mapped, mapped_column
 
 db = SQLAlchemy()
 
-class User(db.Model):
-    id: Mapped[int] = mapped_column(primary_key=True)
-    email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
-    password: Mapped[str] = mapped_column(nullable=False)
-    is_active: Mapped[bool] = mapped_column(Boolean(), nullable=False)
+class Restaurante(db.Model):
+    __tablename__ = 'restaurantes'
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), nullable=False)
+    direccion = db.Column(db.String(200))
+    email_contacto = db.Column(db.String(100))
+
+    usuarios = db.relationship('Usuario', backref='restaurante', lazy=True)
+    ventas = db.relationship('Venta', backref='restaurante', lazy=True)
+    gastos = db.relationship('Gasto', backref='restaurante', lazy=True)
+    proveedores = db.relationship('Proveedor', backref='restaurante', lazy=True)
+
+class Usuario(db.Model):
+    __tablename__ = 'usuarios'
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    contraseña = db.Column(db.String(100), nullable=False)
+    rol = db.Column(db.Enum('admin', 'encargado', 'chef', name='roles'), nullable=False)
+    restaurante_id = db.Column(db.Integer, db.ForeignKey('restaurantes.id'), nullable=False)
+
+class Venta(db.Model):
+    __tablename__ = 'ventas'
+    id = db.Column(db.Integer, primary_key=True)
+    fecha = db.Column(db.Date, nullable=False)
+    monto = db.Column(db.Float, nullable=False)
+    turno = db.Column(db.String(50))
+    restaurante_id = db.Column(db.Integer, db.ForeignKey('restaurantes.id'), nullable=False)
+
+class Proveedor(db.Model):
+    __tablename__ = 'proveedores'
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), nullable=False)
+    categoria = db.Column(db.String(100))
+    restaurante_id = db.Column(db.Integer, db.ForeignKey('restaurantes.id'), nullable=False)
+
+class Gasto(db.Model):
+    __tablename__ = 'gastos'
+    id = db.Column(db.Integer, primary_key=True)
+    fecha = db.Column(db.Date, nullable=False)
+    monto = db.Column(db.Float, nullable=False)
+    categoria = db.Column(db.String(100))
+    proveedor_id = db.Column(db.Integer, db.ForeignKey('proveedores.id'), nullable=False)
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
+    restaurante_id = db.Column(db.Integer, db.ForeignKey('restaurantes.id'), nullable=False)
+    nota = db.Column(db.Text)
+    archivo_adjunto = db.Column(db.String(200))
+
+    proveedor = db.relationship('Proveedor')
+    usuario = db.relationship('Usuario')
+
+class FacturaAlbaran(db.Model):
+    __tablename__ = 'facturas_albaranes'
+    id = db.Column(db.Integer, primary_key=True)
+    proveedor_id = db.Column(db.Integer, db.ForeignKey('proveedores.id'), nullable=False)
+    restaurante_id = db.Column(db.Integer, db.ForeignKey('restaurantes.id'), nullable=False)
+    fecha = db.Column(db.Date, nullable=False)
+    monto = db.Column(db.Float, nullable=False)
+    descripcion = db.Column(db.Text)
+
+    proveedor = db.relationship('Proveedor', backref='facturas')
+    restaurante = db.relationship('Restaurante', backref='facturas')
+
+class MargenObjetivo(db.Model):
+    __tablename__ = 'margen_objetivo'
+    id = db.Column(db.Integer, primary_key=True)
+    restaurante_id = db.Column(db.Integer, db.ForeignKey('restaurantes.id'), nullable=False)
+    porcentaje_min = db.Column(db.Float, nullable=False)
+    porcentaje_max = db.Column(db.Float, nullable=False)
+
+    restaurante = db.relationship('Restaurante', backref='margen_objetivo')
 
 
-    def serialize(self):
-        return {
-            "id": self.id,
-            "email": self.email,
-            # do not serialize the password, its a security breach
-        }
