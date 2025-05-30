@@ -1,3 +1,10 @@
+.bg-orange {
+  background-color: #ff7741;
+}
+
+button.bg-orange:hover {
+  background-color: #f55d21;
+}
 
     .form-control-search {
       width: 300px;
