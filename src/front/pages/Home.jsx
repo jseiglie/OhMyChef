@@ -1,5 +1,5 @@
 
-
+import logo from '../assets/img/logo.svg'
 export const Home = () => {
 
 
