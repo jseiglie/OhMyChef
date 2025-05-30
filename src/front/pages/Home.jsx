@@ -1,5 +1,5 @@
+
 import logo from '../assets/img/logo.svg'
-import { Navbar } from '../components/Navbar'
 
 export const Home = () => {
 
@@ -11,7 +11,7 @@ export const Home = () => {
 
 			<div className="container my-5">
 				<div className="row justify-content-center">
-					<div className="col-md-6 col-lg-4 p-0 border rounded shadow text-center">
+					<div className="col-sm-12 col-md-8 col-lg-6 col-xl-5 col-xxl-4 p-0 border rounded shadow text-center">
 						<div className="col-sm  fs-5 mb-4 px-3 py-2 text-white bg-orange text-start">Login Amin</div>
 						<img
 							src={logo}
