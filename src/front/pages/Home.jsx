@@ -1,5 +1,5 @@
+
 import logo from '../assets/img/logo.svg'
-import { Navbar } from '../components/Navbar'
 
 export const Home = () => {
 
