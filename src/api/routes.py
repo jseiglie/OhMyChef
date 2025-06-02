@@ -5,16 +5,20 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, Usuario, Venta, Gasto, FacturaAlbaran, Proveedor, MargenObjetivo, Restaurante
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
-from flask_jwt_extended import jwt_required, get_jwt_identity
-from flask_jwt_extended import create_access_token
+from sqlalchemy import select
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from werkzeug.security import generate_password_hash, check_password_hash
+import json
+
 
 api = Blueprint('api', __name__)
+
 
 @api.route('/usuarios', methods=['GET'])
 @jwt_required()
 
 def get_usuarios():
-    usuarios = Usuario.query.all()  
+    usuarios = Usuario.query.all()
 
     resultados = []
     for u in usuarios:
@@ -25,41 +29,44 @@ def get_usuarios():
             "rol": u.rol
         })
 
-    return jsonify(resultados), 200  
+    return jsonify(resultados), 200
 
-@api.route('/usuarios', methods=['POST'])
-@jwt_required()
 
-def crear_usuario():
-    data = request.get_json()  
-
-    if not data:
-        return jsonify({"msg": "Datos no recibidos"}), 400
-
-    nombre = data.get("nombre")
-    email = data.get("email")
-    contraseña = data.get("contraseña")
-    rol = data.get("rol")
-    restaurante_id = data.get("restaurante_id")
-
-    if not nombre or not email or not contraseña or not rol or not restaurante_id:
-        return jsonify({"msg": "Faltan campos obligatorios"}), 400
-
-    nuevo_usuario = Usuario(
-        nombre=nombre,
-        email=email,
-        contraseña=contraseña,
-        rol=rol,
-        restaurante_id=restaurante_id
-    )
-
+@api.route("/register", methods=["POST"])
+def register():
     try:
-        db.session.add(nuevo_usuario)
+
+        data = request.json
+
+        if not data["email"] or not data["password"]:
+            raise Exception({"error":  "missing data"})
+        stm = select(Usuario).where(
+            Usuario.email == data["email"])
+        existing_user = db.session.execute(stm).scalar()
+        if existing_user:
+            raise Exception({"error":  "email, taken, try logging in"})
+
+        hashed_password = generate_password_hash(data["password"])
+
+        new_user = Usuario(
+            nombre=data["nombre"],
+            email=data["email"],
+            password=hashed_password,
+            rol=data["rol"],
+            restaurante_id=data.get("restaurante_id"),
+
+        )
+        db.session.add(new_user)
         db.session.commit()
-        return jsonify({"msg": "Usuario creado correctamente"}), 201
+
+        token = create_access_token(identity=str(new_user.id))
+        return jsonify({"msj": "register OK", "token": token}), 201
+
     except Exception as e:
+
         db.session.rollback()
-        return jsonify({"msg": "Error al crear el usuario", "error": str(e)}), 500
+        return jsonify({"error": "something went wrong", "detalle": str(e)}), 400
+
 
 @api.route('/usuarios/<int:id>', methods=['GET'])
 @jwt_required()
@@ -80,6 +87,7 @@ def obtener_usuario(id):
 
     return jsonify(resultado), 200
 
+
 @api.route('/usuarios/<int:id>', methods=['PUT'])
 @jwt_required()
 
@@ -95,7 +103,7 @@ def editar_usuario(id):
 
     usuario.nombre = data.get("nombre", usuario.nombre)
     usuario.email = data.get("email", usuario.email)
-    usuario.contraseña = data.get("contraseña", usuario.contraseña)
+    usuario.password = data.get("password", usuario.password)
     usuario.rol = data.get("rol", usuario.rol)
     usuario.restaurante_id = data.get("restaurante_id", usuario.restaurante_id)
 
@@ -105,6 +113,7 @@ def editar_usuario(id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"msg": "Error al actualizar el usuario", "error": str(e)}), 500
+
 
 @api.route('/usuarios/<int:id>', methods=['DELETE'])
 @jwt_required()
@@ -123,6 +132,7 @@ def eliminar_usuario(id):
         db.session.rollback()
         return jsonify({"msg": "Error al eliminar el usuario", "error": str(e)}), 500
 
+
 @api.route('/ventas', methods=['GET'])
 @jwt_required()
 
@@ -133,13 +143,42 @@ def get_ventas():
     for v in ventas:
         resultados.append({
             "id": v.id,
-            "fecha": v.fecha.isoformat(), 
+            "fecha": v.fecha.isoformat(),
             "monto": v.monto,
             "turno": v.turno,
             "restaurante_id": v.restaurante_id
         })
 
     return jsonify(resultados), 200
+
+    # AUTENTCACION JWT - AUTENTCACION JWT - AUTENTCACION JWT- AUTENTCACION JWT - AUTENTCACION JWT - AUTENTCACION JWT
+    # - AUTENTCACION JWT - AUTENTCACION JWT - AUTENTCACION JWT - AUTENTCACION JWT
+
+
+@api.route("/login", methods=["POST"])
+def login():
+    try:
+
+        data = request.json
+
+        if not data["email"] or not data["password"]:
+            raise Exception({"error":  "missing data"})
+        stm = select(Usuario).where(
+            Usuario.email == data["email"])
+        user = db.session.execute(stm).scalar()
+        if not user:
+            raise Exception({"error":  "email not found"})
+
+        if not check_password_hash(user.password, data["password"]):
+            return jsonify({"success": False, "msg": "email/password incorrectos"}), 418
+
+        token = create_access_token(identity=json.dumps({"id": user.id,"rol": user.rol}))
+        return jsonify({"msj": "login ok", "token": token, "rol": user.rol}), 200
+
+    except Exception as e:
+
+        db.session.rollback()
+        return jsonify({"error": "something went wrong"}), 400
 
 @api.route('/ventas', methods=['POST'])
 @jwt_required()
@@ -779,27 +818,3 @@ def eliminar_restaurante(id):
         return jsonify({"msg": "Error al eliminar restaurante", "error": str(e)}), 500
 
 
-@api.route('/login', methods=['POST'])
-
-def usuario_login():
-    data = request.get_json()
-    email = data.get("email")
-    contraseña = data.get("contraseña")
-
-    if not email or not contraseña:
-        return jsonify({"msg": "Faltan campos"}), 400
-
-    usuario = Usuario.query.filter_by(email=email).first()
-
-    if not usuario or usuario.contraseña != contraseña:
-        return jsonify({"msg": "Credenciales inválidas"}), 401
-
-    
-    access_token = create_access_token(identity=str(usuario.id))
-
-    
-    return jsonify({
-        "token": access_token,
-        "usuario_id": usuario.id,
-        "rol": usuario.rol
-    }), 200
