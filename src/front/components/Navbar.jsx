@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export const Navbar = () => {
 
 	return (
-		<nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom py-2">
+		<nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom py-2 vh-10">
 			<div className="container-fluid">
 				<div className="container">
 					<a className="navbar-brand" href="#">

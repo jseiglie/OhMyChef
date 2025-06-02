@@ -5,3 +5,10 @@
 button.bg-orange:hover {
   background-color: #f55d21;
 }
+
+.vh-90 {
+  height: 90vh !important;
+}
+.vh-10 {
+  height: 10vh !important;
+}

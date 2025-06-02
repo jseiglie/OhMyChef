@@ -19,7 +19,7 @@ export const Nabvarleft = () => {
         <>
             <Navbar />
 
-            <div className="d-flex">
+            <div className="d-flex vh-90">
 
                 <nav id="sidebar" className={`sidebar menu d-flex flex-column p-3 col-3 col-md-2 ${menuall ? "w150" : ""} `}>
                     <div className="d-flex justify-content-between align-items-center mb-4">
@@ -31,7 +31,7 @@ export const Nabvarleft = () => {
                             type="button"
                             data-bs-toggle="collapse"
                             data-bs-target="#menuItems"
-                            aria-expanded={!collapsed}
+                            //aria-expanded={!collapsed}
                             onClick={toggleCollapse}
                         >
                             <i className={`bi bi-chevron-right ${collapsed ? "rotated" : ""}`}></i>
@@ -64,8 +64,11 @@ export const Nabvarleft = () => {
                         </ul>
                     </div>
 
+
                     <div className="logout mt-auto">
-                        <a className="nav-link text-muted d-flex align-items-center" href="#">
+
+                        <a className={`nav-link text-muted d-flex align-items-center ${menuall ? "logout-row" : "logout-column"}`} href="#">
+
                             <i className="bi bi-box-arrow-left me-2"></i>
                             <span>Log Out</span>
                         </a>

@@ -6,7 +6,6 @@ body {
 .sidebar {
   width: 250px;
   background-color: #f8f9fa;
-  height: 100vh;
   transition: width 0.3s ease;
   overflow: hidden;
 }
@@ -66,7 +65,20 @@ body {
 .logout {
   position: absolute;
   bottom: 20px;
-  width: 100%;
+  width: auto;
+}
+.w-40 {
+  width: 40px;
+  transition: transform 0.3s ease;
+}
+a.nav-link.text-muted.d-flex .logout-row {
+  flex-direction: row !important;
+  width: 160px;
+}
+
+a.nav-link.text-muted.d-flex .logout-column {
+  flex-direction: column !important;
+  width: 40px;
 }
 
 @media (max-width: 1100px) {
@@ -80,6 +92,10 @@ body {
   .sidebar {
     width: 156px;
   }
+  /* .logout > .nav-link {
+    flex-direction: row !important;
+    width: auto;
+  } */
 }
 
 @media (max-width: 767px) {
@@ -103,5 +119,15 @@ body {
   }
   .content {
     margin-left: 0;
+  }
+
+  a.nav-link.text-muted.d-flex.align-items-center.logout-row {
+    flex-direction: row !important;
+    width: 100px;
+  }
+
+  a.nav-link.text-muted.d-flex.align-items-center.logout-column {
+    flex-direction: column !important;
+    width: 40px;
   }
 }
