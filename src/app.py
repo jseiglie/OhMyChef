@@ -16,9 +16,6 @@ from flask_cors import CORS
 # from models import Person
 
 
-
-
-
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), '../public/')
@@ -82,6 +79,3 @@ def serve_any_other_file(path):
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3001))
     app.run(host='0.0.0.0', port=PORT, debug=True)
-
-app.config['JWT_SECRET_KEY'] = os.getenv("JWT_SECRET_KEY", "super-secret")  # puedes poner tu clave
-jwt = JWTManager(app)

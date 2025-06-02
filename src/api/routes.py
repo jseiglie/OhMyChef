@@ -8,6 +8,8 @@ from flask_cors import CORS
 from sqlalchemy import select
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from werkzeug.security import generate_password_hash, check_password_hash
+import json
+
 
 api = Blueprint('api', __name__)
 
@@ -170,7 +172,7 @@ def login():
         if not check_password_hash(user.password, data["password"]):
             return jsonify({"success": False, "msg": "email/password incorrectos"}), 418
 
-        token = create_access_token(identity={"id": user.id, "rol": user.rol})
+        token = create_access_token(identity=json.dumps({"id": user.id,"rol": user.rol}))
         return jsonify({"msj": "login ok", "token": token, "rol": user.rol}), 200
 
     except Exception as e:
@@ -816,27 +818,3 @@ def eliminar_restaurante(id):
         return jsonify({"msg": "Error al eliminar restaurante", "error": str(e)}), 500
 
 
-@api.route('/login', methods=['POST'])
-
-def usuario_login():
-    data = request.get_json()
-    email = data.get("email")
-    contraseña = data.get("contraseña")
-
-    if not email or not contraseña:
-        return jsonify({"msg": "Faltan campos"}), 400
-
-    usuario = Usuario.query.filter_by(email=email).first()
-
-    if not usuario or usuario.contraseña != contraseña:
-        return jsonify({"msg": "Credenciales inválidas"}), 401
-
-    
-    access_token = create_access_token(identity=str(usuario.id))
-
-    
-    return jsonify({
-        "token": access_token,
-        "usuario_id": usuario.id,
-        "rol": usuario.rol
-    }), 200

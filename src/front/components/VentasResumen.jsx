@@ -1,0 +1,1 @@
+export const VentasResumen = () => <div>Resumen de ventas</div>;
