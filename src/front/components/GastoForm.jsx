@@ -1,0 +1,1 @@
+export const GastoForm = () => <form>Formulario de gastos</form>;

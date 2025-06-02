@@ -1,32 +1,65 @@
-// Import necessary components and functions from react-router-dom.
-
+// src/front/routes.jsx
 import {
   createBrowserRouter,
   createRoutesFromElements,
-  Route,
+  Route
 } from "react-router-dom";
-import { Layout } from "./pages/Layout";
+
+import { Layout } from "./layout/Layout";
 import { Home } from "./pages/Home";
-import { Single } from "./pages/Single";
-import { Demo } from "./pages/Demo";
-import { Nabvarleft } from "./pages/Nabvarleft";
+import { Login } from "./components/Login";
+
+// Admin
+import { AdminDashboard } from "./pages/admin/AdminDashboard";
+import { Usuarios } from "./pages/admin/Usuarios";
+import { CrearUsuario } from "./pages/admin/CrearUsuario";
+import { Restaurantes } from "./pages/admin/Restaurantes";
+import { CrearRestaurante } from "./pages/admin/CrearRestaurante";
+import { AdminSettings } from "./pages/admin/AdminSettings";
+
+// Encargado
+import { EncargadoDashboard } from "./pages/encargado/EncargadoDashboard";
+import { RegistrarVenta } from "./pages/encargado/RegistrarVenta";
+import { ReporteVentas } from "./pages/encargado/ReporteVentas";
+import { EncargadoSettings } from "./pages/encargado/EncargadoSettings";
+import { RegistrarGasto as RegistrarGastoEncargado } from "./pages/encargado/RegistrarGasto";
+import { Proveedores as ProveedoresEncargado } from "./pages/encargado/Proveedores";
+
+// Chef
+import { ChefDashboard } from "./pages/chef/ChefDashboard";
+import { RegistrarGasto as RegistrarGastoChef } from "./pages/chef/RegistrarGasto";
+import { Proveedores as ProveedoresChef } from "./pages/chef/Proveedores";
+import { Facturas } from "./pages/chef/Facturas";
+import { ChefSettings } from "./pages/chef/ChefSettings";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
-    // CreateRoutesFromElements function allows you to build route elements declaratively.
-    // Create your routes here, if you want to keep the Navbar and Footer in all views, add your new routes inside the containing Route.
-    // Root, on the contrary, create a sister Route, if you have doubts, try it!
-    // Note: keep in mind that errorElement will be the default page when you don't get a route, customize that page to make your project more attractive.
-    // Note: The child paths of the Layout element replace the Outlet component with the elements contained in the "element" attribute of these child paths.
+    <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>}>
+      <Route index element={<Home />} />
+      <Route path="login" element={<Login />} />
 
-    // Root Route: All navigation will start from here.
-    <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>} >
+      {/* Admin */}
+      <Route path="admin/dashboard" element={<AdminDashboard />} />
+      <Route path="admin/usuarios" element={<Usuarios />} />
+      <Route path="admin/crear-usuario" element={<CrearUsuario />} />
+      <Route path="admin/restaurantes" element={<Restaurantes />} />
+      <Route path="admin/crear-restaurante" element={<CrearRestaurante />} />
+      <Route path="admin/settings" element={<AdminSettings />} />
 
-      {/* Nested Routes: Defines sub-routes within the BaseHome component. */}
-      <Route path="/" element={<Home />} />
-      <Route path="/single/:theId" element={<Single />} />  {/* Dynamic route for single items */}
-      <Route path="/demo" element={<Demo />} />
-      <Route path="/nabvarleft" element={<Nabvarleft />} />
+      {/* Encargado */}
+      <Route path="encargado/dashboard" element={<EncargadoDashboard />} />
+      <Route path="encargado/registrar-venta" element={<RegistrarVenta />} />
+      <Route path="encargado/reporte-ventas" element={<ReporteVentas />} />
+      <Route path="encargado/settings" element={<EncargadoSettings />} />
+      <Route path="encargado/registrar-gasto" element={<RegistrarGastoEncargado />} />
+      <Route path="encargado/proveedores" element={<ProveedoresEncargado />} /> 
+
+      {/* Chef */}
+      <Route path="chef/dashboard" element={<ChefDashboard />} />
+      <Route path="chef/registrar-gasto" element={<RegistrarGastoChef />} />
+      <Route path="chef/proveedores" element={<ProveedoresChef />} />
+      <Route path="chef/facturas" element={<Facturas />} />
+      <Route path="chef/settings" element={<ChefSettings />} />
     </Route>
   )
 );
