@@ -57,9 +57,19 @@ body {
 .content.expanded {
   margin-left: 60px;
 }
+.sidebar.menu .nav-link {
+  /* Reservamos 1px de borde transparente para que el tamaño no cambie al hacer hover */
+  background-color: 1px solid transparent;
+  color: inherit;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
 
-.sidebar .nav-link:hover {
-  background-color: #f8f9fa;
+.sidebar.menu .nav-link:hover {
+  background-color: #ff5d1d;
+  color: #fff;
+}
+.sidebar.menu .nav-link:hover i {
+  color: #fff;
 }
 
 .logout {
@@ -112,7 +122,7 @@ a.nav-link.text-muted.d-flex .logout-column {
   }
 
   .sidebar.w150 {
-    width: 150px;
+    width: 155px;
   }
   .sidebar {
     width: 60px;

@@ -1,6 +1,8 @@
 
 
 import React, { useState } from "react";
+import { Navbar } from "./Navbar";
+import { Outlet } from "react-router-dom";
 
 export const Sidebar = () => {
 
@@ -17,7 +19,7 @@ export const Sidebar = () => {
     };
     return (
         <>
-          
+            <Navbar />
 
             <div className="d-flex vh-90">
 
@@ -41,25 +43,25 @@ export const Sidebar = () => {
                     <div className="collapse chefmenu d-md-block" id="menuItems">
                         <ul className="nav nav-pills flex-column">
                             <li className="nav-item">
-                                <a className="nav-link" href="#"><i className="bi bi-house me-2"></i> Dashboard</a>
+                                <a className="nav-link" href="#"><i className="bi bi-house me-2"></i> <span>Dashboard</span></a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#"><i className="bi bi-shop me-2"></i> Restaurante</a>
+                                <a className="nav-link" href="#"><i className="bi bi-shop me-2"></i> <span>Restaurante</span></a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#"><i className="bi bi-receipt me-2"></i> Ventas</a>
+                                <a className="nav-link" href="#"><i className="bi bi-receipt me-2"></i> <span>Ventas</span></a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#"><i className="bi bi-bar-chart-line me-2"></i> Gastos</a>
+                                <a className="nav-link" href="#"><i className="bi bi-bar-chart-line me-2"></i> <span>Gastos</span></a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#"><i className="bi bi-truck me-2"></i> Proveedores</a>
+                                <a className="nav-link" href="#"><i className="bi bi-truck me-2"></i> <span>Proveedores</span></a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#"><i className="bi bi-people me-2"></i> Usuarios</a>
+                                <a className="nav-link" href="#"><i className="bi bi-people me-2"></i> <span>Usuarios</span></a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#"><i className="bi bi-gear me-2"></i> Settings</a>
+                                <a className="nav-link" href="#"><i className="bi bi-gear me-2"></i> <span>Configuracion</span></a>
                             </li>
                         </ul>
                     </div>
@@ -76,7 +78,7 @@ export const Sidebar = () => {
                 </nav>
 
                 <div className="flex-grow-1 p-3">
-                    <h1>Contenido principal</h1>
+                    <Outlet />
                 </div>
             </div>
         </>
