@@ -38,7 +38,11 @@ export const Login = () => {
             .then(data => {
                 if (!data) {
                     setErrorMessage("Credenciales incorrectas");
+                    navigate("admin/sidebar")
+
+
                 } else {
+                    console.log("he entrado como usuario")
                     const userRole = data.rol;
 
                     if (userRole === "admin") {
@@ -57,11 +61,11 @@ export const Login = () => {
     return (
 
         <div className="container my-2">
-            <div className="row justify-content-center">
+            <div className="row w-100 justify-content-center">
 
 
 
-                <div className="col-md-6 col-lg-4  col-xl-12 p-0 border rounded shadow text-center">
+                <div className="col-sm-12 col-md-8 col-lg-6 col-xl-5 p-0 border rounded shadow text-center">
                     <div className="col-sm  fs-5 mb-4 px-3 py-2 text-white bg-orange text-start">Login</div>
                     <img
                         src={logo}

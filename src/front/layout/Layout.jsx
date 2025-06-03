@@ -8,13 +8,13 @@ import { Sidebar } from "../components/Sidebar"
 export const Layout = () => {
   return (
     <>
-     <Navbar/>
+      {/* <Navbar/> */}
 
-      <main className="container mt-4">
+      <main className="d-flex flex-column">
         <Outlet />
       </main>
 
-    <Sidebar/>
+      {/* <Sidebar/> */}
     </>
   );
 };

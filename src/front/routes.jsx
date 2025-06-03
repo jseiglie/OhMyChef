@@ -31,6 +31,7 @@ import { RegistrarGasto as RegistrarGastoChef } from "./pages/chef/RegistrarGast
 import { Proveedores as ProveedoresChef } from "./pages/chef/Proveedores";
 import { Facturas } from "./pages/chef/Facturas";
 import { ChefSettings } from "./pages/chef/ChefSettings";
+import { Sidebar } from "./components/Sidebar";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -38,13 +39,17 @@ export const router = createBrowserRouter(
       <Route index element={<Home />} />
       <Route path="login" element={<Login />} />
 
+
       {/* Admin */}
-      <Route path="admin/dashboard" element={<AdminDashboard />} />
-      <Route path="admin/usuarios" element={<Usuarios />} />
-      <Route path="admin/crear-usuario" element={<CrearUsuario />} />
-      <Route path="admin/restaurantes" element={<Restaurantes />} />
-      <Route path="admin/crear-restaurante" element={<CrearRestaurante />} />
-      <Route path="admin/settings" element={<AdminSettings />} />
+      <Route path="admin/sidebar" element={<Sidebar />}>
+        <Route index element={<AdminDashboard />} /> {/* Se cargará en /admin */}
+        <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="usuarios" element={<Usuarios />} />
+        <Route path="crear-usuario" element={<CrearUsuario />} />
+        <Route path="restaurantes" element={<Restaurantes />} />
+        <Route path="crear-restaurante" element={<CrearRestaurante />} />
+        <Route path="settings" element={<AdminSettings />} />
+      </Route>
 
       {/* Encargado */}
       <Route path="encargado/dashboard" element={<EncargadoDashboard />} />
@@ -52,7 +57,7 @@ export const router = createBrowserRouter(
       <Route path="encargado/reporte-ventas" element={<ReporteVentas />} />
       <Route path="encargado/settings" element={<EncargadoSettings />} />
       <Route path="encargado/registrar-gasto" element={<RegistrarGastoEncargado />} />
-      <Route path="encargado/proveedores" element={<ProveedoresEncargado />} /> 
+      <Route path="encargado/proveedores" element={<ProveedoresEncargado />} />
 
       {/* Chef */}
       <Route path="chef/dashboard" element={<ChefDashboard />} />
