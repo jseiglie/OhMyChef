@@ -9,14 +9,13 @@ from sqlalchemy import select
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
-
+import traceback
 
 api = Blueprint('api', __name__)
 
 
 @api.route('/usuarios', methods=['GET'])
 @jwt_required()
-
 def get_usuarios():
     usuarios = Usuario.query.all()
 
@@ -70,7 +69,6 @@ def register():
 
 @api.route('/usuarios/<int:id>', methods=['GET'])
 @jwt_required()
-
 def obtener_usuario(id):
     usuario = Usuario.query.get(id)
 
@@ -90,7 +88,6 @@ def obtener_usuario(id):
 
 @api.route('/usuarios/<int:id>', methods=['PUT'])
 @jwt_required()
-
 def editar_usuario(id):
     usuario = Usuario.query.get(id)
 
@@ -117,7 +114,6 @@ def editar_usuario(id):
 
 @api.route('/usuarios/<int:id>', methods=['DELETE'])
 @jwt_required()
-
 def eliminar_usuario(id):
     usuario = Usuario.query.get(id)
 
@@ -135,7 +131,6 @@ def eliminar_usuario(id):
 
 @api.route('/ventas', methods=['GET'])
 @jwt_required()
-
 def get_ventas():
     ventas = Venta.query.all()
 
@@ -172,17 +167,18 @@ def login():
         if not check_password_hash(user.password, data["password"]):
             return jsonify({"success": False, "msg": "email/password incorrectos"}), 418
 
-        token = create_access_token(identity=json.dumps({"id": user.id,"rol": user.rol}))
+        token = create_access_token(
+            identity=json.dumps({"id": user.id, "rol": user.rol}))
         return jsonify({"msj": "login ok", "token": token, "rol": user.rol}), 200
 
     except Exception as e:
-
         db.session.rollback()
-        return jsonify({"error": "something went wrong"}), 400
+        print(traceback.format_exc())  # Muestra el error exacto en consola
+        return jsonify({"error": str(e)}), 400  # Muestra el error al fronten
+
 
 @api.route('/ventas', methods=['POST'])
 @jwt_required()
-
 def crear_venta():
     data = request.get_json()
 
@@ -211,9 +207,9 @@ def crear_venta():
         db.session.rollback()
         return jsonify({"msg": "Error al crear la venta", "error": str(e)}), 500
 
+
 @api.route('/ventas/<int:id>', methods=['GET'])
 @jwt_required()
-
 def obtener_venta(id):
     venta = Venta.query.get(id)
 
@@ -230,9 +226,9 @@ def obtener_venta(id):
 
     return jsonify(resultado), 200
 
+
 @api.route('/ventas/<int:id>', methods=['PUT'])
 @jwt_required()
-
 def editar_venta(id):
     venta = Venta.query.get(id)
 
@@ -255,9 +251,9 @@ def editar_venta(id):
         db.session.rollback()
         return jsonify({"msg": "Error al actualizar la venta", "error": str(e)}), 500
 
+
 @api.route('/ventas/<int:id>', methods=['DELETE'])
 @jwt_required()
-
 def eliminar_venta(id):
     venta = Venta.query.get(id)
 
@@ -272,9 +268,9 @@ def eliminar_venta(id):
         db.session.rollback()
         return jsonify({"msg": "Error al eliminar la venta", "error": str(e)}), 500
 
+
 @api.route('/gastos', methods=['GET'])
 @jwt_required()
-
 def get_gastos():
     gastos = Gasto.query.all()
 
@@ -294,9 +290,9 @@ def get_gastos():
 
     return jsonify(resultados), 200
 
+
 @api.route('/gastos', methods=['POST'])
 @jwt_required()
-
 def crear_gasto():
     data = request.get_json()
 
@@ -333,9 +329,9 @@ def crear_gasto():
         db.session.rollback()
         return jsonify({"msg": "Error al registrar el gasto", "error": str(e)}), 500
 
+
 @api.route('/gastos/<int:id>', methods=['GET'])
 @jwt_required()
-
 def obtener_gasto(id):
     gasto = Gasto.query.get(id)
 
@@ -356,9 +352,9 @@ def obtener_gasto(id):
 
     return jsonify(resultado), 200
 
+
 @api.route('/gastos/<int:id>', methods=['PUT'])
 @jwt_required()
-
 def editar_gasto(id):
     gasto = Gasto.query.get(id)
 
@@ -384,11 +380,10 @@ def editar_gasto(id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"msg": "Error al actualizar el gasto", "error": str(e)}), 500
- 
+
 
 @api.route('/facturas', methods=['GET'])
 @jwt_required()
-
 def get_facturas():
     facturas = FacturaAlbaran.query.all()
 
@@ -405,9 +400,9 @@ def get_facturas():
 
     return jsonify(resultados), 200
 
+
 @api.route('/facturas', methods=['POST'])
 @jwt_required()
-
 def crear_factura():
     data = request.get_json()
 
@@ -438,9 +433,9 @@ def crear_factura():
         db.session.rollback()
         return jsonify({"msg": "Error al registrar la factura", "error": str(e)}), 500
 
+
 @api.route('/facturas/<int:id>', methods=['GET'])
 @jwt_required()
-
 def obtener_factura(id):
     factura = FacturaAlbaran.query.get(id)
 
@@ -458,9 +453,9 @@ def obtener_factura(id):
 
     return jsonify(resultado), 200
 
+
 @api.route('/facturas/<int:id>', methods=['PUT'])
 @jwt_required()
-
 def editar_factura(id):
     factura = FacturaAlbaran.query.get(id)
 
@@ -484,9 +479,9 @@ def editar_factura(id):
         db.session.rollback()
         return jsonify({"msg": "Error al actualizar factura", "error": str(e)}), 500
 
+
 @api.route('/facturas/<int:id>', methods=['DELETE'])
 @jwt_required()
-
 def eliminar_factura(id):
     factura = FacturaAlbaran.query.get(id)
 
@@ -504,7 +499,6 @@ def eliminar_factura(id):
 
 @api.route('/proveedores', methods=['GET'])
 @jwt_required()
-
 def get_proveedores():
     proveedores = Proveedor.query.all()
 
@@ -519,9 +513,9 @@ def get_proveedores():
 
     return jsonify(resultados), 200
 
+
 @api.route('/proveedores', methods=['POST'])
 @jwt_required()
-
 def crear_proveedor():
     data = request.get_json()
 
@@ -548,9 +542,9 @@ def crear_proveedor():
         db.session.rollback()
         return jsonify({"msg": "Error al crear proveedor", "error": str(e)}), 500
 
+
 @api.route('/proveedores/<int:id>', methods=['GET'])
 @jwt_required()
-
 def obtener_proveedor(id):
     proveedor = Proveedor.query.get(id)
 
@@ -566,9 +560,9 @@ def obtener_proveedor(id):
 
     return jsonify(resultado), 200
 
+
 @api.route('/proveedores/<int:id>', methods=['PUT'])
 @jwt_required()
-
 def editar_proveedor(id):
     proveedor = Proveedor.query.get(id)
 
@@ -581,7 +575,8 @@ def editar_proveedor(id):
 
     proveedor.nombre = data.get("nombre", proveedor.nombre)
     proveedor.categoria = data.get("categoria", proveedor.categoria)
-    proveedor.restaurante_id = data.get("restaurante_id", proveedor.restaurante_id)
+    proveedor.restaurante_id = data.get(
+        "restaurante_id", proveedor.restaurante_id)
 
     try:
         db.session.commit()
@@ -590,9 +585,9 @@ def editar_proveedor(id):
         db.session.rollback()
         return jsonify({"msg": "Error al actualizar proveedor", "error": str(e)}), 500
 
+
 @api.route('/proveedores/<int:id>', methods=['DELETE'])
 @jwt_required()
-
 def eliminar_proveedor(id):
     proveedor = Proveedor.query.get(id)
 
@@ -607,9 +602,9 @@ def eliminar_proveedor(id):
         db.session.rollback()
         return jsonify({"msg": "Error al eliminar proveedor", "error": str(e)}), 500
 
+
 @api.route('/margen', methods=['GET'])
 @jwt_required()
-
 def get_margen():
     margenes = MargenObjetivo.query.all()
 
@@ -624,9 +619,9 @@ def get_margen():
 
     return jsonify(resultados), 200
 
+
 @api.route('/margen', methods=['POST'])
 @jwt_required()
-
 def crear_margen():
     data = request.get_json()
 
@@ -653,9 +648,9 @@ def crear_margen():
         db.session.rollback()
         return jsonify({"msg": "Error al crear el margen", "error": str(e)}), 500
 
+
 @api.route('/margen/<int:id>', methods=['GET'])
 @jwt_required()
-
 def obtener_margen(id):
     margen = MargenObjetivo.query.get(id)
 
@@ -671,9 +666,9 @@ def obtener_margen(id):
 
     return jsonify(resultado), 200
 
+
 @api.route('/margen/<int:id>', methods=['PUT'])
 @jwt_required()
-
 def editar_margen(id):
     margen = MargenObjetivo.query.get(id)
 
@@ -695,9 +690,9 @@ def editar_margen(id):
         db.session.rollback()
         return jsonify({"msg": "Error al actualizar margen", "error": str(e)}), 500
 
+
 @api.route('/margen/<int:id>', methods=['DELETE'])
 @jwt_required()
-
 def eliminar_margen(id):
     margen = MargenObjetivo.query.get(id)
 
@@ -712,9 +707,9 @@ def eliminar_margen(id):
         db.session.rollback()
         return jsonify({"msg": "Error al eliminar margen", "error": str(e)}), 500
 
+
 @api.route('/restaurantes', methods=['GET'])
 @jwt_required()
-
 def get_restaurantes():
     restaurantes = Restaurante.query.all()
 
@@ -729,9 +724,9 @@ def get_restaurantes():
 
     return jsonify(resultados), 200
 
+
 @api.route('/restaurantes', methods=['POST'])
 @jwt_required()
-
 def crear_restaurante():
     data = request.get_json()
 
@@ -758,9 +753,9 @@ def crear_restaurante():
         db.session.rollback()
         return jsonify({"msg": "Error al crear el restaurante", "error": str(e)}), 500
 
+
 @api.route('/restaurantes/<int:id>', methods=['GET'])
 @jwt_required()
-
 def obtener_restaurante(id):
     restaurante = Restaurante.query.get(id)
 
@@ -776,9 +771,9 @@ def obtener_restaurante(id):
 
     return jsonify(resultado), 200
 
+
 @api.route('/restaurantes/<int:id>', methods=['PUT'])
 @jwt_required()
-
 def editar_restaurante(id):
     restaurante = Restaurante.query.get(id)
 
@@ -791,7 +786,8 @@ def editar_restaurante(id):
 
     restaurante.nombre = data.get("nombre", restaurante.nombre)
     restaurante.direccion = data.get("direccion", restaurante.direccion)
-    restaurante.email_contacto = data.get("email_contacto", restaurante.email_contacto)
+    restaurante.email_contacto = data.get(
+        "email_contacto", restaurante.email_contacto)
 
     try:
         db.session.commit()
@@ -800,9 +796,9 @@ def editar_restaurante(id):
         db.session.rollback()
         return jsonify({"msg": "Error al actualizar restaurante", "error": str(e)}), 500
 
+
 @api.route('/restaurantes/<int:id>', methods=['DELETE'])
 @jwt_required()
-
 def eliminar_restaurante(id):
     restaurante = Restaurante.query.get(id)
 
@@ -816,5 +812,3 @@ def eliminar_restaurante(id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"msg": "Error al eliminar restaurante", "error": str(e)}), 500
-
-

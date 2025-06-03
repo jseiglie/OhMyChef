@@ -46,7 +46,7 @@ export const Login = () => {
                     const userRole = data.rol;
 
                     if (userRole === "admin") {
-                        navigate("/admin/dashboard");
+                        navigate("/admin/sidebar");
                     } else if (userRole === "encargado") {
                         navigate("/encargado/dashboard");
                     } else if (userRole === "chef") {
