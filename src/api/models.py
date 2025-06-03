@@ -26,9 +26,13 @@ class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
-    contraseña = db.Column(db.String(250), nullable=False)  # Aumentado a 250
+ 
+    contraseña = db.Column(db.String(250), nullable=False) 
+
+    password = db.Column(db.String(250), nullable=False)
+ 
     rol = db.Column(db.Enum('admin', 'encargado', 'chef', name='roles'), nullable=False)
-    restaurante_id = db.Column(db.Integer, db.ForeignKey('restaurantes.id'), nullable=False)
+    restaurante_id = db.Column(db.Integer, db.ForeignKey('restaurantes.id'), nullable=True)
 
     def serialize(self):
         return {
