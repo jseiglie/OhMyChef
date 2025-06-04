@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
-import { DashboardChef } from "../../components/DashboardChef";
+
+import { ChefVentas } from "./ChefVentas";
 
 export const ChefDashboard = () => {
   return (
 
-    <DashboardChef />
+    <ChefVentas />
   );
 };
