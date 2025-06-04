@@ -38,19 +38,17 @@ export const Login = () => {
             .then(data => {
                 if (!data) {
                     setErrorMessage("Credenciales incorrectas");
-                    navigate("admin/sidebar")
-
 
                 } else {
                     console.log("he entrado como usuario")
                     const userRole = data.rol;
 
                     if (userRole === "admin") {
-                        navigate("/admin/sidebar");
+                        navigate("/admin/dashboard");
                     } else if (userRole === "encargado") {
                         navigate("/encargado/dashboard");
                     } else if (userRole === "chef") {
-                        navigate("/chef/dashboard");
+                        navigate("/chef/sidebar");
                     } else {
                         setErrorMessage("Rol no reconocido");
                     }

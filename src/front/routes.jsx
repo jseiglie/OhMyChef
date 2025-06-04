@@ -32,6 +32,7 @@ import { Proveedores as ProveedoresChef } from "./pages/chef/Proveedores";
 import { Facturas } from "./pages/chef/Facturas";
 import { ChefSettings } from "./pages/chef/ChefSettings";
 import { Sidebar } from "./components/Sidebar";
+import { ChefVentas } from "./pages/chef/ChefVentas";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -52,6 +53,7 @@ export const router = createBrowserRouter(
       </Route>
 
       {/* Encargado */}
+
       <Route path="encargado/dashboard" element={<EncargadoDashboard />} />
       <Route path="encargado/registrar-venta" element={<RegistrarVenta />} />
       <Route path="encargado/reporte-ventas" element={<ReporteVentas />} />
@@ -60,11 +62,14 @@ export const router = createBrowserRouter(
       <Route path="encargado/proveedores" element={<ProveedoresEncargado />} />
 
       {/* Chef */}
-      <Route path="chef/dashboard" element={<ChefDashboard />} />
-      <Route path="chef/registrar-gasto" element={<RegistrarGastoChef />} />
-      <Route path="chef/proveedores" element={<ProveedoresChef />} />
-      <Route path="chef/facturas" element={<Facturas />} />
-      <Route path="chef/settings" element={<ChefSettings />} />
+      <Route path="chef/sidebar" element={<Sidebar />}>
+        <Route index element={<ChefVentas />} />
+        <Route path="dashboard" element={<ChefVentas />} />
+        <Route path="registrar-gasto" element={<RegistrarGastoChef />} />
+        <Route path="proveedores" element={<ProveedoresChef />} />
+        <Route path="facturas" element={<Facturas />} />
+        <Route path="settings" element={<ChefSettings />} />
+      </Route>
     </Route>
   )
 );
