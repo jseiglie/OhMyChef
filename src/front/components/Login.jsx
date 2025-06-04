@@ -38,7 +38,7 @@ export const Login = () => {
             .then(data => {
                 if (!data) {
                     setErrorMessage("Credenciales incorrectas");
-                    navigate("admin/sidebar")
+                   
 
 
                 } else {
@@ -46,7 +46,7 @@ export const Login = () => {
                     const userRole = data.rol;
 
                     if (userRole === "admin") {
-                        navigate("/admin/sidebar");
+                        navigate("/admin/dashboard");
                     } else if (userRole === "encargado") {
                         navigate("/encargado/dashboard");
                     } else if (userRole === "chef") {
