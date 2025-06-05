@@ -35,7 +35,6 @@ export const Login = () => {
         e.preventDefault();
         console.log(FormData)
 
-<<<<<<< HEAD
        userServices.login(FormData)
         .then(data => {
             if (!data) {
@@ -44,30 +43,6 @@ export const Login = () => {
             dispatch({
                 type: "login_register",
                 payload: { user: data },
-=======
-        userServices.login(FormData)
-            .then(data => {
-                if (!data) {
-                    setErrorMessage("Credenciales incorrectas");
-
-
-
-                } else {
-                    console.log("he entrado como usuario")
-                    const userRole = data.rol;
-
-                    if (userRole === "admin") {
-                        debugger
-                        navigate("/admin/dashboard");
-                    } else if (userRole === "encargado") {
-                        navigate("/encargado/dashboard");
-                    } else if (userRole === "chef") {
-                        navigate("/chef/dashboard");
-                    } else {
-                        setErrorMessage("Rol no reconocido");
-                    }
-                }
->>>>>>> 99ad0988aa4619681e830776b514746d246c7120
             });
 
             const userRole = data.rol;
