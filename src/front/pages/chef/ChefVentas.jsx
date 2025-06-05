@@ -1,5 +1,5 @@
 import { DashboardChef } from "../../components/DashboardChef";
-import VentasChef from "../../components/VentasChef";
+import GastosChef from "../../components/GastosChef";
 
 export const ChefVentas = () => {
   return (
@@ -25,7 +25,7 @@ export const ChefVentas = () => {
           </div>
           <div className="col-10  ms-md-4 ms-lg-0 order-sm-1 order-md-2 ">
             <h5 className=" titulo pt-1 ms-sm-0 ms-md-4 ms-4">Gráfica de Ventas </h5>
-            <VentasChef />
+            <GastosChef />
           </div>
 
         </div>
