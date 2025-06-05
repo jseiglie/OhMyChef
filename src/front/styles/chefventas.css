@@ -50,4 +50,17 @@
     margin-bottom: 48px;
     padding-left: 0px !important;
   }
+  .gastos {
+    font-size: rem !important;
+    justify-content: space-around;
+  }
+  .graficoVentas span:not(:empty) {
+    font-size: 0.9rem;
+  }
+  .graficoVentas span.text-secondary:not(:empty) {
+    font-size: 1.1rem !important;
+  }
+  .titulo {
+    margin-bottom: 0;
+  }
 }
