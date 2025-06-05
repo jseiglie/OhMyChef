@@ -12,7 +12,6 @@ userServices.register = async (formData) => {
     });
     if (!resp.ok) throw Error("something went wrong");
     const data = await resp.json();
-    
 
     return data;
   } catch (error) {
@@ -34,6 +33,7 @@ userServices.getUserinfo = async () => {
 };
 
 userServices.login = async (formData) => {
+  debugger;
   try {
     const resp = await fetch(backendUrl + "/api/login", {
       method: "POST",

@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 
 
 export const Login = () => {
+    debugger;
     const { store, dispatch } = useGlobalReducer()
     const navigate = useNavigate();
     const [FormData, setFormData] = useState({
@@ -38,7 +39,7 @@ export const Login = () => {
             .then(data => {
                 if (!data) {
                     setErrorMessage("Credenciales incorrectas");
-                   
+
 
 
                 } else {
@@ -46,6 +47,7 @@ export const Login = () => {
                     const userRole = data.rol;
 
                     if (userRole === "admin") {
+                        debugger
                         navigate("/admin/dashboard");
                     } else if (userRole === "encargado") {
                         navigate("/encargado/dashboard");

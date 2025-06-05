@@ -10,11 +10,11 @@ import { Home } from "./pages/Home";
 import { Login } from "./components/Login";
 
 // Admin
-import { AdminDashboard} from "./pages/admin/AdminDashboard";
+import { AdminDashboard } from "./pages/admin/AdminDashboard";
 import { Restaurantes } from "./pages/admin/Restaurantes";
 import { CrearRestaurante } from "./pages/admin/CrearRestaurante";
-import {AdminVentas} from "./pages/admin/AdminVentas";
-import { AdminGastos} from "./pages/admin/AdminGastos";
+import { AdminVentas } from "./pages/admin/AdminVentas";
+import { AdminGastos } from "./pages/admin/AdminGastos";
 import { Usuarios } from "./pages/admin/Usuarios";
 import { CrearUsuario } from "./pages/admin/CrearUsuario";
 import { AdminSettings } from "./pages/admin/AdminSettings";
