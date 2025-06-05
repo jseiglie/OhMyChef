@@ -40,7 +40,6 @@ class Usuario(db.Model):
             "id": self.id,
             "nombre": self.nombre,
             "email": self.email,
-            "password": self.password,
             "rol": self.rol,
             "restaurante_id": self.restaurante_id,
         }

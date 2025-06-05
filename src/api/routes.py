@@ -34,7 +34,6 @@ def get_usuarios():
 @api.route("/register", methods=["POST"])
 def register():
     try:
-
         data = request.json
 
         if not data["email"] or not data["password"]:

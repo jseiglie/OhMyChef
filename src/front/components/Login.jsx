@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 
 
 export const Login = () => {
+    debugger;
     const { store, dispatch } = useGlobalReducer()
     const navigate = useNavigate();
     const [FormData, setFormData] = useState({
@@ -34,28 +35,29 @@ export const Login = () => {
         e.preventDefault();
         console.log(FormData)
 
-        userServices.login(FormData)
-            .then(data => {
-                if (!data) {
-                    setErrorMessage("Credenciales incorrectas");
-                    navigate("admin/sidebar")
-
-
-                } else {
-                    console.log("he entrado como usuario")
-                    const userRole = data.rol;
-
-                    if (userRole === "admin") {
-                        navigate("/admin/sidebar");
-                    } else if (userRole === "encargado") {
-                        navigate("/encargado/dashboard");
-                    } else if (userRole === "chef") {
-                        navigate("/chef/dashboard");
-                    } else {
-                        setErrorMessage("Rol no reconocido");
-                    }
-                }
+       userServices.login(FormData)
+        .then(data => {
+            if (!data) {
+            setErrorMessage("Credenciales incorrectas");
+            } else {
+            dispatch({
+                type: "login_register",
+                payload: { user: data },
             });
+
+            const userRole = data.rol;
+            if (userRole === "admin") {
+                navigate("/admin/dashboard");
+            } else if (userRole === "encargado") {
+                navigate("/encargado/dashboard");
+            } else if (userRole === "chef") {
+                navigate("/chef/dashboard");
+            } else {
+                setErrorMessage("Rol no reconocido");
+            }
+            }
+        });
+
     };
 
     return (

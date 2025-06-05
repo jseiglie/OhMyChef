@@ -1,11 +1,11 @@
 
 import React from "react";
 
-export const Usuarios = () => {
+export const Restaurantes = () => {
   return (
     <div className="container py-4">
-      <h1 className="mb-3"> Vista Usuarios</h1>
-
+      <h1 className="mb-3"> Vista restaurantes </h1>
+     
     </div>
   );
 };
