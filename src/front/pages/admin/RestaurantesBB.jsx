@@ -38,7 +38,7 @@ import {
 
 //import QuickActionCard from "./QuickActionCard"; 
 
-export const Restaurantes = () => {
+export const RestaurantesBB = () => {
 
 
   const lineData = [
@@ -153,8 +153,8 @@ export const Restaurantes = () => {
             <button
               onClick={() => setActiveTab("gastos-fechas")}
               className={`flex items-center space-x-2 pb-2 ${activeTab === "gastos-fechas"
-                  ? "border-b-2 border-blue-500 text-blue-600"
-                  : "text-gray-600 hover:text-gray-800"
+                ? "border-b-2 border-blue-500 text-blue-600"
+                : "text-gray-600 hover:text-gray-800"
                 }`}
             >
               <FaCalendarAlt />
@@ -163,8 +163,8 @@ export const Restaurantes = () => {
             <button
               onClick={() => setActiveTab("gastos-proveedor")}
               className={`flex items-center space-x-2 pb-2 ${activeTab === "gastos-proveedor"
-                  ? "border-b-2 border-blue-500 text-blue-600"
-                  : "text-gray-600 hover:text-gray-800"
+                ? "border-b-2 border-blue-500 text-blue-600"
+                : "text-gray-600 hover:text-gray-800"
                 }`}
             >
               <FaUserAlt />
