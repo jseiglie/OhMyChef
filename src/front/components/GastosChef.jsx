@@ -10,7 +10,7 @@ const data = Array.from({ length: 30 }, (_, i) => ({
     porcentaje: Math.floor(Math.random() * 101), // de 0 a 100
 }));
 
-const VentasChef = () => {
+const GastosChef = () => {
     return (
         <LineChart
             width={800}
@@ -37,4 +37,4 @@ const VentasChef = () => {
     );
 };
 
-export default VentasChef;
+export default GastosChef;
