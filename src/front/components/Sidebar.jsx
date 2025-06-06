@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 
 export const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [seemenu, setSeemenu] = useState(true);
   const [menuall, setMenuall] = useState(false);
-  const { store } = useGlobalReducer();
+  const { store, dispatch } = useGlobalReducer();
+  const navigate = useNavigate();
 
   const toggleCollapse = () => {
     setCollapsed(!collapsed);
@@ -15,6 +16,12 @@ export const Sidebar = () => {
   };
 
   const rol = store?.user?.rol;
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("token");
+    dispatch({ type: "get_user_info", payload: null });
+    navigate("/login");
+  };
 
   return (
     <div className="d-flex vh-90">
@@ -103,13 +110,13 @@ export const Sidebar = () => {
         </div>
 
         <div className="logout mt-auto">
-          <Link
-            className={`nav-link text-muted d-flex align-items-center ${menuall ? "logout-row" : "logout-column"}`}
-            to="/login"
+          <button
+            className={`nav-link text-muted d-flex align-items-center bg-transparent border-0 ${menuall ? "logout-row" : "logout-column"}`}
+            onClick={handleLogout}
           >
             <i className="bi bi-box-arrow-left me-2"></i>
             <span>Log Out</span>
-          </Link>
+          </button>
         </div>
       </nav>
     </div>

@@ -811,3 +811,20 @@ def eliminar_restaurante(id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"msg": "Error al eliminar restaurante", "error": str(e)}), 500
+
+@api.route("/private", methods=["GET"])
+@jwt_required()
+def get_user_info():
+    try:
+        user_id = get_jwt_identity()
+        usuario = db.session.get(Usuario, user_id)  
+        if not usuario:
+            return jsonify({"error": "Usuario no encontrado"}), 404
+
+        return jsonify({
+            "user": usuario.serialize()
+        }), 200
+
+    except Exception as e:
+        return jsonify({"error": "Algo salió mal"}), 500
+

@@ -19,17 +19,27 @@ userServices.register = async (formData) => {
   }
 };
 
-userServices.getUserinfo = async () => {
-  const resp = await fetch(backendUrl + "/api/private", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("token"),
-    },
-  });
-  if (!resp.ok) throw Error("something went wrong");
-  const data = await resp.json();
-  return data;
+const getUserinfo = async () => {
+  try {
+    const token = sessionStorage.getItem("token");
+    const response = await fetch(`${backendUrl}/api/private`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+   
+    if (!response.ok) {
+      throw new Error("No se pudo obtener la información del usuario");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error en getUserinfo:", error);
+    throw error;
+  }
 };
 
 userServices.login = async (formData) => {
