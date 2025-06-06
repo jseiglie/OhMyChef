@@ -152,28 +152,33 @@ def get_ventas():
 @api.route("/login", methods=["POST"])
 def login():
     try:
-
         data = request.json
 
         if not data["email"] or not data["password"]:
-            raise Exception({"error":  "missing data"})
-        stm = select(Usuario).where(
-            Usuario.email == data["email"])
+            return jsonify({"error": "Faltan datos"}), 400
+
+        stm = select(Usuario).where(Usuario.email == data["email"])
         user = db.session.execute(stm).scalar()
+
         if not user:
-            raise Exception({"error":  "email not found"})
+            return jsonify({"error": "Email no encontrado"}), 404
 
         if not check_password_hash(user.password, data["password"]):
-            return jsonify({"success": False, "msg": "email/password incorrectos"}), 418
+            return jsonify({"success": False, "msg": "Email o contraseña incorrectos"}), 401
 
-        token = create_access_token(
-            identity=json.dumps({"id": user.id, "rol": user.rol}))
-        return jsonify({"msj": "login ok", "token": token, "rol": user.rol}), 200
+        # ⚠️ No usar json.dumps aquí
+        token = create_access_token(identity={ "id": user.id, "rol": user.rol })
+
+        return jsonify({
+            "access_token": token,
+            "user": user.serialize()
+        }), 200
 
     except Exception as e:
         db.session.rollback()
-        print(traceback.format_exc())  # Muestra el error exacto en consola
-        return jsonify({"error": str(e)}), 400  # Muestra el error al fronten
+        print("❌ Error en /login:\n", traceback.format_exc())
+        return jsonify({"error": str(e)}), 500
+  # Muestra el error al fronten
 
 
 @api.route('/ventas', methods=['POST'])
@@ -811,3 +816,25 @@ def eliminar_restaurante(id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"msg": "Error al eliminar restaurante", "error": str(e)}), 500
+
+
+@api.route("/private", methods=["GET"])
+@jwt_required()
+def get_user_info():
+    try:
+        identidad = get_jwt_identity()
+
+        # Si identidad es un diccionario (como parece), accede al campo id
+        user_id = identidad["id"]
+
+        usuario = db.session.get(Usuario, user_id)
+        if not usuario:
+            return jsonify({"error": "Usuario no encontrado"}), 404
+
+        return jsonify({
+            "user": usuario.serialize()
+        }), 200
+
+    except Exception as e:
+        print("❌ Error en /private:", e)
+        return jsonify({"error": "Algo salió mal"}), 500
