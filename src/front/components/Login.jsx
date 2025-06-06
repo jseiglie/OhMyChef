@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 
 export const Login = () => {
-    debugger;
+
     const { store, dispatch } = useGlobalReducer()
     const navigate = useNavigate();
     const [FormData, setFormData] = useState({

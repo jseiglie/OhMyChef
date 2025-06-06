@@ -12,11 +12,11 @@ export const Layout = () => {
       <Navbar />
       <div className="d-flex">
         <Sidebar />
-        <main className="flex-grow-1 p-4">
+        <main className="flex-grow-1 rtl-scroll  vh-90 overflow-auto p-4">
           <Outlet />
         </main>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };
