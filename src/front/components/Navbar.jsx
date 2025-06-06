@@ -1,15 +1,14 @@
-
-import useGlobalReducer from "../hooks/useGlobalReducer";
 import React, { useEffect } from "react";
+import useGlobalReducer from "../hooks/useGlobalReducer";
 
 export const Navbar = () => {
   const { store } = useGlobalReducer();
-  const user = store.user;
+  
+  const user = store.user || {};
 
-    useEffect(() => {
+  useEffect(() => {
     console.log("Usuario en Navbar:", user);
   }, [user]);
-
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom py-2 vh-10">
@@ -22,11 +21,9 @@ export const Navbar = () => {
             height="55"
           />
         </a>
-
         <button className="btn d-lg-none" type="button">
           <i className="bi bi-search"></i>
         </button>
-
         <div className="collapse navbar-collapse" id="navbarContent">
           <form className="d-flex mx-auto my-2 my-lg-0">
             <input
@@ -37,7 +34,6 @@ export const Navbar = () => {
             />
           </form>
         </div>
-
         <ul className="navbar-nav ms-auto d-flex align-items-center gap-3">
           <li className="nav-item position-relative">
             <i className="bi bi-bell fs-5"></i>
@@ -46,10 +42,14 @@ export const Navbar = () => {
           <li className="nav-item d-flex align-items-center gap-2">
             <i className="bi bi-person-circle fs-4"></i>
             <div className="text-end">
-              <p className="mb-0 name">{user?.nombre || "Usuario"}</p>
-              <p className="mb-0 role text-muted small text-capitalize">{user?.rol || "Rol"}</p>
+              <p className="mb-0 name">{user.nombre || "Usuario"}</p>
+              <p className="mb-0 role text-muted small text-capitalize">
+                {user.rol || "Rol"}
+              </p>
               <p className="mb-0 restaurant text-secondary small">
-                {user?.restaurante_id ? `Restaurante #${user.restaurante_id}` : "Sin restaurante asignado"}
+                {user.restaurante_id
+                  ? `Restaurante #${user.restaurante_id}`
+                  : "Sin restaurante asignado"}
               </p>
             </div>
           </li>

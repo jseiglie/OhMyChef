@@ -1,16 +1,13 @@
 import {
   createBrowserRouter,
   createRoutesFromElements,
-  Route
+  Route,
 } from "react-router-dom";
-
 import { Layout } from "./layout/Layout";
 import { Home } from "./pages/Home";
 import { Login } from "./components/Login";
-import { RutaPrivada } from "./components/RutaPrivada";
-import { ErrorPage } from "./pages/ErrorPage";
+import { RutaPrivada } from "./components/RutaPrivada.jsx";
 
-// Admin
 import { AdminDashboard } from "./pages/admin/AdminDashboard";
 import { Restaurantes } from "./pages/admin/Restaurantes";
 import { CrearRestaurante } from "./pages/admin/CrearRestaurante";
@@ -20,7 +17,6 @@ import { Usuarios } from "./pages/admin/Usuarios";
 import { CrearUsuario } from "./pages/admin/CrearUsuario";
 import { AdminSettings } from "./pages/admin/AdminSettings";
 
-// Encargado
 import { EncargadoDashboard } from "./pages/encargado/EncargadoDashboard";
 import { RegistrarVenta } from "./pages/encargado/RegistrarVenta";
 import { ReporteVentas } from "./pages/encargado/ReporteVentas";
@@ -30,7 +26,6 @@ import { Proveedores as ProveedoresEncargado } from "./pages/encargado/Proveedor
 import { EncargadoVentas } from "./pages/encargado/EncargadoVentas";
 import { EncargadoGastos } from "./pages/encargado/EncargadoGastos";
 
-// Chef
 import { ChefDashboard } from "./pages/chef/ChefDashboard";
 import { RegistrarGasto as RegistrarGastoChef } from "./pages/chef/RegistrarGasto";
 import { Proveedores as ProveedoresChef } from "./pages/chef/Proveedores";
@@ -40,12 +35,9 @@ import { ChefSettings } from "./pages/chef/ChefSettings";
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      {/* RUTAS PÚBLICAS CON MANEJO DE ERROR */}
-      <Route path="/" element={<Home />} errorElement={<ErrorPage />} />
-      <Route path="/login" element={<Login />} errorElement={<ErrorPage />} />
-
-      {/* ADMIN */}
-      <Route element={<RutaPrivada allowedRoles={["admin"]} />} errorElement={<ErrorPage />}>
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
+      <Route element={<RutaPrivada allowedRoles={["admin", "encargado", "chef"]} />}>
         <Route element={<Layout />}>
           <Route path="admin/dashboard" element={<AdminDashboard />} />
           <Route path="admin/restaurantes" element={<Restaurantes />} />
@@ -55,27 +47,27 @@ export const router = createBrowserRouter(
           <Route path="admin/usuarios" element={<Usuarios />} />
           <Route path="admin/crear-usuario" element={<CrearUsuario />} />
           <Route path="admin/settings" element={<AdminSettings />} />
-        </Route>
-      </Route>
 
-      {/* ENCARGADO */}
-      <Route element={<RutaPrivada allowedRoles={["encargado"]} />} errorElement={<ErrorPage />}>
-        <Route element={<Layout />}>
           <Route path="encargado/dashboard" element={<EncargadoDashboard />} />
           <Route path="encargado/registrar-venta" element={<RegistrarVenta />} />
           <Route path="encargado/reporte-ventas" element={<ReporteVentas />} />
+          <Route
+            path="encargado/registrar-gasto"
+            element={<RegistrarGastoEncargado />}
+          />
+          <Route
+            path="encargado/proveedores"
+            element={<ProveedoresEncargado />}
+          />
           <Route path="encargado/ventas" element={<EncargadoVentas />} />
           <Route path="encargado/gastos" element={<EncargadoGastos />} />
-          <Route path="encargado/proveedores" element={<ProveedoresEncargado />} />
           <Route path="encargado/settings" element={<EncargadoSettings />} />
-        </Route>
-      </Route>
 
-      {/* CHEF */}
-      <Route element={<RutaPrivada allowedRoles={["chef"]} />} errorElement={<ErrorPage />}>
-        <Route element={<Layout />}>
           <Route path="chef/dashboard" element={<ChefDashboard />} />
-          <Route path="chef/registrar-gasto" element={<RegistrarGastoChef />} />
+          <Route
+            path="chef/registrar-gasto"
+            element={<RegistrarGastoChef />}
+          />
           <Route path="chef/proveedores" element={<ProveedoresChef />} />
           <Route path="chef/facturas" element={<Facturas />} />
           <Route path="chef/settings" element={<ChefSettings />} />
