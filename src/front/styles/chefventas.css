@@ -23,6 +23,7 @@
   border-radius: 6px;
   padding: 4px;
   color: #027b8c !important;
+  max-width: 120px;
 }
 @media (max-width: 842px) {
   .gastos {
@@ -62,5 +63,8 @@
   }
   .titulo {
     margin-bottom: 0;
+  }
+  .graficoGastos {
+    flex-direction: column;
   }
 }
