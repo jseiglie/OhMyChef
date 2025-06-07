@@ -126,6 +126,11 @@ export const Sidebar = () => {
                     <i className="bi bi-receipt me-2"></i>Facturas
                   </Link>
                 </li>
+                   <li className="nav-item">
+                  <Link className="nav-link" to="/chef/gastos">
+                    <i className="bi bi-receipt me-2"></i>Gastos
+                  </Link>
+                </li>
                 <li className="nav-item">
                   <Link className="nav-link" to="/chef/settings">
                     <i className="bi bi-gear me-2"></i>Configuración

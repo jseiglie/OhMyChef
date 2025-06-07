@@ -5,7 +5,7 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, Usuario, Venta, Gasto, FacturaAlbaran, Proveedor, MargenObjetivo, Restaurante
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
-from sqlalchemy import select
+from sqlalchemy import select, func
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
@@ -32,38 +32,51 @@ def get_usuarios():
 
 
 @api.route("/register", methods=["POST"])
+@jwt_required(optional=True)
 def register():
     try:
         data = request.json
 
-        if not data["email"] or not data["password"]:
-            raise Exception({"error":  "missing data"})
-        stm = select(Usuario).where(
-            Usuario.email == data["email"])
-        existing_user = db.session.execute(stm).scalar()
+        if not data.get("email") or not data.get("password") or not data.get("rol") or not data.get("nombre"):
+            return jsonify({"error": "Faltan datos obligatorios"}), 400
+
+        total_users = db.session.scalar(
+            select(func.count()).select_from(Usuario))
+
+        # ✅ Solo permitir crear sin token si no hay usuarios
+        current_user_id = get_jwt_identity()
+        if total_users > 0:
+            if not current_user_id:
+                return jsonify({"error": "No autorizado"}), 403
+            current_user = db.session.get(Usuario, current_user_id)
+            if not current_user or current_user.rol != "admin":
+                return jsonify({"error": "Solo el admin puede crear usuarios"}), 403
+
+        # Validar restaurante obligatorio para roles chef o encargado
+        if data["rol"] in ["chef", "encargado"] and not data.get("restaurante_id"):
+            return jsonify({"error": "Chef o encargado debe tener restaurante asignado"}), 400
+
+        existing_user = db.session.scalar(
+            select(Usuario).where(Usuario.email == data["email"]))
         if existing_user:
-            raise Exception({"error":  "email, taken, try logging in"})
+            return jsonify({"error": "Email ya registrado"}), 409
 
         hashed_password = generate_password_hash(data["password"])
-
         new_user = Usuario(
             nombre=data["nombre"],
             email=data["email"],
             password=hashed_password,
             rol=data["rol"],
-            restaurante_id=data.get("restaurante_id"),
-
+            restaurante_id=data.get("restaurante_id")
         )
         db.session.add(new_user)
         db.session.commit()
 
-        token = create_access_token(identity=str(new_user.id))
-        return jsonify({"msj": "register OK", "token": token}), 201
+        return jsonify({"msg": "Usuario creado correctamente"}), 201
 
     except Exception as e:
-
         db.session.rollback()
-        return jsonify({"error": "something went wrong", "detalle": str(e)}), 400
+        return jsonify({"error": "Error al registrar", "detalle": str(e)}), 500
 
 
 @api.route('/usuarios/<int:id>', methods=['GET'])
@@ -154,7 +167,7 @@ def login():
     try:
         data = request.json
 
-        if not data["email"] or not data["password"]:
+        if not data.get("email") or not data.get("password"):
             return jsonify({"error": "Faltan datos"}), 400
 
         stm = select(Usuario).where(Usuario.email == data["email"])
@@ -166,19 +179,23 @@ def login():
         if not check_password_hash(user.password, data["password"]):
             return jsonify({"success": False, "msg": "Email o contraseña incorrectos"}), 401
 
-        # ⚠️ No usar json.dumps aquí
-        token = create_access_token(identity={ "id": user.id, "rol": user.rol })
+        token = create_access_token(identity=user.id)
+
+        data = user.serialize()
+
+        if user.restaurante_id:
+            restaurante = db.session.get(Restaurante, user.restaurante_id)
+            if restaurante:
+                data["restaurante_nombre"] = restaurante.nombre
 
         return jsonify({
             "access_token": token,
-            "user": user.serialize()
+            "user": data
         }), 200
 
     except Exception as e:
         db.session.rollback()
-        print("❌ Error en /login:\n", traceback.format_exc())
         return jsonify({"error": str(e)}), 500
-  # Muestra el error al fronten
 
 
 @api.route('/ventas', methods=['POST'])
@@ -822,19 +839,19 @@ def eliminar_restaurante(id):
 @jwt_required()
 def get_user_info():
     try:
-        identidad = get_jwt_identity()
-
-        # Si identidad es un diccionario (como parece), accede al campo id
-        user_id = identidad["id"]
-
+        user_id = get_jwt_identity()
         usuario = db.session.get(Usuario, user_id)
         if not usuario:
             return jsonify({"error": "Usuario no encontrado"}), 404
 
-        return jsonify({
-            "user": usuario.serialize()
-        }), 200
+        data = usuario.serialize()
+
+        if usuario.restaurante_id:
+            restaurante = db.session.get(Restaurante, usuario.restaurante_id)
+            if restaurante:
+                data["restaurante_nombre"] = restaurante.nombre
+
+        return jsonify({"user": data}), 200
 
     except Exception as e:
-        print("❌ Error en /private:", e)
         return jsonify({"error": "Algo salió mal"}), 500

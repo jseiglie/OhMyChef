@@ -26,12 +26,12 @@ export const Login = () => {
   userServices
     .login(FormData)
     .then((data) => {
-      console.log("🔐 Login respuesta:", data);  // 👈 Asegúrate de pegar esto
+      
       if (!data || !data.access_token) {
         setErrorMessage("Credenciales incorrectas");
       } else {
         sessionStorage.setItem("token", data.access_token);
-        dispatch({ type: "login_register", payload: { user: data.user } });
+        dispatch({ type: "get_user_info", payload: data.user });
         navigate(`/${data.user.rol}/dashboard`);
       }
     })

@@ -1,14 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 
 export const Navbar = () => {
   const { store } = useGlobalReducer();
-  
-  const user = store.user || {};
+  const user = store.user;
 
-  useEffect(() => {
-    console.log("Usuario en Navbar:", user);
-  }, [user]);
+  if (!user) return null;
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom py-2 vh-10">
@@ -36,20 +33,16 @@ export const Navbar = () => {
         </div>
         <ul className="navbar-nav ms-auto d-flex align-items-center gap-3">
           <li className="nav-item position-relative">
-            <i className="bi bi-bell fs-5"></i>
+            <i className="bi bi-bell fs-4"></i>
             <span className="notify-dot bg-danger rounded-circle position-absolute top-0 start-100 translate-middle p-1"></span>
           </li>
           <li className="nav-item d-flex align-items-center gap-2">
-            <i className="bi bi-person-circle fs-4"></i>
+            <i className="bi bi-person-circle fs-1"></i>
             <div className="text-end">
-              <p className="mb-0 name">{user.nombre || "Usuario"}</p>
-              <p className="mb-0 role text-muted small text-capitalize">
-                {user.rol || "Rol"}
-              </p>
+              <p className="mb-0 name">{user.nombre}</p>
+              <p className="mb-0 role text-muted small text-capitalize">{user.rol}</p>
               <p className="mb-0 restaurant text-secondary small">
-                {user.restaurante_id
-                  ? `Restaurante #${user.restaurante_id}`
-                  : "Sin restaurante asignado"}
+                {user.restaurante_nombre || "Sin restaurante asignado"}
               </p>
             </div>
           </li>
