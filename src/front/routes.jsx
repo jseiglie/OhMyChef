@@ -32,6 +32,9 @@ import { Proveedores as ProveedoresChef } from "./pages/chef/Proveedores";
 import { Facturas } from "./pages/chef/Facturas";
 import { ChefSettings } from "./pages/chef/ChefSettings";
 
+
+
+
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <>
