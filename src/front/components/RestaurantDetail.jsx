@@ -1,14 +1,16 @@
 import React from 'react';
 import '../styles/RestaurantDetail.css';
+import { useParams } from 'react-router-dom';
 
 const RestaurantDetail = () => {
+  const { id } = useParams();
   return (
     <div className="restaurant-detail-container">
       <header className="header-section">
         <button className="back-btn">← Ir a Ventas</button>
         <div className="title-group">
           <h2 className="title-gasto">Gastos</h2>
-          <h2>RESTAURANTE 1231</h2>
+          <h2>RESTAURANTE #{id} </h2>
           <p className="date-highlight">Mes actual: <strong>Mayo 2025</strong></p>
         </div>
       </header>
