@@ -1,13 +1,16 @@
-import { Link } from "react-router-dom";
-import InfoCard from "../../components/InforCard";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import InfoCard from "../../components/InforCard"; 
+import React from 'react';
 import { FaUser, FaPlus, FaUtensils, FaCog } from 'react-icons/fa';
+import AdminDashboardBB from "../../components/AdminDashboardBB";
+import RestaurantDetail from '../../components/RestaurantDetail';
+import QuickActionCard from '../../components/QuickActionCard';
 
 
 export const AdminDashboard = () => {
   return (
-   <div className="container py-4">
-      <h1 className="mb-3">Vista admin dashbboard </h1>
-      
-    </div>
+
+    <AdminDashboardBB />
   );
 };
+
