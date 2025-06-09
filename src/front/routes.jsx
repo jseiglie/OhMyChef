@@ -27,10 +27,11 @@ import { EncargadoVentas } from "./pages/encargado/EncargadoVentas";
 import { EncargadoGastos } from "./pages/encargado/EncargadoGastos";
 
 import { ChefDashboard } from "./pages/chef/ChefDashboard";
-import { RegistrarGasto as RegistrarGastoChef } from "./pages/chef/RegistrarGasto";
+import { Gastos as ChefGastos } from "./pages/chef/Gastos";
 import { Proveedores as ProveedoresChef } from "./pages/chef/Proveedores";
 import { Facturas } from "./pages/chef/Facturas";
 import { ChefSettings } from "./pages/chef/ChefSettings";
+
 
 
 
@@ -65,12 +66,8 @@ export const router = createBrowserRouter(
           <Route path="encargado/ventas" element={<EncargadoVentas />} />
           <Route path="encargado/gastos" element={<EncargadoGastos />} />
           <Route path="encargado/settings" element={<EncargadoSettings />} />
-
           <Route path="chef/dashboard" element={<ChefDashboard />} />
-          <Route
-            path="chef/registrar-gasto"
-            element={<RegistrarGastoChef />}
-          />
+          <Route path="chef/gastos" element={<ChefGastos />} />
           <Route path="chef/proveedores" element={<ProveedoresChef />} />
           <Route path="chef/facturas" element={<Facturas />} />
           <Route path="chef/settings" element={<ChefSettings />} />
