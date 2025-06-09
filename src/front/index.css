@@ -21,3 +21,11 @@ button.bg-orange:hover {
   direction: ltr;
   text-align: left;
 }
+.dashboard-container {
+  direction: ltr;
+}
+.custom-sidebar {
+  overflow: scroll !important;
+  height: 100vh;
+  direction: rtl;
+}

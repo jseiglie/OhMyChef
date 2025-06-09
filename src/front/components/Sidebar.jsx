@@ -26,13 +26,10 @@ export const Sidebar = () => {
     <div className="d-flex vh-90">
       <nav
         id="sidebar"
-<<<<<<< HEAD
-        className={`sidebar menu d-flex flex-column p-3 ${menuall ? "w150" : ""}`}
-=======
-        className={`sidebar menu d-flex flex-column p-3 col-3 col-md-2 ${
-          menuall ? "w150" : ""
-        }`}
->>>>>>> 4b87e44d9ea704358df3d6db621f7f5efce61d5f
+
+        className={`sidebar menu d-flex flex-column p-3 ${menuall ? "w250" : ""
+          }`}
+
       >
         <div className="d-flex justify-content-between align-items-center mb-4">
           <span className={`fs-5 menu fw-bold ${seemenu ? "d-none" : ""}`}>
@@ -130,7 +127,7 @@ export const Sidebar = () => {
                     <i className="bi bi-receipt me-2"></i>Facturas
                   </Link>
                 </li>
-                   <li className="nav-item">
+                <li className="nav-item">
                   <Link className="nav-link" to="/chef/gastos">
                     <i className="bi bi-receipt me-2"></i>Gastos
                   </Link>
@@ -146,9 +143,8 @@ export const Sidebar = () => {
         </div>
         <div className="logout mt-auto">
           <button
-            className={`nav-link text-muted d-flex align-items-center bg-transparent border-0 ${
-              menuall ? "logout-row" : "logout-column"
-            }`}
+            className={`nav-link text-muted d-flex align-items-center bg-transparent border-0 ${!menuall ? "logout-row" : "logout-column"
+              }`}
             onClick={handleLogout}
           >
             <i className="bi bi-box-arrow-left me-2"></i>
