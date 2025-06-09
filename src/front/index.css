@@ -1,9 +1,9 @@
 .bg-orange {
-  background-color: #ff7741;
+  background-color: #ff7741 !important;
 }
 
 button.bg-orange:hover {
-  background-color: #f55d21;
+  background-color: #f55d21 !important;
 }
 
 .vh-90 {
@@ -14,10 +14,10 @@ button.bg-orange:hover {
 }
 .rtl-scroll {
   direction: rtl;
-  text-align: left; 
+  text-align: left;
 }
 
-.ltr-scroll{
- direction: ltr;
-  text-align: left; 
+.ltr-scroll {
+  direction: ltr;
+  text-align: left;
 }

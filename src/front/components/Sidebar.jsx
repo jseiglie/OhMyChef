@@ -20,7 +20,7 @@ export const Sidebar = () => {
     <div className="d-flex vh-90">
       <nav
         id="sidebar"
-        className={`sidebar menu d-flex flex-column p-3 col-3 col-md-2 ${menuall ? "w150" : ""}`}
+        className={`sidebar menu d-flex flex-column p-3 ${menuall ? "w150" : ""}`}
       >
         <div className="d-flex justify-content-between align-items-center mb-4">
           <span className={`fs-5 menu fw-bold ${seemenu ? "d-none" : ""}`}>Menú</span>
