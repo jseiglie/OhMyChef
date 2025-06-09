@@ -26,9 +26,9 @@ export const Layout = () => {
   return (
     <div className="d-flex flex-column overflow-hidden" style={{ height: "100vh" }}>
       <Navbar />
-      <div className="d-flex flex-grow-1">
+      <div className="d-flex wrapper-content flex-grow-1">
         <Sidebar role={role} />
-        <main className="flex-grow-1 custom-sidebar p-4 bg-light overflow-auto">
+        <main className="flex-grow-1 custom-sidebar p-2 bg-light">
           <Outlet />
         </main>
       </div>
