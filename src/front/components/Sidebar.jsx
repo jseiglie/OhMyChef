@@ -23,7 +23,7 @@ export const Sidebar = () => {
   };
 
   return (
-    <div className="d-flex vh-90">
+    <div className="sidebar-container d-flex vh-90">
       <nav
         id="sidebar"
         className={`sidebar menu d-flex flex-column p-3 col-3 col-md-2 ${
