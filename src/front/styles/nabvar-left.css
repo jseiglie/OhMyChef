@@ -5,7 +5,7 @@ body {
 /* Sidebar base */
 .sidebar {
   width: 250px;
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   transition: width 0.3s ease;
   overflow: hidden;
 }
@@ -139,3 +139,6 @@ a.nav-link.text-muted.d-flex .logout-column {
     width: 40px;
   }
 }
+
+.sidebar-container {
+  background-color: #f8f9fa}
