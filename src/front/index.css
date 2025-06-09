@@ -9,9 +9,15 @@ button.bg-orange:hover {
 .vh-90 {
   height: 90vh !important;
 }
+.vh-70 {
+  height: 70vh !important;
+}
 .vh-10 {
   height: 10vh !important;
 }
+/* .custom-sidebar {
+  overflow-x: hidden !important;
+} */
 .rtl-scroll {
   direction: rtl;
   text-align: left;
@@ -26,6 +32,13 @@ button.bg-orange:hover {
 }
 .custom-sidebar {
   overflow: scroll !important;
-  height: 100vh;
   direction: rtl;
+}
+.wrapper-content {
+  height: 90vh !important;
+}
+@media (max-width: 972px) {
+  .wrapper-content {
+    height: 80vh !important;
+  }
 }

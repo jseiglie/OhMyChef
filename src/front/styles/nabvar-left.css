@@ -100,14 +100,12 @@ a.nav-link.text-muted.d-flex .logout-column {
 .sidebar.w70 {
   width: 70px;
 }
+
 @media (max-width: 1100px) {
   .collapse.chefmenu a {
     padding: 10px 5px;
     font-size: 0.8rem;
   }
-}
-
-@media (max-width: 990px) {
 }
 
 @media (max-width: 767px) {
@@ -139,6 +137,3 @@ a.nav-link.text-muted.d-flex .logout-column {
     width: 40px;
   }
 }
-
-.sidebar-container {
-  background-color: #f8f9fa}

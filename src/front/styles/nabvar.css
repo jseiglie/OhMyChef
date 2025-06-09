@@ -15,6 +15,16 @@
   justify-content: end;
   flex-direction: row !important;
 }
+.sidebar-container {
+  background-color: #f8f9fa;
+  height: 90vh;
+}
+.sidebar {
+  height: 90vh;
+}
+.navbar {
+  height: 10vh;
+}
 .bi-bell {
   position: relative;
   font-size: 1.25rem;
@@ -102,7 +112,7 @@
   flex-direction: row !important;
 }
 .logout-row > span {
-  font-size: 14px;
+  font-size: 13px;
 }
 .logout-column {
   flex-direction: column !important;
@@ -111,14 +121,26 @@
   font-size: 12px;
 }
 .bi-person-circle::before {
-    content: "\f4d7";
-    font-size: 52px;
-     }
+  content: "\f4d7";
+  font-size: 52px;
+}
+
+@media (max-width: 992px) {
+  .sidebar,
+  .sidebar-container,
+  .custom-sidebar {
+    height: 80vh;
+  }
+  .navbar {
+    height: 20vh;
+  }
+}
+
 @media (max-width: 767px) {
   .navbar-brand {
-    flex: 1 0 50%;
+    flex: 1 0 45%;
     order: 1;
- }
+  }
   .wrapper-for {
     flex: 1;
     order: 3;
@@ -128,7 +150,7 @@
     width: 50%;
   }
   .navbar-nav {
-    flex: 1 0 45%;
+    flex: 1 0 50%;
     order: 2;
     flex-direction: row !important;
   }
@@ -137,5 +159,11 @@
   }
   .logout-row:hover > i {
     color: black !important;
+  }
+}
+
+@media (max-width: 609px) {
+  .navbar {
+    height: 25vh;
   }
 }
