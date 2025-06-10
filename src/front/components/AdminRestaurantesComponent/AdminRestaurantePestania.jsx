@@ -1,7 +1,7 @@
-
+import { Form, Card, Row, Col, Button } from "react-bootstrap";
 
 import { useState } from "react";
-const AdminSettingsRestaurantePestania = () => {
+const AdminRestaurantePestania = () => {
 
 
     const [formData, setFormData] = useState({
@@ -40,9 +40,11 @@ const AdminSettingsRestaurantePestania = () => {
         // Aquí podrías enviar formData + image a una API
     };
 
+    const selectOptions = ["Last 7 days", "Last 14 days", "Last 30 days"];
+
     return (
         <div className="card p-4">
-            <h5 className="mb-4">Perfil de Restaurante</h5>
+            <h5 className="mb-4">Perfil de Restaurantess</h5>
             <form onSubmit={handleSubmit}>
                 <div className="row mb-3">
                     <div className="col-12 col-md-2 d-flex flex-column align-items-center mb-3 mb-md-0">
@@ -137,17 +139,27 @@ const AdminSettingsRestaurantePestania = () => {
                             </div>
                         </div>
 
-                        <div className="d-grid w-50 ms-auto">
-                            <button type="submit" className="btn bg-orange text-white px-4">
+                        <div className="d-grid ms-auto justify-content-end">
+                            <button type="submit" className="btn w250 bg-orange text-white px-3">
                                 Save Changes
                             </button>
                         </div>
                     </div>
                 </div>
             </form>
+            <div class="d-flex w-100 searchRestaurant">
+                <p >Busqueda de resraurante</p>
+                <div className="flex-1">
+                    <label class="form-label mt-3">Date</label>
+                    <input type="date" class="form-control searchRestaurant" value="01/11/2023" />
+                </div>
+            </div>
+            <div class="d-grid mt-3 ms-auto"><button type="submit" class="btn w250 bg-success text-white px-4">Buscar</button></div>
         </div>
+
+
     )
 
 }
 
-export default AdminSettingsRestaurantePestania;
+export default AdminRestaurantePestania;
