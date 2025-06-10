@@ -19,7 +19,7 @@ export const Sidebar = () => {
   const handleLogout = () => {
     sessionStorage.removeItem("token");
     dispatch({ type: "get_user_info", payload: null });
-    navigate("/login");
+    navigate("/");
   };
 
   return (
@@ -148,7 +148,7 @@ export const Sidebar = () => {
             onClick={handleLogout}
           >
             <i className="bi bi-box-arrow-left me-2"></i>
-            <span>Log Out</span>
+            <span>Cerrar sesión</span>
           </button>
         </div>
       </nav>

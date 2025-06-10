@@ -42,7 +42,7 @@
   border-radius: 16px;
   padding: 2.5rem 2rem;
   width: 100%;
-  max-width: 480px;  /* ⬅️ Aquí controlas tú el ancho exacto */
+  max-width: 480px;  
   min-width: 400px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   animation: fadeInRight 0.8s ease-in-out;
