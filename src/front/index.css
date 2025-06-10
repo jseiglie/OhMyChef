@@ -15,6 +15,9 @@ button.bg-orange:hover {
 .vh-10 {
   height: 10vh !important;
 }
+.w-60 {
+  width: 60px !important;
+}
 /* .custom-sidebar {
   overflow-x: hidden !important;
 } */
@@ -42,8 +45,26 @@ button.bg-orange:hover {
 .wrapper-content {
   height: 90vh !important;
 }
+
+span.w-auto {
+  width: auto !important;
+}
+span.w-60 {
+  width: auto !important;
+}
 @media (max-width: 972px) {
   .wrapper-content {
     height: 80vh !important;
+  }
+}
+@media (max-width: 767px) {
+  span.w-60 {
+    width: auto !important;
+  }
+  span.w-auto {
+    width: 60px !important;
+  }
+  .logout {
+    left: 10px !important;
   }
 }

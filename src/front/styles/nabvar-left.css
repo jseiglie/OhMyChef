@@ -76,6 +76,7 @@ body {
   position: absolute;
   bottom: 20px;
   width: auto;
+  left: 20px;
 }
 .w-40 {
   width: 40px;
