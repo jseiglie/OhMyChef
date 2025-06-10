@@ -179,7 +179,7 @@ def login():
         if not check_password_hash(user.password, data["password"]):
             return jsonify({"success": False, "msg": "Email o contraseña incorrectos"}), 401
 
-        token = create_access_token(identity=user.id)
+        token = create_access_token(identity=str(user.id))
 
         data = user.serialize()
 
