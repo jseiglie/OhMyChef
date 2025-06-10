@@ -1,5 +1,6 @@
 import React from "react";
-import AdminSettingsComponent from "../../components/AdminSettingsComponent/AdminSettingsComponent.jsx";
+import { AdminSettingsComponent } from "../../components/AdminSettingsComponent";
+
 export const AdminSettings = () => {
   return (
 
