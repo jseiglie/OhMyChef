@@ -70,6 +70,11 @@ export const Sidebar = () => {
                   </Link>
                 </li>
                 <li className="nav-item">
+                  <Link className="nav-link" to="/admin/restaurantes">
+                    <i className="bi bi-shop me-2"></i>Proveedores
+                  </Link>
+                </li>
+                <li className="nav-item">
                   <Link className="nav-link" to="/admin/usuarios">
                     <i className="bi bi-people me-2"></i>Usuarios
                   </Link>
