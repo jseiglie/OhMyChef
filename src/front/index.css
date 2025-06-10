@@ -34,6 +34,11 @@ button.bg-orange:hover {
   overflow: scroll !important;
   direction: rtl;
 }
+
+.custom-sidebar > div {
+  direction: ltr;
+  width: 99.8%;
+}
 .wrapper-content {
   height: 90vh !important;
 }
