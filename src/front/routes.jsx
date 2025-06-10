@@ -31,6 +31,7 @@ import { Gastos as ChefGastos } from "./pages/chef/Gastos";
 import { Proveedores as ProveedoresChef } from "./pages/chef/Proveedores";
 import { Facturas } from "./pages/chef/Facturas";
 import { ChefSettings } from "./pages/chef/ChefSettings";
+import AdminSettingsComponent from "./components/AdminSettingsComponent/AdminSettingsComponent.jsx";
 
 
 
@@ -51,7 +52,7 @@ export const router = createBrowserRouter(
           <Route path="admin/usuarios" element={<Usuarios />} />
           <Route path="admin/crear-usuario" element={<CrearUsuario />} />
           <Route path="admin/settings" element={<AdminSettings />} />
-
+          <Route path="admin/settings/*" element={<AdminSettingsComponent />} />
           <Route path="encargado/dashboard" element={<EncargadoDashboard />} />
           <Route path="encargado/registrar-venta" element={<RegistrarVenta />} />
           <Route path="encargado/reporte-ventas" element={<ReporteVentas />} />
