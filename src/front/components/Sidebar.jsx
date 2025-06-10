@@ -148,7 +148,7 @@ export const Sidebar = () => {
             onClick={handleLogout}
           >
             <i className="bi bi-box-arrow-left me-2"></i>
-            <span>Cerrar sesión</span>
+            <span className={`${menuall ? "w-60" : "w-auto"}`}>Cerrar sesión</span>
           </button>
         </div>
       </nav>
