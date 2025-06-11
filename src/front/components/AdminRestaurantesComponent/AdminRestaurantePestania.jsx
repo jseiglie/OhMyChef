@@ -1,25 +1,33 @@
-import { Form, Card, Row, Col, Button } from "react-bootstrap";
 
-import { useState } from "react";
+import useGlobalReducer from "../../hooks/useGlobalReducer";
+
+
+import { useEffect, useState } from "react";
+import userServices from "../../services/userServices";
+import therestaurant from "../../services/restauranteServices";
+
 const AdminRestaurantePestania = () => {
+    const [mensaje, setMensaje] = useState("");
+    const { store, dispatch } = useGlobalReducer();
 
-
-    const [formData, setFormData] = useState({
-        companyName: "",
-        businessAddress: "",
-        address: "",
-        phoneNumber: "",
-        responsible: "Encargado",
-        chef: "Nombre del chef",
+    const [restaurantes, SetRestaurantes] = useState({
+        nombre: "",
+        direccion: "",
+        email_contacto: "",
+        telefono: "",
+        responsable: "Encargado",
+        chef_name: "",
     });
 
+    const [usuarios, setUsuarios] = useState([])
     const [image, setImage] = useState(null);
     const [preview, setPreview] = useState(null);
 
 
     const handleChange = (e) => {
+        debugger
         const { name, value } = e.target;
-        setFormData((prev) => ({
+        SetRestaurantes((prev) => ({
             ...prev,
             [name]: value,
         }));
@@ -34,13 +42,54 @@ const AdminRestaurantePestania = () => {
     };
 
     const handleSubmit = (e) => {
+        debugger
         e.preventDefault();
-        console.log("Formulario enviado:", formData);
-        console.log("Imagen subida:", image);
-        // Aquí podrías enviar formData + image a una API
+        const { nombre, direccion, email_contacto, telefono, responsable, chef_name } = restaurantes;
+
+        if (!nombre || !direccion || !email_contacto) {
+            setMensaje("Por favor completa todos los campos obligatorios");
+            return;
+
+        }
+        const restaurante = {
+            ...restaurantes,
+            nombre,
+            direccion,
+            email_contacto,
+            telefono,
+            responsable,
+            chef_name
+        };
+
+        if (!confirm("¿Confirmas los datos introducidos?")) return
+
+
+        therestaurant.crearRestaurante(restaurante)
+            .then((data) => {
+                debugger
+                setMensaje("restaurante registrado con exito");
+                SetRestaurantes(data);
+                return data
+            })
+            .catch(() => setMensaje("Error al registrar gastos"));
+
     };
 
-    const selectOptions = ["Last 7 days", "Last 14 days", "Last 30 days"];
+
+    useEffect(() => {
+        debugger
+        const token = sessionStorage.getItem("token");
+        if (token && store.user.rol == "admin") {
+            userServices.getUsuarios(token)
+                .then(data => {
+                    debugger
+                    setUsuarios(data)
+                })
+                .catch(() => {
+                    sessionStorage.removeItem("token");
+                });
+        }
+    }, [store.user]);
 
     return (
         <div className="card p-4">
@@ -70,8 +119,8 @@ const AdminRestaurantePestania = () => {
                             <input
                                 type="text"
                                 className="form-control"
-                                name="companyName"
-                                value={formData.companyName}
+                                name="nombre"
+                                value={restaurantes.nombre}
                                 onChange={handleChange}
                                 required
                             />
@@ -81,9 +130,9 @@ const AdminRestaurantePestania = () => {
                             <label className="form-label">Business Address</label>
                             <textarea
                                 className="form-control"
-                                name="businessAddress"
+                                name="direccion"
                                 rows="2"
-                                value={formData.businessAddress}
+                                value={restaurantes.direccion}
                                 onChange={handleChange}
                                 required
                             ></textarea>
@@ -91,13 +140,14 @@ const AdminRestaurantePestania = () => {
 
                         <div className="row">
                             <div className="col-12 col-md-6 mb-3">
-                                <label className="form-label">Adress</label>
+                                <label className="form-label">email</label>
                                 <input
-                                    type="text"
+                                    type="email"
                                     className="form-control"
-                                    name="address"
-                                    value={formData.address}
+                                    name="email_contacto"
+                                    value={restaurantes.email_contacto}
                                     onChange={handleChange}
+                                    required
                                 />
                             </div>
                             <div className="col-12 col-md-6 mb-3">
@@ -105,8 +155,8 @@ const AdminRestaurantePestania = () => {
                                 <input
                                     type="text"
                                     className="form-control"
-                                    name="phoneNumber"
-                                    value={formData.phoneNumber}
+                                    name="telefono"
+                                    value={restaurantes.telefono}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -114,27 +164,35 @@ const AdminRestaurantePestania = () => {
 
                         <div className="row">
                             <div className="col-12 col-md-6 mb-3">
-                                <label className="form-label">Responsible</label>
+                                <label className="form-label">Responsable</label>
                                 <select
                                     className="form-select"
-                                    name="responsible"
-                                    value={formData.responsible}
+                                    name="responsable"
+                                    value={restaurantes.responsable}
                                     onChange={handleChange}
                                 >
+
                                     <option>Encargado</option>
                                     <option>Subencargado</option>
                                 </select>
                             </div>
                             <div className="col-12 col-md-6 mb-3">
-                                <label className="form-label">Chef</label>
+                                <label className="form-label">Rol</label>
                                 <select
                                     className="form-select"
-                                    name="chef"
-                                    value={formData.chef}
+                                    name="chef_name"
+                                    value={restaurantes.chef_name}
                                     onChange={handleChange}
                                 >
-                                    <option>Nombre del chef</option>
-                                    <option>Otro chef</option>
+                                    {usuarios?.filter(usuario => usuario.rol === 'chef')
+                                        .map(usuario => {
+                                            return (
+                                                <option key={usuario.id} value={usuario.nombre}>
+                                                    {usuario.nombre}
+                                                </option>
+                                            );
+                                        })
+                                    }
                                 </select>
                             </div>
                         </div>
@@ -146,16 +204,16 @@ const AdminRestaurantePestania = () => {
                         </div>
                     </div>
                 </div>
-            </form>
-            <div class="d-flex w-100 searchRestaurant">
+            </form >
+            <div className="d-flex w-100 searchRestaurant">
                 <p >Busqueda de resraurante</p>
                 <div className="flex-1">
-                    <label class="form-label mt-3">Date</label>
-                    <input type="date" class="form-control searchRestaurant" value="01/11/2023" />
+                    <label className="form-label mt-3">Date</label>
+                    <input type="date" className="form-control searchRestaurant" value="01/11/2023" />
                 </div>
             </div>
-            <div class="d-grid mt-3 ms-auto"><button type="submit" class="btn w250 bg-success text-white px-4">Buscar</button></div>
-        </div>
+            <div className="d-grid mt-3 ms-auto"><button type="submit" className="btn w250 bg-success text-white px-4">Buscar</button></div>
+        </div >
 
 
     )

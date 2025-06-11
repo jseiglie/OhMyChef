@@ -1,6 +1,7 @@
 import {
-  createBrowserRouter, BrowserRouter as Route,
+  createBrowserRouter,
   createRoutesFromElements,
+  Route,
 } from "react-router-dom";
 import { Layout } from "./layout/Layout";
 import { Home } from "./pages/Home";
@@ -16,7 +17,7 @@ import { Usuarios } from "./pages/admin/Usuarios";
 import { CrearUsuario } from "./pages/admin/CrearUsuario";
 import { AdminSettings } from "./pages/admin/AdminSettings";
 import { ProveedoresDashboard } from "./pages/admin/ProveedoresDashboard";
-import  ProveedorRestauranteDetail  from "./pages/admin/ProveedorRestauranteDetail";
+import ProveedorRestauranteDetail from "./pages/admin/ProveedorRestauranteDetail";
 
 
 

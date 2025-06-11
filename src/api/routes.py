@@ -770,6 +770,7 @@ def get_restaurantes():
             "nombre": r.nombre,
             "direccion": r.direccion,
             "email_contacto": r.email_contacto
+            
         })
 
     return jsonify(resultados), 200

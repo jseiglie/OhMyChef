@@ -21,6 +21,7 @@ class Restaurante(db.Model):
             "nombre": self.nombre,
             "direccion": self.direccion,
             "email_contacto": self.email_contacto,
+            "usuarios": self.usuarios
         }
 
 

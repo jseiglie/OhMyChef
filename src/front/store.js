@@ -29,10 +29,20 @@ export default function storeReducer(store, action = {}) {
         ...store,
         user: action.payload.user,
       };
+    case "get_usuarios":
+      return {
+        ...store,
+        user: action.payload.user,
+      };
     case "set_hello":
       return {
         ...store,
         message: action.payload,
+      };
+    case "set_restaurante":
+      return {
+        ...store,
+        restaurantes: action.payload, 
       };
     case "add_task":
       const { id, color } = action.payload;
