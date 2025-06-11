@@ -1,7 +1,6 @@
 import {
-  createBrowserRouter,
+  createBrowserRouter, BrowserRouter as Route,
   createRoutesFromElements,
-  Route,
 } from "react-router-dom";
 import { Layout } from "./layout/Layout";
 import { Home } from "./pages/Home";
@@ -16,7 +15,10 @@ import { AdminGastos } from "./pages/admin/AdminGastos";
 import { Usuarios } from "./pages/admin/Usuarios";
 import { CrearUsuario } from "./pages/admin/CrearUsuario";
 import { AdminSettings } from "./pages/admin/AdminSettings";
-import { ProveedoresDashboard } from "./pages/admin/ProveedorRestaurantDashboard";
+import { ProveedoresDashboard } from "./pages/admin/ProveedoresDashboard";
+import  ProveedorRestauranteDetail  from "./pages/admin/ProveedorRestauranteDetail";
+
+
 
 import { EncargadoDashboard } from "./pages/encargado/EncargadoDashboard";
 import { RegistrarVenta } from "./pages/encargado/RegistrarVenta";
@@ -54,7 +56,9 @@ export const router = createBrowserRouter(
           <Route path="admin/crear-usuario" element={<CrearUsuario />} />
           <Route path="admin/settings" element={<AdminSettings />} />
           <Route path="admin/proveedores" element={<ProveedoresDashboard />} />
-          
+          <Route path="admin/proveedores/restaurante/:id" element={<ProveedorRestauranteDetail />} />
+          <Route path="*" element={<h1>404 - Página no encontrada</h1>} />
+
 
           <Route path="encargado/dashboard" element={<EncargadoDashboard />} />
           <Route path="encargado/registrar-venta" element={<RegistrarVenta />} />

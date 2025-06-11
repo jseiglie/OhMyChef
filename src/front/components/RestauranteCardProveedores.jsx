@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../styles/RestauranteCardProveedores.css';
+import "../styles/RestauranteCardProveedores.css";
 
 const RestauranteCardProveedores = ({ restaurant, onViewAll }) => {
     const { id, name, city, zone, percentage, status } = restaurant;

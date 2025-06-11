@@ -1,13 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import RestauranteCardProveedores from './RestauranteCardProveedores';
-import styles from '../../styles/ProveedoresDashboard.css';
+import RestauranteCardProveedores from '../../components/RestauranteCardProveedores';
+import '../../styles/ProveedoresDashboard.css';
 
 const ProveedoresDashboard = () => {
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
-    
-    const restaurants = [
+
+    const restaurantes = [
         { id: '1', name: 'RESTAURANTE # 1', city: 'Valencia', zone: 'zona 1', percentage: 27, status: 'Activo' },
         { id: '2', name: 'RESTAURANTE # 2', city: 'Barcelona', zone: 'zona 2', percentage: 27, status: 'Activo' },
         { id: '3', name: 'RESTAURANTE # 3', city: 'Valencia', zone: 'zona 2', percentage: 27, status: 'Activo' },
@@ -15,8 +15,8 @@ const ProveedoresDashboard = () => {
     ];
 
 
-    const handleViewAll = (restaurantId) => {
-        navigate(`/restaurant/${restaurantId}`);
+    const handleViewAll = (restauranteId) => {
+        navigate(`/restaurantes/${restauranteId}`);
     };
 
     return (
@@ -27,11 +27,11 @@ const ProveedoresDashboard = () => {
             </header>
 
             <main className={styles.gridContainer}>
-                {restaurants.map(restaurant => (
+                {restaurants.map(restaurante => (
                     <RestaurantCard
-                        key={restaurant.id} 
-                        restaurant={restaurant}
-                        onViewAll={handleViewAll} 
+                        key={restaurante.id}
+                        restaurant={restaurante}
+                        onViewAll={handleViewAll}
                     />
                 ))}
             </main>
@@ -39,4 +39,4 @@ const ProveedoresDashboard = () => {
     );
 };
 
-export default ProveedoresDashboard;
+export { ProveedoresDashboard };
