@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export const CambiarContraseña = () => {
+export const CambiarContrasena = () => {
   const [actual, setActual] = useState("");
   const [nueva, setNueva] = useState("");
   const [confirmar, setConfirmar] = useState("");
