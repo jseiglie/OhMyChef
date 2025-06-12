@@ -14,7 +14,7 @@ import { AdminVentas } from "./pages/admin/AdminVentas";
 import { AdminGastos } from "./pages/admin/AdminGastos";
 import { Usuarios } from "./pages/admin/Usuarios";
 import { CrearUsuario } from "./pages/admin/CrearUsuario";
-import { AdminSettings } from "./pages/admin/AdminSettings";
+import { ConfigAdmin} from "./pages/configuracion/ConfigAdmin.jsx";
 import { ProveedoresDashboard } from "./pages/admin/ProveedoresDashboard";
 import  ProveedorRestauranteDetail  from "./pages/admin/ProveedorRestauranteDetail";
 
@@ -57,7 +57,7 @@ export const router = createBrowserRouter(
           <Route path="admin/gastos" element={<AdminGastos />} />
           <Route path="admin/usuarios" element={<Usuarios />} />
           <Route path="admin/crear-usuario" element={<CrearUsuario />} />
-          <Route path="admin/settings" element={<AdminSettings />} />
+          <Route path="admin/settings" element={<ConfigAdmin />} />
           <Route path="admin/proveedores" element={<ProveedoresDashboard />} />
           <Route path="admin/proveedores/restaurante/:id" element={<ProveedorRestauranteDetail />} />
           <Route path="*" element={<h1>404 - Página no encontrada</h1>} />
