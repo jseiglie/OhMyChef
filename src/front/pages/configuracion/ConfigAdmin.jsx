@@ -1,6 +1,6 @@
 import React from "react";
 import { DatosPersonales } from "./Datos/DatosPersonales.jsx";
-import { CambiarContraseña } from "./Datos/CambiarContraseña.jsx";
+import { CambiarContrasena } from "./Datos/CambiarContrasena.jsx";
 import { MonedaPrincipal } from "./Datos/MonedaPrincipal.jsx";
 import { Personalizacion } from "./Datos/Personalizacion.jsx";
 import { AjustesAvanzados } from "./Datos/AjustesAvanzados.jsx";
@@ -12,7 +12,7 @@ export const ConfigAdmin = () => {
       <hr />
       <DatosPersonales />
       <hr />
-      <CambiarContraseña />
+      <CambiarContrasena />
       <hr />
       <MonedaPrincipal />
       <hr />
