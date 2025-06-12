@@ -32,11 +32,11 @@ userServices.getUsuarios = async (token) => {
 };
 
 userServices.getUserinfo = async () => {
-  const token = sessionStorage.getItem("token");
-  const response = await fetch(`${backendUrl}/api/private`, {
+  const resp = await fetch(backendUrl + "/api/private", {
     method: "GET",
     headers: {
-      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + localStorage.getItem("token"),
     },
   });
   await new Promise((res) => setTimeout(res, 2000));
@@ -45,7 +45,6 @@ userServices.getUserinfo = async () => {
   const data = await response.json();
   return data;
 };
-
 userServices.login = async (formData) => {
   try {
     const resp = await fetch(backendUrl + "/api/login", {
