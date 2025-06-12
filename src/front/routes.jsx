@@ -1,5 +1,5 @@
 import {
-  createBrowserRouter, BrowserRouter as Route,
+  createBrowserRouter, Route,
   createRoutesFromElements,
 } from "react-router-dom";
 import { Layout } from "./layout/Layout";
