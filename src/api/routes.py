@@ -977,3 +977,27 @@ def resumen_gastos_mensual():
 
     except Exception as e:
         return jsonify({"msg": "Error interno", "error": str(e)}), 500
+    
+@api.route('/cambiar-password', methods=['PUT'])
+@jwt_required()
+def cambiar_password():
+    data = request.get_json()
+    actual = data.get("actual")
+    nueva = data.get("nueva")
+
+    if not actual or not nueva:
+        return jsonify({ "msg": "Faltan datos" }), 400
+
+    user_id = get_jwt_identity()
+    user = Usuario.query.get(user_id)
+
+    if not user:
+        return jsonify({ "msg": "Usuario no encontrado" }), 404
+
+    if not check_password_hash(user.password, actual):
+        return jsonify({ "msg": "Contraseña actual incorrecta" }), 401
+
+    user.password = generate_password_hash(nueva)
+    db.session.commit()
+
+    return jsonify({ "msg": "Contraseña actualizada correctamente" }), 200
