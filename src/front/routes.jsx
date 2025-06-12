@@ -9,7 +9,6 @@ import { Login } from "./components/Login";
 import { RutaPrivada } from "./components/RutaPrivada.jsx";
 
 import { AdminDashboard } from "./pages/admin/AdminDashboard";
-// import { Restaurantes } from "./pages/admin/Restaurantes";
 import { CrearRestaurante } from "./pages/admin/CrearRestaurante";
 import { AdminVentas } from "./pages/admin/AdminVentas";
 import { AdminGastos } from "./pages/admin/AdminGastos";
@@ -27,15 +26,12 @@ import { EncargadoVentas } from "./pages/encargado/EncargadoVentas";
 import { EncargadoGastos } from "./pages/encargado/EncargadoGastos";
 
 import { ChefDashboard } from "./pages/chef/ChefDashboard";
-import { Gastos as ChefGastos } from "./pages/chef/Gastos";
 import { Proveedores as ProveedoresChef } from "./pages/chef/Proveedores";
 import { Facturas } from "./pages/chef/Facturas";
 import { ChefSettings } from "./pages/chef/ChefSettings";
 import AdminRestaurante from "./pages/admin/AdminRestaurante.jsx";
-
-
-
-
+import { DetalleGastosMensual } from "./components/shared/DetalleGastosMensual.jsx";
+import { GastoForm } from "./components/GastoForm";
 
 
 export const router = createBrowserRouter(
@@ -45,6 +41,7 @@ export const router = createBrowserRouter(
       <Route path="/login" element={<Login />} />
       <Route element={<RutaPrivada allowedRoles={["admin", "encargado", "chef"]} />}>
         <Route element={<Layout />}>
+          {/* Admin */}
           <Route path="admin/dashboard" element={<AdminDashboard />} />
           <Route path="admin/restaurantes" element={<AdminRestaurante />} />
           <Route path="admin/restaurantes/*" element={<AdminRestaurante />} />
@@ -55,25 +52,24 @@ export const router = createBrowserRouter(
           <Route path="admin/crear-usuario" element={<CrearUsuario />} />
           <Route path="admin/settings" element={<AdminSettings />} />
 
+          {/* Encargado */}
           <Route path="encargado/dashboard" element={<EncargadoDashboard />} />
           <Route path="encargado/registrar-venta" element={<RegistrarVenta />} />
-          <Route path="encargado/reporte-ventas" element={<ReporteVentas />} />
-          <Route
-            path="encargado/registrar-gasto"
-            element={<RegistrarGastoEncargado />}
-          />
-          <Route
-            path="encargado/proveedores"
-            element={<ProveedoresEncargado />}
-          />
+          <Route path="encargado/registrar-gasto" element={<RegistrarGastoEncargado />} />
+          <Route path="encargado/proveedores" element={<ProveedoresEncargado />} />
           <Route path="encargado/ventas" element={<EncargadoVentas />} />
           <Route path="encargado/gastos" element={<EncargadoGastos />} />
           <Route path="encargado/settings" element={<EncargadoSettings />} />
+
+          {/* Chef */}
+
           <Route path="chef/dashboard" element={<ChefDashboard />} />
-          <Route path="chef/gastos" element={<ChefGastos />} />
           <Route path="chef/proveedores" element={<ProveedoresChef />} />
           <Route path="chef/facturas" element={<Facturas />} />
           <Route path="chef/settings" element={<ChefSettings />} />
+          <Route path="chef/gastos" element={<DetalleGastosMensual />} />
+          <Route path="chef/gastos/registrar" element={<GastoForm />} />
+
         </Route>
       </Route>
     </>
