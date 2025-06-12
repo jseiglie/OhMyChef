@@ -35,6 +35,8 @@ class Usuario(db.Model):
     restaurante_id = db.Column(db.Integer, db.ForeignKey(
         'restaurantes.id'), nullable=True)
 
+    moneda = db.Colum(db.String(10), nullable=True)
+
     def serialize(self):
         return {
             "id": self.id,
@@ -42,6 +44,7 @@ class Usuario(db.Model):
             "email": self.email,
             "rol": self.rol,
             "restaurante_id": self.restaurante_id,
+            "moneda": self.moneda,
         }
 
 
