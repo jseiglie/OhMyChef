@@ -76,6 +76,7 @@ body {
   position: absolute;
   bottom: 20px;
   width: auto;
+  left: 20px;
 }
 .w-40 {
   width: 40px;
@@ -94,8 +95,8 @@ a.nav-link.text-muted.d-flex .logout-column {
   width: 220px;
   background: white;
 }
-.sidebar.w250 {
-  width: 250px;
+.sidebar.w200 {
+  width: 200px;
 }
 .sidebar.w70 {
   width: 70px;

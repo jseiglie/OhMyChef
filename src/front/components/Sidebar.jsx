@@ -27,7 +27,7 @@ export const Sidebar = () => {
       <nav
         id="sidebar"
 
-        className={`sidebar menu d-flex flex-column p-3 ${menuall ? "w250" : ""
+        className={`sidebar menu d-flex flex-column p-3 ${menuall ? "w200" : ""
           }`}
 
       >
@@ -67,6 +67,11 @@ export const Sidebar = () => {
                 <li className="nav-item">
                   <Link className="nav-link" to="/admin/gastos">
                     <i className="bi bi-cash-coin me-2"></i>Gastos
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/admin/restaurantes">
+                    <i className="bi bi-shop me-2"></i>Proveedores
                   </Link>
                 </li>
                 <li className="nav-item">
@@ -148,7 +153,7 @@ export const Sidebar = () => {
             onClick={handleLogout}
           >
             <i className="bi bi-box-arrow-left me-2"></i>
-            <span>Cerrar sesión</span>
+            <span className={`${menuall ? "w-60" : "w-auto"}`}>Cerrar sesión</span>
           </button>
         </div>
       </nav>
