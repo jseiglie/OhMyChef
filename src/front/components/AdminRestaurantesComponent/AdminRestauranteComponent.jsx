@@ -1,4 +1,4 @@
-import AdminExpensePestania from "./AdminExpensePestania";
+import AdminVerRestaurante from "./AdminVerRestaurante";
 import AdminRestaurantePestania from "./AdminRestaurantePestania";
 import AdminNotificationsPestania from "./AdminNotificationsPestania";
 import { Routes, Route, Link, useLocation, Navigate } from "react-router-dom";
@@ -36,7 +36,7 @@ const AdminRestauranteComponent = () => {
                 <div className="card p-4">
                     <Routes>
                         <Route path="restaurant" element={<AdminRestaurantePestania />} />
-                        <Route path="expense" element={<AdminExpensePestania />} />
+                        <Route path="expense" element={<AdminVerRestaurante />} />
                         <Route path="notifications" element={<AdminNotificationsPestania />} />
                         <Route path="/" element={<Navigate to="restaurant" replace />} />
                     </Routes>

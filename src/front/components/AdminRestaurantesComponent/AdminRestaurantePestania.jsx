@@ -1,15 +1,13 @@
 
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 
-
 import { useEffect, useState } from "react";
 import userServices from "../../services/userServices";
 import therestaurant from "../../services/restauranteServices";
 
 const AdminRestaurantePestania = () => {
-    const [mensaje, setMensaje] = useState("");
     const { store, dispatch } = useGlobalReducer();
-
+    const [mensaje, setMensaje] = useState("");
     const [restaurantes, SetRestaurantes] = useState({
         nombre: "",
         direccion: "",
@@ -18,12 +16,29 @@ const AdminRestaurantePestania = () => {
         responsable: "Encargado",
         chef_name: "",
     });
-
     const [usuarios, setUsuarios] = useState([])
     const [image, setImage] = useState(null);
     const [preview, setPreview] = useState(null);
 
 
+
+    useEffect(() => {
+        debugger
+        const token = sessionStorage.getItem("token");
+        if (token && store.user.rol == "admin") {
+            userServices.getUsuarios(token)
+                .then(data => {
+                    debugger
+                    setUsuarios(data)
+                })
+                .catch(() => {
+                    sessionStorage.removeItem("token");
+                });
+        }
+    }, [store.user]);
+
+
+    // INICIO FUNCIONES ///////////////
     const handleChange = (e) => {
         debugger
         const { name, value } = e.target;
@@ -76,21 +91,7 @@ const AdminRestaurantePestania = () => {
     };
 
 
-    useEffect(() => {
-        debugger
-        const token = sessionStorage.getItem("token");
-        if (token && store.user.rol == "admin") {
-            userServices.getUsuarios(token)
-                .then(data => {
-                    debugger
-                    setUsuarios(data)
-                })
-                .catch(() => {
-                    sessionStorage.removeItem("token");
-                });
-        }
-    }, [store.user]);
-
+    // INICIO HTML ///////////////
     return (
         <div className="card p-4">
             <h5 className="mb-4">Perfil de Restaurantess</h5>
@@ -162,46 +163,24 @@ const AdminRestaurantePestania = () => {
                             </div>
                         </div>
 
-                        <div className="row">
-                            <div className="col-12 col-md-6 mb-3">
-                                <label className="form-label">Responsable</label>
-                                <select
-                                    className="form-select"
-                                    name="responsable"
-                                    value={restaurantes.responsable}
-                                    onChange={handleChange}
-                                >
-
-                                    <option>Encargado</option>
-                                    <option>Subencargado</option>
-                                </select>
-                            </div>
-                            <div className="col-12 col-md-6 mb-3">
-                                <label className="form-label">Rol</label>
-                                <select
-                                    className="form-select"
-                                    name="chef_name"
-                                    value={restaurantes.chef_name}
-                                    onChange={handleChange}
-                                >
-                                    {usuarios?.filter(usuario => usuario.rol === 'chef')
-                                        .map(usuario => {
-                                            return (
-                                                <option key={usuario.id} value={usuario.nombre}>
-                                                    {usuario.nombre}
-                                                </option>
-                                            );
-                                        })
-                                    }
-                                </select>
+                        <div class="row"><div class="col-12 col-md-6 mb-3"><label class="form-label">Responsable</label>
+                            <select class="form-select" name="responsable">
+                                <option>Encargado</option>
+                                <option>Subencargado</option>
+                            </select>
+                        </div>
+                            <div class="col-12 col-md-6 mb-3 d-flex align-items-end justify-content-end" >
+                                <button type="submit" class="btn w250 bg-orange text-white px-3">Save Changes</button>
                             </div>
                         </div>
-
-                        <div className="d-grid ms-auto justify-content-end">
-                            <button type="submit" className="btn w250 bg-orange text-white px-3">
-                                Save Changes
-                            </button>
-                        </div>
+                        {mensaje && (
+                            <div
+                                className={`alert col-12 col-sm-12 col-md-12 col-lg-6 mt-3 text-white text-center float-end ${mensaje.toLowerCase().includes("exito") ? "bg-success" : "bg-danger"
+                                    }`}
+                            >
+                                {mensaje}
+                            </div>
+                        )}
                     </div>
                 </div>
             </form >
@@ -212,10 +191,8 @@ const AdminRestaurantePestania = () => {
                     <input type="date" className="form-control searchRestaurant" value="01/11/2023" />
                 </div>
             </div>
-            <div className="d-grid mt-3 ms-auto"><button type="submit" className="btn w250 bg-success text-white px-4">Buscar</button></div>
+            <div className="d-grid mt-3 ms-auto"><button type="submit" className="btn w250 bg-primary text-white px-4">Buscar</button></div>
         </div >
-
-
     )
 
 }

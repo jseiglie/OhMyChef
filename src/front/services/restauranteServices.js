@@ -3,7 +3,6 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL;
 const therestaurant = {};
 
 therestaurant.crearRestaurante = async (restaurante) => {
-  
   const token = sessionStorage.getItem("token");
   const response = await fetch(`${backendUrl}/api/restaurantes`, {
     method: "POST",
@@ -35,4 +34,20 @@ therestaurant.getRestaurantes = async (token) => {
   const data = await response.json();
   return data;
 };
+
+therestaurant.eliminarRestaurante = async (id, token) => {
+  const response = await fetch(`${backendUrl}/api/restaurantes/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  await new Promise((res) => setTimeout(res, 2000));
+
+  if (!response.ok)
+    throw new Error("No se pudo obtener la información del los usuarios");
+  const data = await response.json();
+  return data;
+};
+
 export default therestaurant;

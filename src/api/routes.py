@@ -320,7 +320,6 @@ def crear_gasto():
     if not data:
         return jsonify({"msg": "Datos no recibidos"}), 400
 
-    
     if isinstance(data, list):
         try:
             for g in data:
@@ -346,7 +345,6 @@ def crear_gasto():
             db.session.rollback()
             return jsonify({"msg": "Error al registrar gastos", "error": str(e)}), 500
 
-    
     else:
         fecha = data.get("fecha")
         monto = data.get("monto")
@@ -377,7 +375,6 @@ def crear_gasto():
         except Exception as e:
             db.session.rollback()
             return jsonify({"msg": "Error al registrar el gasto", "error": str(e)}), 500
-
 
 
 @api.route('/gastos/<int:id>', methods=['GET'])
@@ -762,15 +759,22 @@ def eliminar_margen(id):
 @jwt_required()
 def get_restaurantes():
     restaurantes = Restaurante.query.all()
-
     resultados = []
     for r in restaurantes:
         resultados.append({
             "id": r.id,
             "nombre": r.nombre,
             "direccion": r.direccion,
-            "email_contacto": r.email_contacto
-            
+            "email_contacto": r.email_contacto,
+            "telefono": r.telefono,
+            "usuarios": [{
+                "nombre": u.nombre,
+                "id": u.id,
+                "rol": u.rol
+            }
+                for u in r.usuarios
+            ]
+            # "usuarios": [u.serialize() for u in r.usuarios]
         })
 
     return jsonify(resultados), 200
@@ -787,6 +791,7 @@ def crear_restaurante():
     nombre = data.get("nombre")
     direccion = data.get("direccion")
     email_contacto = data.get("email_contacto")
+    telefono = data.get("telefono")
 
     if not nombre:
         return jsonify({"msg": "El campo 'nombre' es obligatorio"}), 400
@@ -795,7 +800,8 @@ def crear_restaurante():
         nuevo = Restaurante(
             nombre=nombre,
             direccion=direccion,
-            email_contacto=email_contacto
+            email_contacto=email_contacto,
+            telefono=telefono
         )
         db.session.add(nuevo)
         db.session.commit()

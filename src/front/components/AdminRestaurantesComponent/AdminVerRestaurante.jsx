@@ -3,38 +3,26 @@ import therestaurant from "../../services/restauranteServices";
 import React, { useState, useEffect } from "react";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 
-const AdminExpensePestania = () => {
+const AdminVerRestaurante = () => {
     const { store, dispatch } = useGlobalReducer();
-    const [restaurantes, SetRestaurantes] = useState([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const token = sessionStorage.getItem("token");
-        console.log("hay tantnos restaurantes", restaurantes.length)
-        if (restaurantes.length > 0 && token && store.user.rol === "admin") {
-            setLoading(false);
-            return
 
-
-        }
-        else if (token && store.user.rol === "admin") {
+        if (token && store.user?.rol === "admin") {
             setLoading(true);
             therestaurant.getRestaurantes(token)
                 .then((data) => {
-                    SetRestaurantes(data);
-                    setLoading(false);
                     dispatch({ type: "set_restaurante", payload: data });
-
+                    setLoading(false);
                 })
                 .catch(() => {
                     sessionStorage.removeItem("token");
                     setLoading(false);
                 });
         }
-
-
-    }, [store.user.rol]);
-
+    }, [store.user?.rol, dispatch]);
     return (
         <>
             {loading ? (
@@ -48,10 +36,11 @@ const AdminExpensePestania = () => {
                     </div>
                 </div>
             ) : (
-                <ListaRestaurantes restaurantes={restaurantes} />
+                <ListaRestaurantes restaurantes={store.restaurantes} />
             )}
         </>
     );
 };
 
-export default AdminExpensePestania;
+
+export default AdminVerRestaurante;
