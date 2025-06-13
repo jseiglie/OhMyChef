@@ -128,11 +128,6 @@ export const Sidebar = () => {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/chef/facturas">
-                    <i className="bi bi-receipt me-2"></i>Facturas
-                  </Link>
-                </li>
-                <li className="nav-item">
                   <Link className="nav-link" to="/chef/gastos">
                     <i className="bi bi-receipt me-2"></i>Gastos
                   </Link>

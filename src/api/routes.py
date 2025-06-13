@@ -43,7 +43,6 @@ def register():
         total_users = db.session.scalar(
             select(func.count()).select_from(Usuario))
 
-        # ✅ Solo permitir crear sin token si no hay usuarios
         current_user_id = get_jwt_identity()
         if total_users > 0:
             if not current_user_id:
@@ -52,7 +51,7 @@ def register():
             if not current_user or current_user.rol != "admin":
                 return jsonify({"error": "Solo el admin puede crear usuarios"}), 403
 
-        # Validar restaurante obligatorio para roles chef o encargado
+      
         if data["rol"] in ["chef", "encargado"] and not data.get("restaurante_id"):
             return jsonify({"error": "Chef o encargado debe tener restaurante asignado"}), 400
 

@@ -76,7 +76,7 @@ export const GastoForm = () => {
       setGastos([{ proveedor_id: "", categoria: "", monto: "", nota: "" }]);
 
       setTimeout(() => {
-        navigate("/chef/gastos");
+        navigate(`/${user.rol}/gastos`);
       }, 1500);
     } catch {
       setMensaje("Error al registrar gastos");
