@@ -70,7 +70,7 @@ export const Sidebar = () => {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/admin/restaurantes">
+                  <Link className="nav-link" to="/admin/Proveedores">
                     <i className="bi bi-shop me-2"></i>Proveedores
                   </Link>
                 </li>
