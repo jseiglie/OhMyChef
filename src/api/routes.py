@@ -240,7 +240,6 @@ def crear_venta():
         return jsonify({"msg": "Error al crear la venta", "error": str(e)}), 500
 
 
-
 @api.route('/ventas/<int:id>', methods=['GET'])
 @jwt_required()
 def obtener_venta(id):
@@ -837,7 +836,10 @@ def crear_restaurante():
         )
         db.session.add(nuevo)
         db.session.commit()
-        return jsonify({"msg": "Restaurante creado correctamente"}), 201
+        return jsonify({
+            "msg": "Restaurante creado correctamente",
+            "nuevo": nuevo.serialize()
+        }), 201
     except Exception as e:
         db.session.rollback()
         return jsonify({"msg": "Error al crear el restaurante", "error": str(e)}), 500
@@ -907,7 +909,8 @@ def eliminar_restaurante(id):
 @jwt_required()
 def get_user_info():
     try:
-        user_identity = json.loads(get_jwt_identity())  # 🔁 aquí parseamos el JSON
+        # 🔁 aquí parseamos el JSON
+        user_identity = json.loads(get_jwt_identity())
         user_id = user_identity["id"]
 
         usuario = db.session.get(Usuario, user_id)
@@ -926,8 +929,6 @@ def get_user_info():
 
     except Exception as e:
         return jsonify({"error": "Algo salió mal"}), 500
-
-
 
 
 @api.route("/gastos/resumen-mensual", methods=["GET"])
@@ -987,7 +988,8 @@ def resumen_gastos_mensual():
 
     except Exception as e:
         return jsonify({"msg": "Error interno", "error": str(e)}), 500
-    
+
+
 @api.route('/cambiar-password', methods=['PUT'])
 @jwt_required()
 def cambiar_password():
@@ -996,18 +998,18 @@ def cambiar_password():
     nueva = data.get("nueva")
 
     if not actual or not nueva:
-        return jsonify({ "msg": "Faltan datos" }), 400
+        return jsonify({"msg": "Faltan datos"}), 400
 
     user_id = get_jwt_identity()
     user = Usuario.query.get(user_id)
 
     if not user:
-        return jsonify({ "msg": "Usuario no encontrado" }), 404
+        return jsonify({"msg": "Usuario no encontrado"}), 404
 
     if not check_password_hash(user.password, actual):
-        return jsonify({ "msg": "Contraseña actual incorrecta" }), 401
+        return jsonify({"msg": "Contraseña actual incorrecta"}), 401
 
     user.password = generate_password_hash(nueva)
     db.session.commit()
 
-    return jsonify({ "msg": "Contraseña actualizada correctamente" }), 200
+    return jsonify({"msg": "Contraseña actualizada correctamente"}), 200

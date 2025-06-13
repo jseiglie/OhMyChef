@@ -21,7 +21,6 @@ export const GastoForm = () => {
   });
 
   useEffect(() => {
-    debugger
     if (user?.restaurante_id) {
 
       gastoServices
@@ -191,11 +190,10 @@ export const GastoForm = () => {
 
         {mensaje && (
           <div
-            className={`alert mt-3 ${
-              mensaje.toLowerCase().includes("éxito")
+            className={`alert mt-3 ${mensaje.toLowerCase().includes("éxito")
                 ? "alert-success"
                 : "alert-danger"
-            }`}
+              }`}
           >
             {mensaje}
           </div>

@@ -10,7 +10,7 @@ const AdminVerRestaurante = () => {
     useEffect(() => {
         const token = sessionStorage.getItem("token");
 
-        if (token && store.user?.rol === "admin") {
+        if (token && store.user?.rol === "admin" && (!store.restaurantes || store.restaurantes.length == 0)) {
             setLoading(true);
             therestaurant.getRestaurantes(token)
                 .then((data) => {
@@ -24,6 +24,9 @@ const AdminVerRestaurante = () => {
         }
     }, [store.user?.rol, dispatch]);
     return (
+
+
+
         <>
             {loading ? (
                 <div className="d-flex justify-content-center align-items-center h-100">

@@ -13,7 +13,7 @@ const AdminRestauranteComponent = () => {
             <h1 className="dashboard-title ">Restaurantes</h1>
             <p className="dashboard-welcome mb-2">Añade tu Restaurante</p>
 
-            <div className="col-12 col-sm-12 col-md-11 col-lg-10 col-xl-9 col-xxl-8 mt-4">
+            <div className="col-12 col-sm-12 col-md-9 col-lg-7col-xl-7 col-xxl-6 mt-4">
                 <ul className="nav nav-tabs">
                     <li className="nav-item">
                         <Link className={`nav-link ${location.pathname.endsWith("restaurant") ? "active" : ""}`} to="restaurant">
@@ -25,11 +25,11 @@ const AdminRestauranteComponent = () => {
                             Ver restaurantes
                         </Link>
                     </li>
-                    <li className="nav-item">
+                    {/* <li className="nav-item">
                         <Link className={`nav-link ${location.pathname.endsWith("notifications") ? "active" : ""}`} to="notifications">
                             Notifications
                         </Link>
-                    </li>
+                    </li> */}
                 </ul>
 
 

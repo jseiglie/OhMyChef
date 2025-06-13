@@ -4,31 +4,41 @@ import useGlobalReducer from "../../hooks/useGlobalReducer";
 import { useEffect, useState } from "react";
 import userServices from "../../services/userServices";
 import therestaurant from "../../services/restauranteServices";
+import { useLocation } from "react-router-dom";
+
 
 const AdminRestaurantePestania = () => {
     const { store, dispatch } = useGlobalReducer();
     const [mensaje, setMensaje] = useState("");
+    const location = useLocation();
+    const restaurante = location.state?.restaurante;
     const [restaurantes, SetRestaurantes] = useState({
         nombre: "",
         direccion: "",
         email_contacto: "",
-        telefono: "",
-        responsable: "Encargado",
-        chef_name: "",
+        telefono: ""
+
     });
     const [usuarios, setUsuarios] = useState([])
     const [image, setImage] = useState(null);
     const [preview, setPreview] = useState(null);
 
+    // ✅ Corrección aquí (nueva línea 15 aprox.)
+    useEffect(() => {
+        debugger
+        if (restaurante) {
+            SetRestaurantes(restaurante);
+        }
+    }, [restaurante]);
+
+
 
 
     useEffect(() => {
-        debugger
         const token = sessionStorage.getItem("token");
         if (token && store.user.rol == "admin") {
             userServices.getUsuarios(token)
                 .then(data => {
-                    debugger
                     setUsuarios(data)
                 })
                 .catch(() => {
@@ -36,6 +46,8 @@ const AdminRestaurantePestania = () => {
                 });
         }
     }, [store.user]);
+
+
 
 
     // INICIO FUNCIONES ///////////////
@@ -48,6 +60,8 @@ const AdminRestaurantePestania = () => {
         }));
     };
 
+
+
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -59,45 +73,53 @@ const AdminRestaurantePestania = () => {
     const handleSubmit = (e) => {
         debugger
         e.preventDefault();
-        const { nombre, direccion, email_contacto, telefono, responsable, chef_name } = restaurantes;
-
-        if (!nombre || !direccion || !email_contacto) {
-            setMensaje("Por favor completa todos los campos obligatorios");
-            return;
-
+        if (restaurante) {
+            therestaurant.actualizarRestaurante(restaurantes)
+                .then((data) => {
+                    setMensaje("restaurante actualizado con exito");
+                    dispatch({ type: "actualizar_restaurante", payload: restaurantes });
+                    SetRestaurantes(restaurantes)
+                    return data
+                })
+                .catch(() => setMensaje("Error al registrar gastos"));
         }
-        const restaurante = {
-            ...restaurantes,
-            nombre,
-            direccion,
-            email_contacto,
-            telefono,
-            responsable,
-            chef_name
-        };
+        else {
+            const { nombre, direccion, email_contacto, telefono } = restaurantes;
+            if (!nombre || !direccion || !email_contacto) {
+                setMensaje("Por favor completa todos los campos obligatorios");
+                return;
+            }
 
-        if (!confirm("¿Confirmas los datos introducidos?")) return
-
-
-        therestaurant.crearRestaurante(restaurante)
-            .then((data) => {
-                debugger
-                setMensaje("restaurante registrado con exito");
-                SetRestaurantes(data);
-                return data
-            })
-            .catch(() => setMensaje("Error al registrar gastos"));
+            if (!confirm("¿Confirmas los datos introducidos?")) return
+            const restaurante = {
+                ...restaurantes,
+                nombre,
+                direccion,
+                email_contacto,
+                telefono
+            };
+            therestaurant.crearRestaurante(restaurante)
+                .then((data) => {
+                    restaurante.id = data.nuevo.id
+                    setMensaje("restaurante registrado con exito");
+                    SetRestaurantes(data.nuevo);
+                    dispatch({ type: "add_restaurante", payload: data.nuevo });
+                    return data.nuevo
+                })
+                .catch(() => setMensaje("Error al registrar gastos"));
+        }
 
     };
 
 
     // INICIO HTML ///////////////
     return (
-        <div className="card p-4">
+
+        <>
             <h5 className="mb-4">Perfil de Restaurantess</h5>
             <form onSubmit={handleSubmit}>
                 <div className="row mb-3">
-                    <div className="col-12 col-md-2 d-flex flex-column align-items-center mb-3 mb-md-0">
+                    {/* <div className="col-12 col-md-2 d-flex flex-column align-items-center mb-3 mb-md-0">
                         <div className="border rounded p-2 text-center mb-2 w-100 bg-light">
                             {preview ? (
                                 <img src={preview} alt="Preview" className="img-fluid rounded" />
@@ -112,9 +134,9 @@ const AdminRestaurantePestania = () => {
                             onChange={handleImageChange}
                             className="form-control form-control-sm"
                         />
-                    </div>
+                    </div> */}
 
-                    <div className="col-12 col-md-10">
+                    <div className="col-12 col-md-12">
                         <div className="mb-3">
                             <label className="form-label">Company Name</label>
                             <input
@@ -163,13 +185,14 @@ const AdminRestaurantePestania = () => {
                             </div>
                         </div>
 
-                        <div class="row"><div class="col-12 col-md-6 mb-3"><label class="form-label">Responsable</label>
+                        <div class="row">
+                            {/* <div class="col-12 col-md-6 mb-3"><label class="form-label">Responsable</label>
                             <select class="form-select" name="responsable">
                                 <option>Encargado</option>
                                 <option>Subencargado</option>
                             </select>
-                        </div>
-                            <div class="col-12 col-md-6 mb-3 d-flex align-items-end justify-content-end" >
+                        </div> */}
+                            <div class="col-12 col-md-12 mb-3 d-flex align-items-end justify-content-end" >
                                 <button type="submit" class="btn w250 bg-orange text-white px-3">Save Changes</button>
                             </div>
                         </div>
@@ -184,15 +207,15 @@ const AdminRestaurantePestania = () => {
                     </div>
                 </div>
             </form >
-            <div className="d-flex w-100 searchRestaurant">
+            {/* <div className="d-flex w-100 searchRestaurant">
                 <p >Busqueda de resraurante</p>
                 <div className="flex-1">
                     <label className="form-label mt-3">Date</label>
                     <input type="date" className="form-control searchRestaurant" value="01/11/2023" />
                 </div>
-            </div>
-            <div className="d-grid mt-3 ms-auto"><button type="submit" className="btn w250 bg-primary text-white px-4">Buscar</button></div>
-        </div >
+            </div> 
+            <div className="d-grid mt-3 ms-auto"><button type="submit" className="btn w250 bg-primary text-white px-4">Buscar</button></div>*/}
+        </>
     )
 
 }

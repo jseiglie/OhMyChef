@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import therestaurant from "../services/restauranteServices";
+import { useNavigate, Link } from "react-router-dom";
+
 
 
 const ListaRestaurantes = ({ restaurantes }) => {
@@ -11,14 +13,23 @@ const ListaRestaurantes = ({ restaurantes }) => {
   const [restaurantesLocal, setRestaurantesLocal] = useState([]);
 
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (Array.isArray(restaurantes)) {
       setRestaurantesLocal(restaurantes);
     }
   }, [restaurantes]);
 
+
+
   // funcion editar
   const handlerditar = (restauranteSeleccionado) => {
+
+    navigate(`/${store.user.rol}/restaurantes/restaurant`, {
+      state: { restaurante: restauranteSeleccionado }
+    });
+
     console.log("Restaurante seleccionado:", restauranteSeleccionado);
 
   };
@@ -26,13 +37,14 @@ const ListaRestaurantes = ({ restaurantes }) => {
 
   // funcion eliminar
   const handlerEliminar = (restauranteSeleccionado) => {
-
     if (token && store.user.rol === "admin") {
+      if (!confirm("¿Confirmas los datos introducidos?")) return
       setLoading(true);
       therestaurant.eliminarRestaurante(restauranteSeleccionado.id, token)
         .then(data => {
           setMensaje("restaurante eliminado con exito");
           setRestaurantesLocal((prev) => prev.filter((r) => r.id !== restauranteSeleccionado.id));
+          dispatch({ type: "remove_restaurante", payload: restauranteSeleccionado.id });
           setLoading(false);
         })
         .catch((error) => {
@@ -43,8 +55,8 @@ const ListaRestaurantes = ({ restaurantes }) => {
       setMensaje("No tienes permisos para eliminar restaurantes");
     }
   };
-
   return (
+
     loading ? (
       <div className="d-flex justify-content-center align-items-center h-100">
         <div
@@ -59,7 +71,7 @@ const ListaRestaurantes = ({ restaurantes }) => {
       <div className="container">
         <h5 className="mb-3">Lista de Restaurantes</h5>
         <ul className="list-group">
-          {restaurantesLocal.map((restaurante) => (
+          {restaurantesLocal && restaurantesLocal.map(restaurante => (
             <li
               key={restaurante.id}
               className="list-group-item d-flex justify-content-between align-items-center"
@@ -70,6 +82,11 @@ const ListaRestaurantes = ({ restaurantes }) => {
                 <small className="text-muted">{restaurante.direccion}</small>
                 <br />
                 <small className="text-muted">{restaurante.email_contacto}</small>
+                <br />
+                {restaurante.telefono &&
+                  <small className="text-muted">{restaurante.telefono}</small>
+                }
+
               </div>
 
               <div className="d-flex align-items-center gap-2">

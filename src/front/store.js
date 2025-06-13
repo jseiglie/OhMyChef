@@ -14,11 +14,8 @@ export const initialStore = () => {
         background: null,
       },
     ],
+    restaurantes: [],
   };
-};
-
-const initialState = {
-  restaurantes: [],
 };
 
 export default function storeReducer(store, action = {}) {
@@ -52,6 +49,13 @@ export default function storeReducer(store, action = {}) {
       return {
         ...store,
         restaurantes: [...store.restaurantes, action.payload],
+      };
+    case "actualizar_restaurante":
+      return {
+        ...store,
+        restaurantes: store.restaurantes.map((r) =>
+          r.id === action.payload.id ? action.payload : r
+        ),
       };
     case "remove_restaurante":
       return {
