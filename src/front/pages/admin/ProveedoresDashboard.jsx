@@ -1,8 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import ProveedoresCardRestaurante from '../../components/ProveedoresCardRestaurante';
+import { ProveedoresCardRestaurante } from '../../components/ProveedoresCardRestaurante.jsx';
+import '../../styles/ProveedoresDashboard.css';
 
-const ProveedoresDashboard = () => {
+export const ProveedoresDashboard = () => {
     const navigate = useNavigate();
 
     const restaurantes = [
@@ -13,21 +14,21 @@ const ProveedoresDashboard = () => {
     ];
 
     const handleViewAll = (restauranteId) => {
-        navigate(`/restaurante/${restauranteId}`);
+        navigate(`/admin/proveedores/restaurante/${restauranteId}`);
     };
 
     return (
-        <div className="p-6 bg-gray-100 min-h-screen">
+        <div className="dashboard-container p-6 bg-gray-100 min-h-screen">
             <header className="mb-6">
                 <h1 className="text-3xl font-bold mb-1">Proveedor</h1>
                 <p className="text-gray-600">Proveedor por restaurante</p>
             </header>
 
-            <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <main className="dashboard-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {restaurantes.map((restaurante) => (
                     <ProveedoresCardRestaurante
                         key={restaurante.id}
-                        restaurantes={restaurante}
+                        restaurante={restaurante}
                         onViewAll={handleViewAll}
                     />
                 ))}
@@ -35,5 +36,3 @@ const ProveedoresDashboard = () => {
         </div>
     );
 };
-
-export { ProveedoresDashboard };

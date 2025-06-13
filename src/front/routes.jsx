@@ -1,15 +1,13 @@
 import {
   createBrowserRouter, Route,
-  createBrowserRouter, Route,
   createRoutesFromElements,
 } from "react-router-dom";
 import { Layout } from "./layout/Layout";
 import { Home } from "./pages/Home";
 import { Login } from "./components/Login";
 import { RutaPrivada } from "./components/RutaPrivada.jsx";
-
 import { AdminDashboard } from "./pages/admin/AdminDashboard";
-// import { Restaurantes } from "./pages/admin/Restaurantes";
+import { Restaurantes } from "./pages/admin/Restaurantes";
 import { CrearRestaurante } from "./pages/admin/CrearRestaurante";
 import { AdminVentas } from "./pages/admin/AdminVentas";
 import { AdminGastos } from "./pages/admin/AdminGastos";
@@ -17,7 +15,7 @@ import { Usuarios } from "./pages/admin/Usuarios";
 import { CrearUsuario } from "./pages/admin/CrearUsuario";
 import { ConfigAdmin} from "./pages/configuracion/ConfigAdmin.jsx";
 import { ProveedoresDashboard } from "./pages/admin/ProveedoresDashboard";
-import  ProveedorRestauranteDetail  from "./pages/admin/ProveedorRestauranteDetail";
+import { ProveedorRestauranteDetail }  from "./pages/admin/ProveedorRestauranteDetail";
 
 
 
