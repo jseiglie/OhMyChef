@@ -30,6 +30,7 @@ import { EncargadoGastos } from "./pages/encargado/EncargadoGastos";
 import { ProveedorForm } from "./components/shared/ProveedorForm";
 
 
+
 import { ChefDashboard } from "./pages/chef/ChefDashboard";
 import { ChefProveedores } from "./pages/chef/ChefProveedores";
 import { Facturas } from "./pages/chef/Facturas";
@@ -72,6 +73,7 @@ export const router = createBrowserRouter(
           <Route path="encargado/ventas" element={<EncargadoVentas />} />
           <Route path="encargado/gastos" element={<DetalleGastosMensual />} />
           <Route path="encargado/settings" element={<EncargadoSettings />} />
+          
 
           {/* Chef */}
 
