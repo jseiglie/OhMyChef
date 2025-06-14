@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import useGlobalReducer from "../../hooks/useGlobalReducer";
-import { GastoPorcentajeCard } from "../../components/shared/GastoPorcentajeCard"; 
-import encargadoServices from "../../services/encargadoServices"; // ✅ CORREGIDO
+import useGlobalReducer from "../hooks/useGlobalReducer";
+import { GastoPorcentajeCard } from "../components/shared/GastoPorcentajeCard"; 
+import encargadoServices from "../services/encargadoServices"; // ✅ CORREGIDO
 
 export const ResumenGastoCard = () => {
   const { store } = useGlobalReducer();
