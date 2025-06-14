@@ -5,8 +5,10 @@ import { QuickActionsEncargado } from "../../components/QuickActionsEncargado";
 import "../../styles/EncargadoDashboard.css";
 import encargadoServices from "../../services/encargadoServices";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { MonedaSimbolo } from "../../services/MonedaSimbolo"; // ajusta la ruta si es necesario
 
 export const EncargadoDashboard = () => {
+  const simbolo = MonedaSimbolo();
   const [gastoDatos, setGastoDatos] = useState([]);
   const [resumenMensual, setResumenMensual] = useState(null);
   const [ventas, setVentas] = useState([]);
@@ -69,7 +71,7 @@ export const EncargadoDashboard = () => {
               </div>
               <h6 className="fw-bold text-warning">Ventas actuales</h6>
               <div className="fs-4 fw-bold text-dark">
-                {totalVentas} €
+                {totalVentas}{simbolo}
               </div>
             </div>
 

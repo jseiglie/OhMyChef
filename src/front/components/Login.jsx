@@ -88,9 +88,9 @@ export const Login = () => {
         </button>
 
         <div className="mt-3">
-          <Link to="/forgot-password" className="text-muted">
-            ¿Olvidaste tu contraseña?
-          </Link>
+          <p className="text-center mt-2">
+            <Link to="/forgot-password">¿Olvidaste tu contraseña?</Link>
+          </p>
         </div>
       </form>
     </div>
