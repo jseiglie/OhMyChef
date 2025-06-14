@@ -4,7 +4,7 @@ import {
 } from "react-router-dom";
 import { Layout } from "./layout/Layout";
 import { Home } from "./pages/Home";
-import { Login } from "./components/Login";
+import { Login } from "./components/Login.jsx";
 import { RutaPrivada } from "./components/RutaPrivada.jsx";
 import { AdminDashboard } from "./pages/admin/AdminDashboard";
 import { Restaurantes } from "./pages/admin/Restaurantes";
@@ -39,6 +39,8 @@ import AdminRestaurante from "./pages/admin/AdminRestaurante.jsx";
 import { DetalleGastosMensual } from "./components/shared/DetalleGastosMensual.jsx";
 import { GastoForm } from "./components/GastoForm";
 
+import ForgotPassword from "./pages/configuracion/ForgotPassword.jsx";
+
 
 
 export const router = createBrowserRouter(
@@ -46,6 +48,7 @@ export const router = createBrowserRouter(
     <>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route element={<RutaPrivada allowedRoles={["admin", "encargado", "chef"]} />}>
         <Route element={<Layout />}>
           {/* Admin */}

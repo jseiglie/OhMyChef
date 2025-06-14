@@ -1,7 +1,11 @@
 import React from "react";
 import { Button } from "react-bootstrap";
+import { MonedaSimbolo } from "../services/MonedaSimbolo"; // ajusta la ruta si es necesario
+
 
 const VentasResumen = ({ restauranteId, mes, ventas, porcentaje }) => {
+    const simbolo = MonedaSimbolo();
+
     return (
         <>
         <div className="d-flex align-items-center justify-content-end flex-wrap">
@@ -21,9 +25,9 @@ const VentasResumen = ({ restauranteId, mes, ventas, porcentaje }) => {
         <div className="col-6">
             <div className="p-2 rounded bg-info bg-opacity-25">
                 <div className="fw-bold small text-dark">Ventas Actuales</div>
-                <div className="fw-bold fs-4 text-dark">
-                    {ventas} <small className="text-muted">$</small>
-                </div>
+                    <div className="fw-bold fs-4 text-dark">
+                        {simbolo}{ventas}
+                    </div>
             </div>
         </div>
         <div className="col-6">
