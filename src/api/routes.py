@@ -1170,3 +1170,41 @@ def gastos_por_categoria():
     except Exception as e:
         return jsonify({"msg": "Error interno", "error": str(e)}), 500
 
+@api.route("/ventas/resumen-diario", methods=["GET"])
+@jwt_required()
+def resumen_ventas_diario():
+    try:
+        user_id = int(get_jwt_identity())
+        usuario = Usuario.query.get(user_id)
+
+        if not usuario or not usuario.restaurante_id:
+            return jsonify({"msg": "Usuario no válido"}), 404
+
+        restaurante_id = usuario.restaurante_id
+        mes = int(request.args.get("mes", 0))
+        ano = int(request.args.get("ano", 0))
+
+        if not mes or not ano:
+            return jsonify({"msg": "Mes y año requeridos"}), 400
+
+        ventas_diarias = db.session.query(
+            extract("day", Venta.fecha).label("dia"),
+            func.sum(Venta.monto).label("monto")
+        ).filter(
+            Venta.restaurante_id == restaurante_id,
+            extract("month", Venta.fecha) == mes,
+            extract("year", Venta.fecha) == ano
+        ).group_by(
+            extract("day", Venta.fecha)
+        ).order_by(
+            extract("day", Venta.fecha)
+        ).all()
+
+        resultado = [{"dia": int(row.dia), "monto": float(row.monto)} for row in ventas_diarias]
+
+        return jsonify(resultado), 200
+
+    except Exception as e:
+        return jsonify({"msg": "Error interno", "error": str(e)}), 500
+
+
