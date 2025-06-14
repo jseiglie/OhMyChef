@@ -42,6 +42,8 @@ userServices.login = async (formData) => {
     if (!resp.ok) throw Error("something went wrong");
     const data = await resp.json();
     sessionStorage.setItem("token", data.access_token);
+    sessionStorage.setItem("restaurante_id", data.user.restaurante_id); // :círculo_verde_grande: AÑADIDO
+    sessionStorage.setItem("restaurante_moneda", data.user.restaurante_nombre); // :círculo_azul_grande: Opcional, si quieres también guardar la moneda
     return data;
   } catch (error) {
     console.log(error);
