@@ -39,7 +39,8 @@ import AdminRestaurante from "./pages/admin/AdminRestaurante.jsx";
 import { DetalleGastosMensual } from "./components/shared/DetalleGastosMensual.jsx";
 import { GastoForm } from "./components/GastoForm";
 
-import ForgotPassword from "./pages/configuracion/ForgotPassword.jsx";
+
+import ForgotPage from "./pages/configuracion/ForgotPage.jsx";
 
 
 
@@ -48,7 +49,7 @@ export const router = createBrowserRouter(
     <>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/forgot-password" element={<ForgotPage />} />
       <Route element={<RutaPrivada allowedRoles={["admin", "encargado", "chef"]} />}>
         <Route element={<Layout />}>
           {/* Admin */}
