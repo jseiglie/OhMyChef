@@ -73,7 +73,7 @@ export const EncargadoVentas = () => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="dashboard-container ps-2 row py-3 pt-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>Ventas del restaurante</h2>
         <Link to="/encargado/registrar-venta" className="btn btn-success">
@@ -85,9 +85,9 @@ export const EncargadoVentas = () => {
       {mensaje && (
         <div
           className={`alert mt-2 ${mensaje.toLowerCase().includes("éxito") ||
-              mensaje.toLowerCase().includes("eliminada")
-              ? "alert-success"
-              : "alert-danger"
+            mensaje.toLowerCase().includes("eliminada")
+            ? "alert-success"
+            : "alert-danger"
             }`}
         >
           {mensaje}
@@ -100,7 +100,7 @@ export const EncargadoVentas = () => {
         <p>No hay ventas registradas.</p>
       ) : (
         <>
-          <table className="table table-striped mt-3">
+          <table className="table table-striped border mt-3">
             <thead>
               <tr>
                 <th>Fecha</th>

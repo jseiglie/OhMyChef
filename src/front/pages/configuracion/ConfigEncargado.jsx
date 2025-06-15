@@ -5,9 +5,8 @@ import { MonedaPrincipal } from "./Datos/MonedaPrincipal.jsx";
 
 const ConfigEncargado = () => {
   return (
-    <div className="container mt-4">
-      <h2>Configuración del Encargado</h2>
-      <hr />
+    <div className="dashboard-container ps-2 row py-3 pt-4">
+      <h2 className="dashboard-title mb-4">Configuración del Encargado</h2>
       <DatosPersonales />
       <CambiarContrasena />
       <MonedaPrincipal />
