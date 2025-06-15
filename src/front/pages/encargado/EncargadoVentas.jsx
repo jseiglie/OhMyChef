@@ -48,14 +48,14 @@ export const EncargadoVentas = () => {
         monto: parseFloat(nuevoMonto),
       });
       setMensaje("Venta actualizada con éxito");
-      setTimeout(() => setMensaje(""), 3000);
+      setTimeout(() => setMensaje(""), 2000);
       const modal = bootstrap.Modal.getInstance(document.getElementById("editarModal"));
       modal.hide();
       setVentaSeleccionada(null);
       cargarVentas();
     } catch (error) {
       setMensaje("Error al actualizar venta");
-      setTimeout(() => setMensaje(""), 3000);
+      setTimeout(() => setMensaje(""), 2000);
     }
   };
 
@@ -64,11 +64,11 @@ export const EncargadoVentas = () => {
     try {
       await ventaServices.eliminarVenta(id);
       setMensaje("Venta eliminada correctamente");
-      setTimeout(() => setMensaje(""), 3000);
+      setTimeout(() => setMensaje(""), 2000);
       cargarVentas();
     } catch (error) {
       setMensaje("Error al eliminar venta");
-      setTimeout(() => setMensaje(""), 3000);
+      setTimeout(() => setMensaje(""), 2000);
     }
   };
 
@@ -84,12 +84,11 @@ export const EncargadoVentas = () => {
       {/* Mensaje tipo GastoForm */}
       {mensaje && (
         <div
-          className={`alert mt-2 ${
-            mensaje.toLowerCase().includes("éxito") ||
-            mensaje.toLowerCase().includes("eliminada")
+          className={`alert mt-2 ${mensaje.toLowerCase().includes("éxito") ||
+              mensaje.toLowerCase().includes("eliminada")
               ? "alert-success"
               : "alert-danger"
-          }`}
+            }`}
         >
           {mensaje}
         </div>
@@ -117,7 +116,7 @@ export const EncargadoVentas = () => {
                   <td>{v.monto}</td>
                   <td>{v.turno || "-"}</td>
                   <td>
-                   <button
+                    <button
                       className="btn btn-outline-warning btn-sm me-1"
                       title="Editar"
                       onClick={() => abrirModalEdicion(v)}

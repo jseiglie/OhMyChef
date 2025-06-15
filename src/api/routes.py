@@ -266,7 +266,6 @@ def crear_venta():
         return jsonify({"msg": "Error al crear la venta", "error": str(e)}), 500
 
 
-
 @api.route('/ventas/<int:id>', methods=['GET'])
 @jwt_required()
 def obtener_venta(id):
@@ -817,14 +816,22 @@ def eliminar_margen(id):
 @jwt_required()
 def get_restaurantes():
     restaurantes = Restaurante.query.all()
-
     resultados = []
     for r in restaurantes:
         resultados.append({
             "id": r.id,
             "nombre": r.nombre,
             "direccion": r.direccion,
-            "email_contacto": r.email_contacto
+            "email_contacto": r.email_contacto,
+            "telefono": r.telefono,
+            "usuarios": [{
+                "nombre": u.nombre,
+                "id": u.id,
+                "rol": u.rol
+            }
+                for u in r.usuarios
+            ]
+            # "usuarios": [u.serialize() for u in r.usuarios]
         })
 
     return jsonify(resultados), 200
@@ -841,6 +848,7 @@ def crear_restaurante():
     nombre = data.get("nombre")
     direccion = data.get("direccion")
     email_contacto = data.get("email_contacto")
+    telefono = data.get("telefono")
 
     if not nombre:
         return jsonify({"msg": "El campo 'nombre' es obligatorio"}), 400
@@ -849,11 +857,15 @@ def crear_restaurante():
         nuevo = Restaurante(
             nombre=nombre,
             direccion=direccion,
-            email_contacto=email_contacto
+            email_contacto=email_contacto,
+            telefono=telefono
         )
         db.session.add(nuevo)
         db.session.commit()
-        return jsonify({"msg": "Restaurante creado correctamente"}), 201
+        return jsonify({
+            "msg": "Restaurante creado correctamente",
+            "nuevo": nuevo.serialize()
+        }), 201
     except Exception as e:
         db.session.rollback()
         return jsonify({"msg": "Error al crear el restaurante", "error": str(e)}), 500
@@ -923,7 +935,8 @@ def eliminar_restaurante(id):
 @jwt_required()
 def get_user_info():
     try:
-        user_identity = json.loads(get_jwt_identity())  # 🔁 aquí parseamos el JSON
+        # 🔁 aquí parseamos el JSON
+        user_identity = json.loads(get_jwt_identity())
         user_id = user_identity["id"]
 
         usuario = db.session.get(Usuario, user_id)
@@ -942,8 +955,6 @@ def get_user_info():
 
     except Exception as e:
         return jsonify({"error": "Algo salió mal"}), 500
-
-
 
 
 @api.route("/gastos/resumen-mensual", methods=["GET"])
@@ -1003,7 +1014,8 @@ def resumen_gastos_mensual():
 
     except Exception as e:
         return jsonify({"msg": "Error interno", "error": str(e)}), 500
-    
+
+
 @api.route('/cambiar-password', methods=['PUT'])
 @jwt_required()
 def cambiar_password():
@@ -1012,16 +1024,16 @@ def cambiar_password():
     nueva = data.get("nueva")
 
     if not actual or not nueva:
-        return jsonify({ "msg": "Faltan datos" }), 400
+        return jsonify({"msg": "Faltan datos"}), 400
 
     user_id = get_jwt_identity()
     user = Usuario.query.get(user_id)
 
     if not user:
-        return jsonify({ "msg": "Usuario no encontrado" }), 404
+        return jsonify({"msg": "Usuario no encontrado"}), 404
 
     if not check_password_hash(user.password, actual):
-        return jsonify({ "msg": "Contraseña actual incorrecta" }), 401
+        return jsonify({"msg": "Contraseña actual incorrecta"}), 401
 
     user.password = generate_password_hash(nueva)
     db.session.commit()

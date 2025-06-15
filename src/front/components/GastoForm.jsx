@@ -22,6 +22,7 @@ export const GastoForm = () => {
 
   useEffect(() => {
     if (user?.restaurante_id) {
+
       gastoServices
         .getProveedores(user.restaurante_id)
         .then(setProveedores)
@@ -30,16 +31,19 @@ export const GastoForm = () => {
   }, [user]);
 
   const handleChange = (index, e) => {
+
     const updatedGastos = [...gastos];
     updatedGastos[index][e.target.name] = e.target.value;
     setGastos(updatedGastos);
   };
 
   const handleAddRow = () => {
+
     setGastos([...gastos, { proveedor_id: "", categoria: "", monto: "", nota: "" }]);
   };
 
   const handleRemoveRow = (index) => {
+
     const updated = [...gastos];
     updated.splice(index, 1);
     setGastos(updated);
@@ -186,11 +190,10 @@ export const GastoForm = () => {
 
         {mensaje && (
           <div
-            className={`alert mt-3 ${
-              mensaje.toLowerCase().includes("éxito")
+            className={`alert mt-3 ${mensaje.toLowerCase().includes("éxito")
                 ? "alert-success"
                 : "alert-danger"
-            }`}
+              }`}
           >
             {mensaje}
           </div>
