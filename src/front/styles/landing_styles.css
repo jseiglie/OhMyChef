@@ -36,14 +36,14 @@
   color: #555;
 }
 
-/* Login */
-.login-overlay {
-  background-color: rgba(255, 255, 255, 0.97);
+
+.auth-overlay {
+  background-color: rgba(255, 255, 255, 0.536);
   border-radius: 16px;
   padding: 2.5rem 2rem;
   width: 100%;
-  max-width: 480px;  
-  min-width: 400px;
+  max-width: 780px;
+  min-width: 300px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   animation: fadeInRight 0.8s ease-in-out;
 }
@@ -83,5 +83,50 @@ html, body {
   margin: 0;
 }
 
+
+/* Móviles pequeños (≤ 576px) */
+@media (max-width: 576px) {
+  .landing-message h1 {
+    font-size: 1.8rem;
+    text-align: center;
+  }
+  .landing-message p {
+    font-size: 1rem;
+    text-align: center;
+    padding: 0 1rem;
+  }
+  .auth-overlay {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    max-width: 90%;
+  }
+  .main-row {
+    flex-direction: column;
+    padding: 0 1rem;
+  }
+}
+/* Tablets (≤ 768px) */
+@media (max-width: 768px) {
+  .landing-message h1 {
+    font-size: 2rem;
+  }
+  .landing-message p {
+    font-size: 1.1rem;
+  }
+  .auth-overlay {
+    margin-top: 2rem;
+    padding: 2rem;
+    max-width: 85%;
+  }
+}
+/* Portátiles pequeños (≤ 992px) */
+@media (max-width: 992px) {
+  .landing-message {
+    padding: 1rem;
+  }
+  .auth-overlay {
+    max-width: 90%;
+  }
+}
 
 

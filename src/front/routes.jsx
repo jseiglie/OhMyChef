@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 import { Layout } from "./layout/Layout";
 import { Home } from "./pages/Home";
-import { Login } from "./components/Login";
+import { Login } from "./components/Login.jsx";
 import { RutaPrivada } from "./components/RutaPrivada.jsx";
 import { AdminDashboard } from "./pages/admin/AdminDashboard";
 import { Restaurantes } from "./pages/admin/Restaurantes";
@@ -23,7 +23,7 @@ import { ProveedorRestauranteDetail }  from "./pages/admin/ProveedorRestauranteD
 import { EncargadoDashboard } from "./pages/encargado/EncargadoDashboard";
 import { RegistrarVenta } from "./pages/encargado/RegistrarVenta";
 import { ReporteVentas } from "./pages/encargado/ReporteVentas";
-import { EncargadoSettings } from "./pages/encargado/EncargadoSettings";
+import ConfigEncargado from "./pages/configuracion/ConfigEncargado.jsx";
 import { RegistrarGasto as RegistrarGastoEncargado } from "./pages/encargado/RegistrarGasto";
 import { Proveedores as ProveedoresEncargado } from "./pages/encargado/Proveedores";
 import { EncargadoVentas } from "./pages/encargado/EncargadoVentas";
@@ -31,13 +31,17 @@ import { EncargadoGastos } from "./pages/encargado/EncargadoGastos";
 import { ProveedorForm } from "./components/shared/ProveedorForm";
 
 
+
 import { ChefDashboard } from "./pages/chef/ChefDashboard";
 import { ChefProveedores } from "./pages/chef/ChefProveedores";
 import { Facturas } from "./pages/chef/Facturas";
-import { ChefSettings } from "./pages/chef/ChefSettings";
+import ConfigChef from "./pages/configuracion/ConfigChef.jsx";
 import AdminRestaurante from "./pages/admin/AdminRestaurante.jsx";
 import { DetalleGastosMensual } from "./components/shared/DetalleGastosMensual.jsx";
 import { GastoForm } from "./components/GastoForm";
+
+
+import ForgotPage from "./pages/configuracion/ForgotPage.jsx";
 
 
 
@@ -46,6 +50,7 @@ export const router = createBrowserRouter(
     <>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPage />} />
       <Route element={<RutaPrivada allowedRoles={["admin", "encargado", "chef"]} />}>
         <Route element={<Layout />}>
           {/* Admin */}
@@ -72,14 +77,15 @@ export const router = createBrowserRouter(
           <Route path="encargado/proveedores/editar/:id" element={<ProveedorForm />} /> 
           <Route path="encargado/ventas" element={<EncargadoVentas />} />
           <Route path="encargado/gastos" element={<DetalleGastosMensual />} />
-          <Route path="encargado/settings" element={<EncargadoSettings />} />
+          <Route path="/encargado/settings" element={<ConfigEncargado />} />
+          
 
           {/* Chef */}
 
           <Route path="chef/dashboard" element={<ChefDashboard />} />
           
           <Route path="chef/facturas" element={<Facturas />} />
-          <Route path="chef/settings" element={<ChefSettings />} />
+          <Route path="/chef/settings" element={<ConfigChef />} />
           <Route path="chef/gastos" element={<DetalleGastosMensual />} />
           <Route path="chef/gastos/registrar" element={<GastoForm />} />
           <Route path="chef/proveedores" element={<ChefProveedores />} />
