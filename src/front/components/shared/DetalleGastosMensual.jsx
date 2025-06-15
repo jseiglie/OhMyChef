@@ -63,7 +63,7 @@ export const DetalleGastosMensual = () => {
     .filter(g => !filterCategoria || g.categoria === filterCategoria);
 
   return (
-    <div className="container mt-4">
+    <div className="dashboard-container ps-2 row py-3 pt-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>Detalle de Gastos</h2>
         <button className="btn btn-success" onClick={() => navigate(`/${user.rol}/gastos/registrar`)}>
@@ -151,7 +151,7 @@ export const DetalleGastosMensual = () => {
             </select>
           </div>
           <div className="table-responsive">
-            <table className="table table-striped">
+            <table className="table table-striped border">
               <thead>
                 <tr>
                   <th>Proveedor</th>

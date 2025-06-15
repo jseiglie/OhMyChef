@@ -73,7 +73,7 @@ export const Proveedores = () => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="dashboard-container ps-2 row py-3 pt-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>Proveedores</h2>
         <button className="btn btn-success" onClick={abrirModalCrear}>
@@ -89,7 +89,7 @@ export const Proveedores = () => {
       ) : proveedores.length === 0 ? (
         <p>No hay proveedores registrados.</p>
       ) : (
-        <table className="table table-striped">
+        <table className="table table-striped border">
           <thead>
             <tr>
               <th>Nombre</th>

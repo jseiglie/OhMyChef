@@ -84,121 +84,124 @@ export const GastoForm = () => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="dashboard-container ps-2 row py-3 pt-4">
       <h2>Registrar Gastos del día</h2>
       <h5 className="text-muted mb-3">Mes actual: {nombreMes.toUpperCase()}</h5>
 
-      <div className="mb-3">
-        <label className="form-label">Fecha</label>
-        <input
-          type="date"
-          value={fecha}
-          onChange={(e) => setFecha(e.target.value)}
-          className="form-control"
-        />
-      </div>
 
-      <form onSubmit={handleSubmit}>
-        {gastos.map((gasto, index) => (
-          <div className="row align-items-end mb-3" key={index}>
-            <div className="col-md-3">
-              <label className="form-label">Proveedor</label>
-              <select
-                className="form-select"
-                name="proveedor_id"
-                value={gasto.proveedor_id}
-                onChange={(e) => handleChange(index, e)}
-                required
-              >
-                <option value="">Seleccione</option>
-                {proveedores.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.nombre}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="col-md-2">
-              <label className="form-label">Categoría</label>
-              <select
-                className="form-select"
-                name="categoria"
-                value={gasto.categoria}
-                onChange={(e) => handleChange(index, e)}
-                required
-              >
-                <option value="">Seleccione</option>
-                <option value="alimentos">Alimentos</option>
-                <option value="bebidas">Bebidas</option>
-                <option value="limpieza">Limpieza</option>
-                <option value="otros">Otros</option>
-              </select>
-            </div>
-
-            <div className="col-md-2">
-              <label className="form-label">Monto (€)</label>
-              <input
-                type="number"
-                className="form-control"
-                name="monto"
-                value={gasto.monto}
-                onChange={(e) => handleChange(index, e)}
-                min="0"
-                step="0.01"
-                required
-              />
-            </div>
-
-            <div className="col-md-3">
-              <label className="form-label">Nota</label>
-              <input
-                type="text"
-                className="form-control"
-                name="nota"
-                value={gasto.nota}
-                onChange={(e) => handleChange(index, e)}
-              />
-            </div>
-
-            <div className="col-md-2 text-end">
-              {index > 0 && (
-                <button
-                  type="button"
-                  className="btn btn-outline-danger mt-2"
-                  onClick={() => handleRemoveRow(index)}
-                >
-                  Eliminar
-                </button>
-              )}
-            </div>
-          </div>
-        ))}
-
+      <div className="col-12 col-sm-12 col-md-9 col-lg-7 col-xl-7 col-xxl-6 mt-4">
         <div className="mb-3">
-          <button
-            type="button"
-            className="btn btn-outline-secondary me-2"
-            onClick={handleAddRow}
-          >
-            + Añadir otro gasto
-          </button>
-          <button type="submit" className="btn btn-primary">
-            Registrar Gastos
-          </button>
+          <label className="form-label">Fecha</label>
+          <input
+            type="date"
+            value={fecha}
+            onChange={(e) => setFecha(e.target.value)}
+            className="form-control"
+          />
         </div>
 
-        {mensaje && (
-          <div
-            className={`alert mt-3 ${mensaje.toLowerCase().includes("éxito")
+        <form onSubmit={handleSubmit}>
+          {gastos.map((gasto, index) => (
+            <div className="row align-items-end mb-3" key={index}>
+              <div className="col-md-3">
+                <label className="form-label">Proveedor</label>
+                <select
+                  className="form-select"
+                  name="proveedor_id"
+                  value={gasto.proveedor_id}
+                  onChange={(e) => handleChange(index, e)}
+                  required
+                >
+                  <option value="">Seleccione</option>
+                  {proveedores.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="col-md-2">
+                <label className="form-label">Categoría</label>
+                <select
+                  className="form-select"
+                  name="categoria"
+                  value={gasto.categoria}
+                  onChange={(e) => handleChange(index, e)}
+                  required
+                >
+                  <option value="">Seleccione</option>
+                  <option value="alimentos">Alimentos</option>
+                  <option value="bebidas">Bebidas</option>
+                  <option value="limpieza">Limpieza</option>
+                  <option value="otros">Otros</option>
+                </select>
+              </div>
+
+              <div className="col-md-2">
+                <label className="form-label">Monto (€)</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  name="monto"
+                  value={gasto.monto}
+                  onChange={(e) => handleChange(index, e)}
+                  min="0"
+                  step="0.01"
+                  required
+                />
+              </div>
+
+              <div className="col-md-3">
+                <label className="form-label">Nota</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="nota"
+                  value={gasto.nota}
+                  onChange={(e) => handleChange(index, e)}
+                />
+              </div>
+
+              <div className="col-md-2 text-end">
+                {index > 0 && (
+                  <button
+                    type="button"
+                    className="btn btn-outline-danger mt-2"
+                    onClick={() => handleRemoveRow(index)}
+                  >
+                    Eliminar
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+
+          <div className="mb-3">
+            <button
+              type="button"
+              className="btn btn-outline-secondary me-2"
+              onClick={handleAddRow}
+            >
+              + Añadir otro gasto
+            </button>
+            <button type="submit" className="btn btn-primary">
+              Registrar Gastos
+            </button>
+          </div>
+
+          {mensaje && (
+            <div
+              className={`alert mt-3 ${mensaje.toLowerCase().includes("éxito")
                 ? "alert-success"
                 : "alert-danger"
-              }`}
-          >
-            {mensaje}
-          </div>
-        )}
-      </form>
+                }`}
+            >
+              {mensaje}
+            </div>
+          )}
+        </form>
+      </div>
     </div>
   );
 };

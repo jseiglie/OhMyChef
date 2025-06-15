@@ -32,7 +32,7 @@ export const ChefDashboard = () => {
   const porcentaje = resumenMensual?.porcentaje || 0;
   const gasto = resumenMensual?.gastos || 0;
 
-  
+
   let bgClass = "bg-success-subtle";
   let textClass = "text-success";
   let icono = "✅";
@@ -48,14 +48,16 @@ export const ChefDashboard = () => {
   }
 
   return (
-    <div className="container-fluid px-4 mt-4">
-      <div className="row justify-content-center">
+    <div className="dashboard-container ps-2 row py-3 pt-4">
+      <h1 className="dashboard-title">Graficas en Porcentajes</h1>
+      <p class="dashboard-welcome mb-4">Graficas de gastos</p>
+      <div className="row justify-content-start">
         <div className="col-lg-11">
           <div className="card shadow-sm border rounded p-4">
             <div className="row align-items-center">
               <div className="col-md-3 d-flex flex-column gap-4 w- align-items-center">
 
-               
+
                 <div className="rounded shadow-sm p-3 text-center bg-info-subtle w-80">
                   <div className="rounded-circle bg-white text-info d-inline-flex align-items-center justify-content-center mb-2"
                     style={{ width: "50px", height: "50px", fontSize: "1.5rem" }}>
@@ -67,7 +69,7 @@ export const ChefDashboard = () => {
                   </div>
                 </div>
 
-              
+
                 <div className={`rounded shadow-sm p-3 text-center w-80 ${bgClass}`}>
                   <div className={`rounded-circle ${textClass} bg-white d-inline-flex align-items-center justify-content-center mb-2`}
                     style={{ width: "50px", height: "50px", fontSize: "1.5rem" }}>
