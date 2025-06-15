@@ -37,24 +37,29 @@ therestaurant.getRestaurantes = async (token) => {
 
 therestaurant.eliminarRestaurante = async (id, token) => {
   try {
+    console.log("ID que se va a eliminar:", id);
+    console.log("Token:", token);
+
     const response = await fetch(`${backendUrl}/api/restaurantes/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
     });
 
-    // Simula retraso (puedes eliminarlo si no quieres)
-    await new Promise((res) => setTimeout(res, 2000));
+    console.log("Código de respuesta HTTP:", response.status);
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Respuesta del servidor:", errorText);
       throw new Error("No se pudo eliminar el restaurante");
     }
 
     const data = response.status !== 204 ? await response.json() : null;
     return data;
   } catch (error) {
-    console.error("Error al eliminar restaurante:", error);
+    console.error("Error al eliminar restaurante:", error.message);
     throw error;
   }
 };

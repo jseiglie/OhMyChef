@@ -34,7 +34,7 @@ export const AdminVentas = () => {
 
       </div>
 
-      <div className="row mt-3 w-90 justify-content-start d-flex">asdfa</div>
+
     </>
 
 
