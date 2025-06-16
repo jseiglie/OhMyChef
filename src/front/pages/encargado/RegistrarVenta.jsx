@@ -2,8 +2,11 @@ import { useState } from "react";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 import ventaServices from "../../services/ventaServices";
 import { useNavigate } from "react-router-dom";
+import { MonedaSimbolo } from "../../services/MonedaSimbolo";
 
 export const RegistrarVenta = () => {
+  const simbolo = MonedaSimbolo();
+
   const { store } = useGlobalReducer();
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -59,7 +62,7 @@ export const RegistrarVenta = () => {
 
         {/* Monto */}
         <div className="mb-3">
-          <label className="form-label">Monto (€)</label>
+          <label className="form-label">Monto ({simbolo})</label>
           <input
             type="number"
             name="monto"
