@@ -39,11 +39,11 @@ export const RegistrarVenta = () => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="dashboard-container ps-2 row py-3 pt-4">
       <h2>Registrar Venta</h2>
       <h5 className="text-muted mb-3">Mes actual: {nombreMes.toUpperCase()}</h5>
 
-      <form onSubmit={handleSubmit} className="card p-4 shadow-sm mt-3">
+      <form onSubmit={handleSubmit} className="card p-4 shadow-sm mt-3  col-12 col-sm-12 col-md-10 col-lg-7 col-xl-7 col-xxl-5 ">
         {/* Fecha */}
         <div className="mb-3">
           <label className="form-label">Fecha</label>

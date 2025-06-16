@@ -6,13 +6,13 @@ import { MonedaPrincipal } from "./Datos/MonedaPrincipal.jsx";
 
 export const ConfigAdmin = () => {
   return (
-    <div className="container mt-4">
-      <h2>Configuración del Administrador</h2>
-      <hr />
+    <div className="dashboard-container ps-2 row py-3 pt-4 ">
+      <h1 className="dashboard-title">Configuración del Administrador</h1>
+      <p class="dashboard-welcome mb-4">Configura tu usuario</p>
       <DatosPersonales />
-      <hr />
+
       <CambiarContrasena />
-      <hr />
+
       <MonedaPrincipal />
     </div>
   );

@@ -48,14 +48,14 @@ export const EncargadoVentas = () => {
         monto: parseFloat(nuevoMonto),
       });
       setMensaje("Venta actualizada con éxito");
-      setTimeout(() => setMensaje(""), 3000);
+      setTimeout(() => setMensaje(""), 2000);
       const modal = bootstrap.Modal.getInstance(document.getElementById("editarModal"));
       modal.hide();
       setVentaSeleccionada(null);
       cargarVentas();
     } catch (error) {
       setMensaje("Error al actualizar venta");
-      setTimeout(() => setMensaje(""), 3000);
+      setTimeout(() => setMensaje(""), 2000);
     }
   };
 
@@ -64,16 +64,16 @@ export const EncargadoVentas = () => {
     try {
       await ventaServices.eliminarVenta(id);
       setMensaje("Venta eliminada correctamente");
-      setTimeout(() => setMensaje(""), 3000);
+      setTimeout(() => setMensaje(""), 2000);
       cargarVentas();
     } catch (error) {
       setMensaje("Error al eliminar venta");
-      setTimeout(() => setMensaje(""), 3000);
+      setTimeout(() => setMensaje(""), 2000);
     }
   };
 
   return (
-    <div className="container mt-4">
+    <div className="dashboard-container ps-2 row py-3 pt-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>Ventas del restaurante</h2>
         <Link to="/encargado/registrar-venta" className="btn btn-success">
@@ -84,12 +84,11 @@ export const EncargadoVentas = () => {
       {/* Mensaje tipo GastoForm */}
       {mensaje && (
         <div
-          className={`alert mt-2 ${
-            mensaje.toLowerCase().includes("éxito") ||
+          className={`alert mt-2 ${mensaje.toLowerCase().includes("éxito") ||
             mensaje.toLowerCase().includes("eliminada")
-              ? "alert-success"
-              : "alert-danger"
-          }`}
+            ? "alert-success"
+            : "alert-danger"
+            }`}
         >
           {mensaje}
         </div>
@@ -101,7 +100,7 @@ export const EncargadoVentas = () => {
         <p>No hay ventas registradas.</p>
       ) : (
         <>
-          <table className="table table-striped mt-3">
+          <table className="table table-striped border mt-3">
             <thead>
               <tr>
                 <th>Fecha</th>
@@ -117,7 +116,7 @@ export const EncargadoVentas = () => {
                   <td>{v.monto}</td>
                   <td>{v.turno || "-"}</td>
                   <td>
-                   <button
+                    <button
                       className="btn btn-outline-warning btn-sm me-1"
                       title="Editar"
                       onClick={() => abrirModalEdicion(v)}

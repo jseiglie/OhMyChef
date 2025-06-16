@@ -16,44 +16,44 @@ export const DatosPersonales = () => {
   }, []);
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const updateData ={
-      nombre,
-      email,
-    };
+    try {
+      const updateData = {
+        nombre,
+        email,
+      };
 
-    if (user.password) updateData.password = user.password;
-    if (user.restaurante_id !== undefined) updateData.restaurante_id = user.restaurante_id;
+      if (user.password) updateData.password = user.password;
+      if (user.restaurante_id !== undefined) updateData.restaurante_id = user.restaurante_id;
 
-    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/usuarios/${user.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-      },
-      body: JSON.stringify(updateData),
-    });
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/usuarios/${user.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(updateData),
+      });
 
-    if (!response.ok) throw new Error("Error actualizando datos");
+      if (!response.ok) throw new Error("Error actualizando datos");
 
-    const data = await response.json();
-    console.log(data);
+      const data = await response.json();
+      console.log(data);
 
-    // Actualizar store si lo deseas con nueva info del usuario
-    dispatch({ type: "get_user_info", payload: { ...user, nombre, email } });
+      // Actualizar store si lo deseas con nueva info del usuario
+      dispatch({ type: "get_user_info", payload: { ...user, nombre, email } });
 
-    alert("Datos personales actualizados correctamente");
-  } catch (error) {
-    console.error("Error al actualizar datos personales:", error);
-    alert("Error al actualizar los datos");
-  }
-};
+      alert("Datos personales actualizados correctamente");
+    } catch (error) {
+      console.error("Error al actualizar datos personales:", error);
+      alert("Error al actualizar los datos");
+    }
+  };
 
 
   return (
-    <div className="card p-4 mb-4">
+    <div className="card col-sm-12 col-md-12 col-lg-10 me-4 col-xl-5 p-4 mb-4">
       <h4>Datos personales</h4>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">

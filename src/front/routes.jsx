@@ -1,6 +1,7 @@
 import {
-  createBrowserRouter, Route,
+  createBrowserRouter,
   createRoutesFromElements,
+  Route,
 } from "react-router-dom";
 import { Layout } from "./layout/Layout";
 import { Home } from "./pages/Home";
@@ -13,7 +14,7 @@ import { AdminVentas } from "./pages/admin/AdminVentas";
 import { AdminGastos } from "./pages/admin/AdminGastos";
 import { Usuarios } from "./pages/admin/Usuarios";
 import { CrearUsuario } from "./pages/admin/CrearUsuario";
-import { ConfigAdmin} from "./pages/configuracion/ConfigAdmin.jsx";
+import { ConfigAdmin } from "./pages/configuracion/ConfigAdmin.jsx";
 import { ProveedoresDashboard } from "./pages/admin/ProveedoresDashboard";
 import { ProveedorRestauranteDetail }  from "./pages/admin/ProveedorRestauranteDetail";
 
