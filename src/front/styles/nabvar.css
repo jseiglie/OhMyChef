@@ -23,7 +23,7 @@
   height: 90vh;
 }
 .navbar {
-  height: 10vh;
+  height: auto;
 }
 .bi-bell {
   position: relative;
@@ -131,9 +131,6 @@
   .custom-sidebar {
     height: 80vh;
   }
-  .navbar {
-    height: 20vh;
-  }
 }
 
 @media (max-width: 767px) {
@@ -162,8 +159,8 @@
   }
 }
 
-@media (max-width: 609px) {
+/* @media (max-width: 609px) {
   .navbar {
     height: 25vh;
   }
-}
+} */

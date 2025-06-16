@@ -1,18 +1,17 @@
 # seed.py
+
+
+import random
 import os
 import sys
-import random
-from datetime import date, timedelta
-from dotenv import load_dotenv
-from werkzeug.security import generate_password_hash
-
-
-
 sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
 
-
 from api.models import Proveedor, Gasto, Usuario, Restaurante, Venta
-from front.app import app, db
+from app import app, db
+from werkzeug.security import generate_password_hash
+from dotenv import load_dotenv
+from datetime import date, timedelta
+
 
 load_dotenv()
 
@@ -20,7 +19,6 @@ load_dotenv()
 with app.app_context():
     print("🔄 Inicializando seed...")
 
-   
     restaurante = Restaurante.query.first()
     if not restaurante:
         restaurante = Restaurante(nombre="Restaurante Demo")
@@ -28,11 +26,13 @@ with app.app_context():
         db.session.commit()
         print("🏗️ Restaurante creado.")
 
-   
     usuarios = [
-        {"nombre": "Admin Seed", "email": "admin@seed.com", "rol": "admin", "restaurante_id": None},
-        {"nombre": "Encargado Seed", "email": "encargado@seed.com", "rol": "encargado", "restaurante_id": restaurante.id},
-        {"nombre": "Chef Seed", "email": "chef@seed.com", "rol": "chef", "restaurante_id": restaurante.id},
+        {"nombre": "Admin Seed", "email": "admin@seed.com",
+            "rol": "admin", "restaurante_id": None},
+        {"nombre": "Encargado Seed", "email": "encargado@seed.com",
+            "rol": "encargado", "restaurante_id": restaurante.id},
+        {"nombre": "Chef Seed", "email": "chef@seed.com",
+            "rol": "chef", "restaurante_id": restaurante.id},
     ]
 
     for u in usuarios:
@@ -98,7 +98,7 @@ with app.app_context():
             turno="mañana",
             monto=round(random.uniform(150, 400), 2),
             restaurante_id=restaurante.id,
-           
+
         )
         db.session.add(venta)
     db.session.commit()

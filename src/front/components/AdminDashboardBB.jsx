@@ -15,7 +15,9 @@ const AdminDashboardBB = () => {
       <div className="restaurant-cards">
         {restaurants.map((num) => (
           <div key={num} className="restaurant-card">
-            <h3>RESTAURANTE # {num}</h3>
+            <h3>RESTAURANTE
+              <span className="color-orange"> # {num}</span>
+            </h3>
             <div className="card-metrics">
               <div className="metric">
                 <p className="label">VENTAS mes</p>

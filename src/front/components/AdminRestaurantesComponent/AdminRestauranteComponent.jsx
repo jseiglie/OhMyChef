@@ -1,6 +1,5 @@
 import AdminVerRestaurante from "./AdminVerRestaurante";
 import AdminRestaurantePestania from "./AdminRestaurantePestania";
-import AdminNotificationsPestania from "./AdminNotificationsPestania";
 import { Routes, Route, Link, useLocation, Navigate } from "react-router-dom";
 import '../../styles/AdminRestauranteComponent.css';
 // import '../styles/AdminDashboardBB.css';
@@ -9,27 +8,22 @@ import '../../styles/AdminRestauranteComponent.css';
 const AdminRestauranteComponent = () => {
     const location = useLocation();
     return (
-        <div className="dashboard-container px-0 py-3 pt-4 row">
+        <div className="dashboard-container">
             <h1 className="dashboard-title ">Restaurantes</h1>
             <p className="dashboard-welcome mb-2">Añade tu Restaurante</p>
 
             <div className="col-12 col-sm-12 col-md-9 col-lg-7 col-xl-7 col-xxl-6 mt-4">
                 <ul className="nav nav-tabs">
                     <li className="nav-item">
-                        <Link className={`nav-link ${location.pathname.endsWith("restaurant") ? "active" : ""}`} to="restaurant">
-                            Crear Restaurantes
+                        <Link className={`nav-link pestania ${location.pathname.endsWith("restaurant") ? "active" : ""}`} to="restaurant">
+                            Crear restaurantes
                         </Link>
                     </li>
                     <li className="nav-item">
-                        <Link className={`nav-link ${location.pathname.endsWith("expense") ? "active" : ""}`} to="expense">
-                            Ver restaurantes
+                        <Link className={`nav-link pestania ${location.pathname.endsWith("expense") ? "active" : ""}`} to="expense">
+                            Ver Restaurantes
                         </Link>
                     </li>
-                    {/* <li className="nav-item">
-                        <Link className={`nav-link ${location.pathname.endsWith("notifications") ? "active" : ""}`} to="notifications">
-                            Notifications
-                        </Link>
-                    </li> */}
                 </ul>
 
 
@@ -37,7 +31,6 @@ const AdminRestauranteComponent = () => {
                     <Routes>
                         <Route path="restaurant" element={<AdminRestaurantePestania />} />
                         <Route path="expense" element={<AdminVerRestaurante />} />
-                        <Route path="notifications" element={<AdminNotificationsPestania />} />
                         <Route path="/" element={<Navigate to="restaurant" replace />} />
                     </Routes>
                 </div>

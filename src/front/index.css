@@ -1,11 +1,39 @@
 .bg-orange {
   background-color: #ff7741 !important;
+  color: rgb(255, 255, 255) !important;
 }
-
+.color-orange {
+  color: #ff7741 !important;
+}
+.color-orange-bold {
+  color: #ff7741 !important;
+  font-weight: 500 !important;
+}
 button.bg-orange:hover {
   background-color: #f55d21 !important;
 }
+.dashboard-container {
+  background-color: #f3f3f3b5;
+}
+.proveedor-header span.proveedor-zone {
+  color: #000000 !important;
+  background: #ffffff;
+  border: 1px solid #c9c2c2;
+}
+.proveedor-header span {
+  color: #f94700 !important;
+}
+table thead tr th {
+  text-align: left;
+}
+.table > thead tr th {
+  background: #396d81 !important;
+  color: #ffffff !important;
+}
 
+.table > tbody tr td {
+  background: #ffffff82;
+}
 .vh-90 {
   height: 90vh !important;
 }
@@ -46,7 +74,15 @@ button.bg-orange:hover {
 .wrapper-content {
   height: 90vh !important;
 }
+.nav-link.pestania {
+  color: black !important;
+}
 
+a.nav-link.pestania.active {
+  box-shadow: inset 0px 4px 0px rgb(255 93 29);
+  border-bottom: none;
+  color: #af3200 !important;
+}
 span.w-auto {
   width: auto !important;
 }
