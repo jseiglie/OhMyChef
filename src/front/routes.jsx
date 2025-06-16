@@ -12,7 +12,7 @@ import { Restaurantes } from "./pages/admin/Restaurantes";
 import { CrearRestaurante } from "./pages/admin/CrearRestaurante";
 import { AdminVentas } from "./pages/admin/AdminVentas";
 import { AdminGastos } from "./pages/admin/AdminGastos";
-import { Usuarios } from "./pages/admin/Usuarios";
+import { UsuariosDashboard } from "./pages/admin/UsuariosDashboard";
 import { CrearUsuario } from "./pages/admin/CrearUsuario";
 import { ConfigAdmin } from "./pages/configuracion/ConfigAdmin.jsx";
 import { ProveedoresDashboard } from "./pages/admin/ProveedoresDashboard";
@@ -60,7 +60,7 @@ export const router = createBrowserRouter(
           <Route path="admin/crear-restaurante" element={<CrearRestaurante />} />
           <Route path="admin/ventas" element={<AdminVentas />} />
           <Route path="admin/gastos" element={<AdminGastos />} />
-          <Route path="admin/usuarios" element={<Usuarios />} />
+          <Route path="admin/usuarios" element={<UsuariosDashboard />} />
           <Route path="admin/crear-usuario" element={<CrearUsuario />} />
           <Route path="admin/settings" element={<ConfigAdmin />} />
           <Route path="admin/proveedores" element={<ProveedoresDashboard />} />

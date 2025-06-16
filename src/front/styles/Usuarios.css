@@ -1,0 +1,124 @@
+
+.usuarios-container {
+  padding: 24px;
+  font-family: sans-serif;
+}
+
+.usuarios-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.usuarios-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.usuarios-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.add-user-button {
+  background-color: #ff5a1f;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.add-user-button:hover {
+  background-color: #e74c14;
+}
+
+/* Tabla */
+
+.usuarios-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.usuarios-table thead {
+  background-color: #f9fafb;
+  color: #6b7280;
+  text-align: left;
+}
+
+.usuarios-table th,
+.usuarios-table td {
+  padding: 12px 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.user-info-name {
+  font-weight: 600;
+  color: #111827;
+}
+
+.user-info-email {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: lowercase;
+}
+
+.badge.admin {
+  background-color: #fce7f3;
+  color: #db2777;
+}
+
+.badge.chef {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
+.badge.active {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.badge.inactive {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+/* Acciones */
+
+.user-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.user-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6b7280;
+  font-size: 16px;
+}
+
+.user-actions button:hover {
+  color: #111827;
+}
+
+.user-actions .delete {
+  color: #ef4444;
+}
+
+.user-actions .delete:hover {
+  color: #b91c1c;
+}
