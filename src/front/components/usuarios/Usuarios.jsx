@@ -12,7 +12,7 @@ const Users = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
 
-  // **DATOS DUMMY ACTUALIZADOS CON EMAIL Y ROLES/ESTADOS MÁS DIVERSOS**
+ 
   const [users, setUsers] = useState([
     { id: 1, name: 'Sarah Johnson', email: 'sarah@ohmychef.com', role: 'admin', status: 'active', restaurant: 'Italian Bistro' },
     { id: 2, name: 'Marco Rossi', email: 'marco@ohmychef.com', role: 'chef', status: 'active', restaurant: 'Sushi Central' },
@@ -23,8 +23,8 @@ const Users = () => {
 
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) || user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRole = selectedRole === 'All Roles' || user.role === selectedRole.toLowerCase(); // Convertir a minúsculas
-    const matchesStatus = selectedStatus === 'All Status' || user.status === selectedStatus.toLowerCase(); // Convertir a minúsculas
+    const matchesRole = selectedRole === 'All Roles' || user.role === selectedRole.toLowerCase(); 
+    const matchesStatus = selectedStatus === 'All Status' || user.status === selectedStatus.toLowerCase(); 
     return matchesSearch && matchesRole && matchesStatus;
   });
 
@@ -56,11 +56,58 @@ const Users = () => {
     }
   };
 
-  // Función para simular "eliminar rol" - puedes implementar la lógica real aquí
-  const handleRemoveRole = (userId) => {
-    alert(`Simulando eliminación de rol para usuario con ID: ${userId}`);
-    // Aquí iría la lógica para llamar a tu API para remover el rol.
-    // Ejemplo: setUsers(users.map(user => user.id === userId ? { ...user, role: 'viewer' } : user));
+   const handleRemoveRole = (userId) => {
+    const userToUpdate = users.find(user => user.id === userId);
+
+    if (!userToUpdate) {
+      console.warn(`Usuario con ID ${userId} no encontrado.`);
+      return;
+    }
+
+    if (userToUpdate.role === 'viewer') {
+      alert(`El usuario ${userToUpdate.name} ya es un 'viewer'. No se puede eliminar el rol.`);
+      return;
+    }
+    if (window.confirm(`¿Estás seguro de que quieres cambiar el rol de "${userToUpdate.name}" a "viewer"?`)) {
+      console.log(`Simulando llamada a API para actualizar rol del usuario ${userId} a 'viewer'`);
+      setTimeout(() => {
+        setUsers(prevUsers =>
+          prevUsers.map(user =>
+            user.id === userId ? { ...user, role: 'viewer' } : user
+          )
+        );
+        alert(`El rol de ${userToUpdate.name} ha sido cambiado a 'viewer'.`);
+        console.log(`Rol del usuario ${userId} actualizado a 'viewer' en el estado local.`);
+      }, 500); 
+    }
+  };
+
+  const handleActivateUser = (userId) => {
+    const userToUpdate = users.find(user => user.id === userId);
+
+    if (!userToUpdate) {
+      console.warn(`Usuario con ID ${userId} no encontrado.`);
+      return;
+    }
+
+    if (userToUpdate.status === 'active') {
+      alert(`El usuario ${userToUpdate.name} ya está "activo".`);
+      return;
+    }
+
+    if (window.confirm(`¿Estás seguro de que quieres activar a "${userToUpdate.name}"?`)) {
+      console.log(`Simulando llamada a API para activar el usuario ${userId}`);
+
+      setTimeout(() => {
+        setUsers(prevUsers =>
+          prevUsers.map(user =>
+            user.id === userId ? { ...user, status: 'active' } : user
+          )
+        );
+        alert(`El usuario ${userToUpdate.name} ha sido activado.`);
+        console.log(`Estado del usuario ${userId} actualizado a 'active' en el estado local.`);
+      }, 500);
+    }
   };
 
 
@@ -142,13 +189,15 @@ const Users = () => {
                 <span className={`badge badge-${user.status}`}>{user.status}</span>
               </td>
               <td className="actions-cell">
-                <button className="action-icon-button remove-role-button" onClick={() => handleRemoveRole(user.id)} title="Remove Role">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-x-circle">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="15" y1="9" x2="9" y2="15"></line>
-                        <line x1="9" y1="9" x2="15" y2="15"></line>
-                    </svg>
-                </button>
+                {user.role !== 'viewer' && (
+                  <button className="action-icon-button remove-role-button" onClick={() => handleRemoveRole(user.id)} title="Remove Role">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-x-circle">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <line x1="15" y1="9" x2="9" y2="15"></line>
+                          <line x1="9" y1="9" x2="15" y2="15"></line>
+                      </svg>
+                  </button>
+                )}
                 <button className="action-icon-button edit-button" onClick={() => handleEditUser(user)} title="Edit User">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-edit-2">
                         <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
@@ -162,9 +211,8 @@ const Users = () => {
                         <line x1="14" y1="11" x2="14" y2="17"></line>
                     </svg>
                 </button>
-                {/* Nuevo botón de checkmark para cuando el estado sea "inactive" */}
                 {user.status === 'inactive' && (
-                    <button className="action-icon-button activate-button" onClick={() => alert(`Activar usuario ${user.name}`)} title="Activate User">
+                    <button className="action-icon-button activate-button" onClick={() => handleActivateUser(user.id)} title="Activate User">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-check-circle">
                             <path d="M22 11.08V12a10 10 0 1 1-5.93-8.8"></path>
                             <polyline points="22 4 12 14.01 9 11.01"></polyline>
@@ -178,7 +226,7 @@ const Users = () => {
       </table>
 
       {isModalOpen && (
-        <UserFormModal
+        <UserModal
           user={currentUser}
           onSave={handleSaveUser}
           onClose={() => setIsModalOpen(false)}

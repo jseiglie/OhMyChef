@@ -1,12 +1,10 @@
-/* src/components/UserFormModal.css */
-
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); 
+  background-color: rgba(255, 255, 255, 0.5); 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -14,12 +12,13 @@
 }
 
 .modal-content {
-  background-color: #fff;
+  background-color: white; 
+  color: #333; 
   padding: 30px;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(11, 11, 11, 0.2);
   width: 90%;
-  max-width: 500px; 
+  max-width: 500px;
   position: relative;
   animation: fadeInScale 0.3s ease-out;
 }
@@ -40,6 +39,7 @@
   color: #333;
   margin-bottom: 25px;
   text-align: center;
+  background-color: white;
 }
 
 .form-group {
