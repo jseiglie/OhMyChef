@@ -80,7 +80,7 @@ export const EncargadoDashboard = () => {
                 📈
               </div>
               <h6 className="fw-bold text-info">Promedio diario</h6>
-              <div className="fs-5 text-info">{promedioDiario} €</div>
+              <div className="fs-5 text-info">{promedioDiario}{simbolo}</div>
             </div>
 
             <div className="rounded shadow-sm p-3 text-center bg-success-subtle w-100">
@@ -88,7 +88,7 @@ export const EncargadoDashboard = () => {
                 📊
               </div>
               <h6 className="fw-bold text-success">Proyección mensual</h6>
-              <div className="fs-5 text-success">{proyeccionMensual} €</div>
+              <div className="fs-5 text-success">{proyeccionMensual}{simbolo}</div>
             </div>
           </div>
 
@@ -115,7 +115,7 @@ export const EncargadoDashboard = () => {
               </div>
               <h6 className="fw-bold text-info">Gastos Actuales</h6>
               <div className="fs-4 fw-bold text-dark">
-                {gasto} €
+                {gasto}{simbolo}
               </div>
             </div>
 
