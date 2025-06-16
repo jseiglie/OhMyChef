@@ -1,36 +1,34 @@
-/* src/components/Users.css */
 
-/* Variables CSS para colores */
 :root {
-  --primary-color: #ff5722; /* Naranja/Rojo del botón Add User */
+  --primary-color: #ff5722; 
   --text-dark: #333;
   --text-medium: #666;
   --text-light: #999;
   --border-color: #e0e0e0;
-  --bg-light: #f5f6f8; /* Fondo general más claro */
+  --bg-light: #f5f6f8; 
   --card-bg: #ffffff;
   --shadow-light: rgba(0, 0, 0, 0.05);
   --shadow-medium: rgba(0, 0, 0, 0.1);
 
-  /* Colores para Badges */
-  --badge-admin-bg: #ffe0e6; /* Rosa claro */
-  --badge-admin-text: #e0004c; /* Rojo oscuro */
-  --badge-chef-bg: #fff0e0; /* Naranja claro */
-  --badge-chef-text: #e08000; /* Naranja oscuro */
-  --badge-active-bg: #e0fff0; /* Verde claro */
-  --badge-active-text: #008000; /* Verde oscuro */
-  --badge-inactive-bg: #f0f0f0; /* Gris claro */
-  --badge-inactive-text: #606060; /* Gris oscuro */
-  --badge-viewer-bg: #e0f0ff; /* Azul claro */
-  --badge-viewer-text: #0060e0; /* Azul oscuro */
+  
+  --badge-admin-bg: #d03151; 
+  --badge-admin-text: #e0004c; 
+  --badge-chef-bg: #eb9539; 
+  --badge-chef-text: #e08000; 
+  --badge-active-bg: #37a570; 
+  --badge-active-text: #008000; 
+  --badge-inactive-bg: #898787; 
+  --badge-inactive-text: #606060;
+  --badge-viewer-bg: #28649b; 
+  --badge-viewer-text: #0060e0; 
 }
 
 
 .users-container {
   padding: 30px;
-  font-family: 'Inter', sans-serif; /* Asumo una fuente moderna como Inter o similar */
-  background-color: var(--bg-light);
-  min-height: 100vh; /* Para que el fondo se extienda */
+  font-family: 'Inter', sans-serif; 
+  background-color: white;
+  min-height: 100vh; 
 }
 
 .users-header {
@@ -44,7 +42,7 @@
   font-size: 32px;
   color: var(--text-dark);
   margin-bottom: 5px;
-  font-weight: 700; /* Más audaz */
+  font-weight: 700; 
 }
 
 .users-header .header-text p {
@@ -56,27 +54,27 @@
 .add-user-button {
   background-color: var(--primary-color);
   color: white;
-  padding: 12px 25px; /* Más padding */
+  padding: 12px 25px; 
   border: none;
-  border-radius: 8px; /* Bordes más redondeados */
+  border-radius: 8px; 
   cursor: pointer;
   font-size: 16px;
-  font-weight: 600; /* Semi-bold */
+  font-weight: 600; 
   display: flex;
   align-items: center;
-  gap: 8px; /* Espacio entre icono y texto */
+  gap: 8px; 
   transition: background-color 0.2s ease;
-  box-shadow: 0 4px 8px var(--shadow-medium); /* Sombra para el botón */
+  box-shadow: 0 4px 8px var(--shadow-medium); 
 }
 
 .add-user-button:hover {
-  background-color: #e04a1f; /* Un tono un poco más oscuro al pasar el ratón */
+  background-color: #e04a1f; 
 }
 
 .add-user-button svg {
-    fill: none; /* Asegura que no tenga relleno por defecto */
-    stroke: white; /* Color del icono */
-    stroke-width: 2; /* Grosor de la línea del icono */
+    fill: none; 
+    stroke: white; 
+    stroke-width: 2; 
 }
 
 
@@ -88,14 +86,14 @@
 }
 
 .filter-search-input {
-  flex-grow: 2; /* Permite que el input de búsqueda sea más grande */
+  flex-grow: 2; 
   padding: 12px 15px;
   border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 15px;
   color: var(--text-dark);
-  background-color: var(--card-bg); /* Fondo blanco */
-  box-shadow: 0 2px 4px var(--shadow-light); /* Sombra ligera */
+  background-color: var(--card-bg); 
+  box-shadow: 0 2px 4px var(--shadow-light); 
 }
 
 .filter-search-input::placeholder {
@@ -111,7 +109,7 @@
   color: var(--text-dark);
   background-color: var(--card-bg);
   box-shadow: 0 2px 4px var(--shadow-light);
-  appearance: none; /* Elimina la flecha por defecto en algunos navegadores */
+  appearance: none; 
   -webkit-appearance: none;
   -moz-appearance: none;
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>');
@@ -129,13 +127,13 @@
 
 .users-table {
   width: 100%;
-  border-collapse: separate; /* Permite border-spacing */
-  border-spacing: 0 10px; /* Espacio entre filas */
-  background-color: transparent; /* El fondo está en el container */
+  border-collapse: separate; 
+  border-spacing: 0 10px; 
+  background-color: transparent; 
 }
 
 .users-table thead tr {
-  background-color: transparent; /* No hay fondo en el encabezado */
+  background-color: transparent;
   color: var(--text-medium);
   text-align: left;
   font-size: 14px;
@@ -145,19 +143,19 @@
 
 .users-table th,
 .users-table td {
-  padding: 15px 20px; /* Más padding */
+  padding: 15px 20px; 
   vertical-align: middle;
 }
 
 .users-table th {
-  border-bottom: none; /* Eliminar borde inferior del encabezado */
-  padding-bottom: 5px; /* Espacio más pequeño debajo del encabezado */
+  border-bottom: none; 
+  padding-bottom: 5px; 
 }
 
 .users-table tbody tr {
   background-color: var(--card-bg);
-  border-radius: 10px; /* Bordes redondeados para cada fila */
-  box-shadow: 0 2px 8px var(--shadow-light); /* Sombra para cada fila */
+  border-radius: 10px; 
+  box-shadow: 0 2px 8px var(--shadow-light); 
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -166,7 +164,7 @@
   box-shadow: 0 4px 12px var(--shadow-medium);
 }
 
-/* Primera y última celda de la fila para bordes redondeados */
+
 .users-table tbody tr td:first-child {
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
@@ -177,7 +175,7 @@
 }
 
 
-/* Estilos para la columna de Usuario (avatar, nombre, email) */
+
 .user-info {
   display: flex;
   align-items: center;
@@ -188,16 +186,16 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #e0e0e0; /* Color de fondo del círculo del avatar */
+  background-color: #e0e0e0; 
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--text-dark); /* Color del icono de persona */
-  flex-shrink: 0; /* Evita que el avatar se encoja */
+  color: var(--text-dark); 
+  flex-shrink: 0; 
 }
 
 .user-avatar svg {
-    stroke: var(--text-medium); /* Color del icono de persona dentro del círculo */
+    stroke: var(--text-medium); 
     width: 24px;
     height: 24px;
 }
@@ -220,17 +218,17 @@
 }
 
 
-/* Estilos para los badges de Rol y Estado */
+
 .badge {
-  display: inline-flex; /* Para centrar el texto verticalmente */
+  display: inline-flex; 
   align-items: center;
   justify-content: center;
   padding: 6px 12px;
-  border-radius: 20px; /* Muy redondeado como píldora */
+  border-radius: 20px; 
   font-size: 13px;
   font-weight: 600;
-  text-transform: capitalize; /* Capitaliza la primera letra */
-  white-space: nowrap; /* Evita que el texto del badge se rompa */
+  text-transform: capitalize; 
+  white-space: nowrap; 
 }
 
 .badge-admin {
@@ -243,7 +241,7 @@
   color: var(--badge-chef-text);
 }
 
-.badge-viewer { /* Si tienes un rol viewer */
+.badge-viewer { 
   background-color: var(--badge-viewer-bg);
   color: var(--badge-viewer-text);
 }
@@ -259,35 +257,35 @@
 }
 
 
-/* Estilos para los botones de acción (solo iconos) */
+
 .actions-cell {
-  white-space: nowrap; /* Evita que los botones se salten de línea */
+  white-space: nowrap; 
 }
 
 .action-icon-button {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 8px; /* Padding para hacer clic más fácil */
-  border-radius: 50%; /* Para un efecto de hover circular */
+  padding: 8px; 
+  border-radius: 50%; 
   transition: background-color 0.2s ease;
-  color: var(--text-medium); /* Color por defecto de los iconos */
+  color: var(--text-medium); 
 }
 
 .action-icon-button svg {
-    width: 20px; /* Tamaño del icono */
+    width: 20px; 
     height: 20px;
-    stroke: var(--text-medium); /* Color de las líneas del SVG */
+    stroke: var(--text-medium); 
 }
 
 .action-icon-button:hover {
-  background-color: #f0f0f0; /* Fondo gris claro al pasar el ratón */
+  background-color: #f0f0f0; 
 }
 
-/* Colores específicos para iconos */
+
 .remove-role-button svg {
-    color: #dc3545; /* Rojo para la X */
-    stroke: #dc3545;
+    color: #f67e8a;
+    stroke: #ef7783;
 }
 .remove-role-button:hover {
     background-color: rgba(220, 53, 69, 0.1);
@@ -295,35 +293,35 @@
 
 
 .edit-button svg {
-    color: #007bff; /* Azul para editar */
-    stroke: #007bff;
+    color: #75b1f2; 
+    stroke: #8bbff7;
 }
 .edit-button:hover {
     background-color: rgba(0, 123, 255, 0.1);
 }
 
 .delete-button svg {
-    color: #6c757d; /* Gris oscuro para eliminar */
+    color: #6c757d; 
     stroke: #6c757d;
 }
 .delete-button:hover {
     background-color: rgba(108, 117, 125, 0.1);
 }
 
-.activate-button svg { /* Botón de checkmark para inactive */
-    color: #28a745; /* Verde para activar */
+.activate-button svg { 
+    color: #28a745; 
     stroke: #28a745;
 }
 .activate-button:hover {
     background-color: rgba(40, 167, 69, 0.1);
 }
 
-/* Ocultar el scrollbar en algunos navegadores si no es necesario (opcional) */
+
 body {
   overflow-x: hidden;
 }
 
-/* Media Queries para Responsividad básica */
+
 @media (max-width: 768px) {
   .users-header {
     flex-direction: column;
@@ -343,10 +341,10 @@ body {
     min-width: unset;
   }
   .users-table thead {
-    display: none; /* Oculta el encabezado en pantallas pequeñas */
+    display: none; 
   }
   .users-table tbody, .users-table tr, .users-table td {
-    display: block; /* Hace que las filas y celdas se comporten como bloques */
+    display: block; 
     width: 100%;
   }
   .users-table tr {
@@ -359,7 +357,7 @@ body {
     position: relative;
   }
   .users-table td:before {
-    content: attr(data-label); /* Usa el atributo data-label para el encabezado */
+    content: attr(data-label); 
     position: absolute;
     left: 15px;
     width: 45%;
@@ -373,7 +371,7 @@ body {
       border-bottom: none;
   }
   .actions-cell {
-      justify-content: flex-end; /* Alinea los botones a la derecha */
+      justify-content: flex-end; 
       display: flex;
   }
 }

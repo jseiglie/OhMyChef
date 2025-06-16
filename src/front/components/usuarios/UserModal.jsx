@@ -4,10 +4,10 @@ import '../../styles/UserModal.css';
 const UserFormModal = ({ user, onSave, onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
-    email: '', // Añadido campo email
-    role: 'viewer', // Minúsculas para coincidir con los datos
-    status: 'active', // Minúsculas para coincidir con los datos
-    restaurant: '', // Mantengo el restaurante por si lo quieres añadir al modal
+    email: '', 
+    role: 'viewer', 
+    status: 'active', 
+    restaurant: '', 
   });
 
   useEffect(() => {
@@ -61,7 +61,7 @@ const UserFormModal = ({ user, onSave, onClose }) => {
           <div className="form-group">
             <label htmlFor="email">Email:</label>
             <input
-              type="email" // Usar type="email" para mejor validación nativa
+              type="email" 
               id="email"
               name="email"
               value={formData.email}
