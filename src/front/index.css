@@ -32,6 +32,7 @@ button.bg-orange:hover {
 }
 .dashboard-container {
   direction: ltr;
+  align-self: flex-start;
 }
 .custom-sidebar {
   overflow: scroll !important;

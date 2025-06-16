@@ -3,7 +3,7 @@ import useGlobalReducer from "../../hooks/useGlobalReducer";
 import proveedorServices from "../../services/proveedorServices";
 import { ProveedorForm } from "../../components/shared/ProveedorForm";
 
-export const ChefProveedores  = () => {
+export const ChefProveedores = () => {
   const { store } = useGlobalReducer();
   const restaurante_id = store.user.restaurante_id;
 
@@ -73,7 +73,7 @@ export const ChefProveedores  = () => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="dashboard-container ps-2 row py-3 pt-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>Proveedores</h2>
         <button className="btn btn-success" onClick={abrirModalCrear}>
@@ -89,7 +89,7 @@ export const ChefProveedores  = () => {
       ) : proveedores.length === 0 ? (
         <p>No hay proveedores registrados.</p>
       ) : (
-        <table className="table table-striped">
+        <table className="table table-striped border">
           <thead>
             <tr>
               <th>Nombre</th>
