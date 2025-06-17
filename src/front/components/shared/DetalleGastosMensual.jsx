@@ -71,11 +71,11 @@ export const DetalleGastosMensual = () => {
         </button>
       </div>
 
-      <div className="btn-group mb-3">
-        <button className={`btn btn-outline-primary ${view === 'mensual' ? 'active' : ''}`} onClick={() => setView('mensual')}>
+      <div className="btn-group col-12 col-sm-12 col-lg-6 col-xl-5  mb-3">
+        <button className={`btn btn-outline-orange ${view === 'mensual' ? 'active' : ''}`} onClick={() => setView('mensual')}>
           Resumen Mensual
         </button>
-        <button className={`btn btn-outline-primary ${view === 'diario' ? 'active' : ''}`} onClick={() => setView('diario')}>
+        <button className={`btn btn-outline-orange ${view === 'diario' ? 'active' : ''}`} onClick={() => setView('diario')}>
           Detalle Diario
         </button>
       </div>
@@ -84,9 +84,9 @@ export const DetalleGastosMensual = () => {
 
       {view === 'mensual' ? (
         <>
-          <div className="mb-3">
-            <div className="d-flex justify-content-between align-items-center">
-              <h5 className="text-muted">Mes seleccionado: {nombreMes.toUpperCase()}</h5>
+          <div className="mb-3 justify-content-start">
+            <div className="d-flex justify-content-start align-items-center mb-3 mt-2">
+              <h5 className="text-muted me-4">Mes seleccionado: {nombreMes.toUpperCase()}</h5>
               <input
                 type="month"
                 className="form-control w-auto"

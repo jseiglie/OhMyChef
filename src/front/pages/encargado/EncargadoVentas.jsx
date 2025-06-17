@@ -100,6 +100,28 @@ export const EncargadoVentas = () => {
         <p>No hay ventas registradas.</p>
       ) : (
         <>
+          {/* <p className="mt-3">
+            <strong>Total:</strong> €{total.toFixed(2)}<br />
+            <strong>Promedio diario:</strong> €{promedio.toFixed(2)}
+          </p>
+ */}
+
+
+          <div className="rounded shadow-sm p-2 col-sm-12 col-md-7 col-lg-6 col-xl-4 col-xxl-3 text-center bg-info-subtle  d-flex flex-direction-row  ">
+            <div className="icono-circular ms-2 me-4 rounded-circle bg-white text-info mt-1">
+              📈</div>
+            <div className="d-flex flex-column text-start">
+              <h6 className="fw-bold text-info strong">Promedio diario: €{promedio.toFixed(2)}</h6>
+              <div className="fs-5 text-info strong">Total: €{total.toFixed(2)}</div>
+            </div>
+          </div>
+
+
+
+
+
+
+
           <table className="table table-striped border mt-3">
             <thead>
               <tr>
@@ -137,10 +159,7 @@ export const EncargadoVentas = () => {
               ))}
             </tbody>
           </table>
-          <p className="mt-3">
-            <strong>Total:</strong> €{total.toFixed(2)}<br />
-            <strong>Promedio diario:</strong> €{promedio.toFixed(2)}
-          </p>
+
         </>
       )}
 

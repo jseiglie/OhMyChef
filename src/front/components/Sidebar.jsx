@@ -89,27 +89,28 @@ export const Sidebar = () => {
             )}
             {rol === "encargado" && (
               <>
-                <li className="nav-item">
+
+                <li className={`nav-item ${location.pathname === "/encargado/dashboard" ? "color-orange-bold" : ""}`}>
                   <Link className="nav-link" to="/encargado/dashboard">
                     <i className="bi bi-house me-2"></i>Dashboard
                   </Link>
                 </li>
-                <li className="nav-item">
+                <li className={`nav-item ${location.pathname === "/encargado/ventas" ? "color-orange-bold" : ""}`}>
                   <Link className="nav-link" to="/encargado/ventas">
                     <i className="bi bi-bar-chart me-2"></i>Ventas
                   </Link>
                 </li>
-                <li className="nav-item">
+                <li className={`nav-item ${location.pathname === "/encargado/gastos" ? "color-orange-bold" : ""}`}>
                   <Link className="nav-link" to="/encargado/gastos">
                     <i className="bi bi-cash-stack me-2"></i>Gastos
                   </Link>
                 </li>
-                <li className="nav-item">
+                <li className={`nav-item ${location.pathname === "/encargado/proveedores" ? "color-orange-bold" : ""}`}>
                   <Link className="nav-link" to="/encargado/proveedores">
                     <i className="bi bi-truck me-2"></i>Proveedores
                   </Link>
                 </li>
-                <li className="nav-item">
+                <li className={`nav-item ${location.pathname === "/encargado/settings" ? "color-orange-bold" : ""}`}>
                   <Link className="nav-link" to="/encargado/settings">
                     <i className="bi bi-gear me-2"></i>Configuración
                   </Link>
@@ -118,22 +119,22 @@ export const Sidebar = () => {
             )}
             {rol === "chef" && (
               <>
-                <li className="nav-item">
+                <li className={`nav-item ${location.pathname === "/chef/dashboard" ? "color-orange-bold" : ""}`}>
                   <Link className="nav-link" to="/chef/dashboard">
                     <i className="bi bi-house me-2"></i>Dashboard
                   </Link>
                 </li>
-                <li className="nav-item">
+                <li className={`nav-item ${location.pathname === "/chef/proveedores" ? "color-orange-bold" : ""}`}>
                   <Link className="nav-link" to="/chef/proveedores">
                     <i className="bi bi-truck me-2"></i>Proveedores
                   </Link>
                 </li>
-                <li className="nav-item">
+                <li className={`nav-item ${location.pathname === "/chef/gastos" ? "color-orange-bold" : ""}`}>
                   <Link className="nav-link" to="/chef/gastos">
                     <i className="bi bi-receipt me-2"></i>Gastos
                   </Link>
                 </li>
-                <li className="nav-item">
+                <li className={`nav-item ${location.pathname === "/chef/settings" ? "color-orange-bold" : ""}`}>
                   <Link className="nav-link" to="/chef/settings">
                     <i className="bi bi-gear me-2"></i>Configuración
                   </Link>

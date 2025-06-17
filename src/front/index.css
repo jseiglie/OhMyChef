@@ -9,6 +9,22 @@
   color: #ff7741 !important;
   font-weight: 500 !important;
 }
+.btn-outline-orange {
+  background-color: rgb(255 255 255 / 50%) !important;
+  border: 1px solid #ffb496 !important;
+  color: #000000 !important;
+}
+.btn-outline-orange.active {
+  background: #ff5d1d !important;
+  border: 1px solid #c63b04 !important;
+  color: #fff !important;
+}
+.boder-orange {
+  border: 1px solid #c43c06;
+}
+.text-info.strong {
+  color: rgb(0 142 170) !important;
+}
 button.bg-orange:hover {
   background-color: #f55d21 !important;
 }
@@ -89,9 +105,19 @@ span.w-auto {
 span.w-60 {
   width: auto !important;
 }
+
+@media (max-width: 2100px) {
+  input.form-control.custom-gastos-fecha {
+    width: 40%;
+  }
+}
+
 @media (max-width: 972px) {
   .wrapper-content {
     height: 80vh !important;
+  }
+  input.form-control.custom-gastos-fecha {
+    width: 22%;
   }
 }
 @media (max-width: 767px) {
@@ -106,5 +132,8 @@ span.w-60 {
   }
   .dashboard-container {
     margin: 0 auto !important;
+  }
+  .dashboard-container input.form-control.custom-gastos-fecha {
+    width: 100% !important;
   }
 }
