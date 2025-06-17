@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import gastoServices from "../../services/GastoServices";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
+import { MonedaSimbolo } from "../../services/MonedaSimbolo";
 
 export const DetalleGastosMensual = () => {
+  const simbolo = MonedaSimbolo();
   const { store } = useGlobalReducer();
   const user = store.user;
   const navigate = useNavigate();
@@ -167,7 +169,7 @@ export const DetalleGastosMensual = () => {
                     <tr key={g.id}>
                       <td>{provName}</td>
                       <td>{g.categoria}</td>
-                      <td>€{parseFloat(g.monto).toFixed(2)}</td>
+                      <td>{simbolo}{parseFloat(g.monto).toFixed(2)}</td>
                       <td>{g.nota}</td>
                     </tr>
                   );

@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 import ventaServices from "../../services/ventaServices";
 import { Link } from "react-router-dom";
+import { MonedaSimbolo } from "../../services/MonedaSimbolo";
 
 export const EncargadoVentas = () => {
+
+  const simbolo = MonedaSimbolo();
   const { store } = useGlobalReducer();
   const user = store.user;
 
@@ -126,7 +129,7 @@ export const EncargadoVentas = () => {
             <thead>
               <tr>
                 <th>Fecha</th>
-                <th>Monto (€)</th>
+                <th>Monto ({simbolo})</th>
                 <th>Turno</th>
                 <th>Acciones</th>
               </tr>
@@ -159,7 +162,14 @@ export const EncargadoVentas = () => {
               ))}
             </tbody>
           </table>
+<<<<<<< HEAD
 
+=======
+          <p className="mt-3">
+            <strong>Total:</strong> {simbolo}{total.toFixed(2)}<br />
+            <strong>Promedio diario:</strong> {simbolo}{promedio.toFixed(2)}
+          </p>
+>>>>>>> ce187c70b42819f43d9d0144d998fa2db81a6931
         </>
       )}
 
@@ -171,7 +181,7 @@ export const EncargadoVentas = () => {
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div className="modal-body">
-              <label>Monto (€)</label>
+              <label>Monto ({simbolo})</label>
               <input
                 type="number"
                 className="form-control"

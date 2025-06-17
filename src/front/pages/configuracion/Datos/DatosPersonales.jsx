@@ -74,7 +74,11 @@ export const DatosPersonales = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
+<<<<<<< HEAD
         <button type="submit" className="btn btn-success">
+=======
+        <button type="submit" className="btn bg-orange text-white">
+>>>>>>> ce187c70b42819f43d9d0144d998fa2db81a6931
           Guardar cambios
         </button>
       </form>
