@@ -112,6 +112,34 @@ const Users = () => {
 
 
   return (
+<<<<<<< HEAD
+    <div className="container-fluid py-4">
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
+        <div>
+          <h1 className="h3">Usuarios</h1>
+          <p className="text-muted mb-2">Maneja todos tus usuarios</p>
+        </div>
+        <button
+          className="btn bg-orange"
+          onClick={() => {
+            setEditingUser(null);
+            setIsModalOpen(true);
+          }}
+        >
+          + Add User
+        </button>
+      </div>
+
+      <div className="table-responsive">
+        <table className="table table-striped table-hover align-middle text-center">
+          <thead className="table-dark">
+            <tr>
+              <th>User</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Restaurant</th>
+              <th>Actions</th>
+=======
     <div className="users-container">
       <div className="users-header">
         <div className="header-text">
@@ -220,19 +248,137 @@ const Users = () => {
                     </button>
                 )}
               </td>
+>>>>>>> ce187c70b42819f43d9d0144d998fa2db81a6931
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.map(user => (
+              <tr key={user.id}>
+                <td>
+                  <div className="fw-semibold">{user.name}</div>
+                  <div className="text-muted small">{user.email}</div>
+                </td>
+                <td>
+                  <span className={`badge bg-${user.role === 'admin' ? 'primary' : 'warning'} text-white`}>
+                    {user.role}
+                  </span>
+                </td>
+                <td>
+                  <span className={`badge bg-${user.status === 'active' ? 'success' : 'secondary'}`}>
+                    {user.status}
+                  </span>
+                </td>
+                <td>{user.restaurant}</td>
+                <td>
+                  <div className="d-flex justify-content-start gap-2">
+                    <button
+                      className="btn btn-sm btn-outline-primary"
+                      onClick={() => handleEdit(user)}
+                      title="Edit"
+                    >
+                      ✏️
+                    </button>
+                    <button
+                      className="btn btn-sm btn-outline-danger"
+                      onClick={() => handleDelete(user.id)}
+                      title="Delete"
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {isModalOpen && (
+<<<<<<< HEAD
+        <div className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center z-3">
+          <div className="bg-white rounded p-4 shadow" style={{ minWidth: '300px', maxWidth: '500px', width: '90%' }}>
+            <h2 className="h5 mb-3">{editingUser ? 'Editar Usuario' : 'Crear Usuario'}</h2>
+            <form onSubmit={handleSubmit} className="row g-3">
+              <div className="col-12">
+                <input
+                  type="text"
+                  name="name"
+                  className="form-control"
+                  placeholder="Nombre"
+                  value={userData.name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="col-12">
+                <input
+                  type="email"
+                  name="email"
+                  className="form-control"
+                  placeholder="Correo electrónico"
+                  value={userData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="col-12">
+                <select
+                  name="role"
+                  className="form-select"
+                  value={userData.role}
+                  onChange={handleChange}
+                >
+                  <option value="admin">Admin</option>
+                  <option value="chef">Chef</option>
+                </select>
+              </div>
+              <div className="col-12">
+                <select
+                  name="status"
+                  className="form-select"
+                  value={userData.status}
+                  onChange={handleChange}
+                >
+                  <option value="active">Activo</option>
+                  <option value="inactive">Inactivo</option>
+                </select>
+              </div>
+              <div className="col-12">
+                <input
+                  type="text"
+                  name="restaurant"
+                  className="form-control"
+                  placeholder="Restaurante"
+                  value={userData.restaurant}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="col-12 d-flex justify-content-end gap-2">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  Cancelar
+                </button>
+                <button type="submit" className="btn btn-success">
+                  Guardar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+=======
         <UserModal
           user={currentUser}
           onSave={handleSaveUser}
           onClose={() => setIsModalOpen(false)}
         />
+>>>>>>> ce187c70b42819f43d9d0144d998fa2db81a6931
       )}
     </div>
+
   );
 };
 

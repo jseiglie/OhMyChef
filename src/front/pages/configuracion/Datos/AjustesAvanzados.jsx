@@ -15,7 +15,7 @@ export const AjustesAvanzados = () => {
         <input className="form-check-input" type="checkbox" id="debug" checked={debug} onChange={() => setDebug(!debug)} />
         <label className="form-check-label" htmlFor="debug">Modo debug</label>
       </div>
-      <button className="btn btn-primary mt-3">Guardar configuración</button>
+      <button className="btn bg-orange mt-3">Guardar configuración</button>
     </div>
   );
 };
