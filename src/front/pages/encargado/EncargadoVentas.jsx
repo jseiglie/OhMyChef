@@ -162,14 +162,10 @@ export const EncargadoVentas = () => {
               ))}
             </tbody>
           </table>
-<<<<<<< HEAD
-
-=======
           <p className="mt-3">
             <strong>Total:</strong> {simbolo}{total.toFixed(2)}<br />
             <strong>Promedio diario:</strong> {simbolo}{promedio.toFixed(2)}
           </p>
->>>>>>> ce187c70b42819f43d9d0144d998fa2db81a6931
         </>
       )}
 
