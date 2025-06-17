@@ -6,12 +6,62 @@ from api.models import db, Usuario, Venta, Gasto, FacturaAlbaran, Proveedor, Mar
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from sqlalchemy import select, func, extract
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, decode_token
 from werkzeug.security import generate_password_hash, check_password_hash
+from api.mail.mailer import send_email
 import json
 import traceback
 
 api = Blueprint('api', __name__)
+
+
+@api.route('/forgot-password', methods=['POST'])
+def forgot_password():
+    try:
+        data = request.get_json()
+        email = data.get('email')
+        if not email:
+            return jsonify({'success': False, 'msg': 'Correo requerido'}), 400
+        user = Usuario.query.filter_by(email=email).first()
+        if not user:
+            return jsonify({'success': False, 'msg': 'Correo no registrado'}), 404
+        token = create_access_token(identity=str(user.id))
+        result = send_email(email, token)
+        if result['success']:
+            return jsonify({'success': True, 'msg': 'Revisa tu correo electrónico', 'token': token}), 200
+        else:
+            return jsonify({'success': False, 'msg': result['msg']}), 500
+    except Exception as e:
+        print(" Error en forgot-password:", str(e))
+        return jsonify({'success': False, 'msg': str(e)}), 500
+
+
+@api.route('/reset-password', methods=['POST'])
+def reset_password():
+    try:
+        data = request.get_json()
+        token = data.get("token")
+        new_password = data.get("new_password")
+        if not token or not new_password:
+            return jsonify({"msg": "Faltan datos"}), 400
+        # DEBUG: Verificamos el contenido del token
+        try:
+            print("TOKEN RECIBIDO:", token)
+            decoded = decode_token(token)
+            print("TOKEN DECODIFICADO:", decoded)
+            user_id = decoded["sub"]
+        except Exception as e:
+            print("ERROR AL DECODIFICAR TOKEN:", str(e))
+            return jsonify({"msg": "Token inválido o expirado"}), 401
+        user = db.session.get(Usuario, user_id)
+        if not user:
+            return jsonify({"msg": "Usuario no encontrado"}), 404
+        user.password = generate_password_hash(new_password)
+        db.session.commit()
+        return jsonify({"msg": "Contraseña actualizada correctamente"}), 200
+    except Exception as e:
+        print("ERROR GENERAL:", str(e))
+        return jsonify({"msg": "Error al cambiar contraseña", "error": str(e)}), 500
 
 
 @api.route('/usuarios', methods=['GET'])
@@ -51,7 +101,6 @@ def register():
             if not current_user or current_user.rol != "admin":
                 return jsonify({"error": "Solo el admin puede crear usuarios"}), 403
 
-      
         if data["rol"] in ["chef", "encargado"] and not data.get("restaurante_id"):
             return jsonify({"error": "Chef o encargado debe tener restaurante asignado"}), 400
 
@@ -195,33 +244,6 @@ def login():
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
-    
-@api.route("/forgot-password", methods=["POST"])
-def forgot_password():
-    data = request.get_json()
-    email = data.get("email")
-    if not email:
-        return jsonify({"msg": "Correo electrónico requerido"}), 400
-    user = Usuario.query.filter_by(email=email).first()
-    if not user:
-        return jsonify({"msg": "No existe ninguna cuenta con ese correo"}), 404
-    # Simulación de envío de email
-    print(f"Simulando envío de email a {email} con enlace para restablecer contraseña.")
-    return jsonify({"msg": "Revisa tu correo electrónico"}), 200
-
-@api.route("/reset-password", methods=["POST"])
-def reset_password():
-    data = request.get_json()
-    email = data.get("email")
-    new_password = data.get("new_password")
-    if not email or not new_password:
-        return jsonify({"msg": "Datos incompletos"}), 400
-    user = Usuario.query.filter_by(email=email).first()
-    if not user:
-        return jsonify({"msg": "Usuario no encontrado"}), 404
-    user.password = generate_password_hash(new_password)
-    db.session.commit()
-    return jsonify({"msg": "Contraseña actualizada correctamente"}), 200
 
 
 @api.route('/ventas', methods=['POST'])
@@ -1038,7 +1060,7 @@ def cambiar_password():
     user.password = generate_password_hash(nueva)
     db.session.commit()
 
-    return jsonify({ "msg": "Contraseña actualizada correctamente" }), 200
+    return jsonify({"msg": "Contraseña actualizada correctamente"}), 200
 
 
 @api.route("/gastos/porcentaje-mensual", methods=["GET"])
@@ -1073,7 +1095,8 @@ def porcentaje_gasto_mensual():
             extract("year", Venta.fecha) == anio
         ).scalar() or 0
 
-        porcentaje = round((total_gastos / total_ventas) * 100, 2) if total_ventas else 0
+        porcentaje = round((total_gastos / total_ventas)
+                           * 100, 2) if total_ventas else 0
 
         return jsonify({
             "gastos": round(total_gastos, 2),
@@ -1084,24 +1107,23 @@ def porcentaje_gasto_mensual():
     except Exception as e:
         return jsonify({"msg": "Error interno", "error": str(e)}), 500
 
+
 @api.route('/api/encargado/resumen-porcentaje/<int:restaurante_id>/<int:mes>/<int:ano>', methods=['GET'])
 @jwt_required()
 def resumen_porcentaje(restaurante_id, mes, ano):
- 
+
     ventas = db.session.query(func.sum(Venta.monto)).filter(
         Venta.restaurante_id == restaurante_id,
         extract('month', Venta.fecha) == mes,
         extract('year', Venta.fecha) == ano
     ).scalar() or 0
 
-   
     gastos = db.session.query(func.sum(Gasto.monto)).filter(
         Gasto.restaurante_id == restaurante_id,
         extract('month', Gasto.fecha) == mes,
         extract('year', Gasto.fecha) == ano
     ).scalar() or 0
 
- 
     porcentaje = round((gastos / ventas) * 100, 2) if ventas > 0 else 0
 
     return jsonify({
@@ -1109,6 +1131,7 @@ def resumen_porcentaje(restaurante_id, mes, ano):
         "gastos": round(gastos, 2),
         "porcentaje": porcentaje
     }), 200
+
 
 @api.route("/gastos/resumen-diario", methods=["GET"])
 @jwt_required()
@@ -1127,7 +1150,6 @@ def resumen_diario_gastos():
         if not mes or not ano:
             return jsonify({"msg": "Mes y año requeridos"}), 400
 
-      
         ventas_diarias = db.session.query(
             extract("day", Venta.fecha).label("dia"),
             func.sum(Venta.monto).label("ventas")
@@ -1176,6 +1198,7 @@ def resumen_diario_gastos():
     except Exception as e:
         return jsonify({"msg": "Error interno", "error": str(e)}), 500
 
+
 @api.route('/gastos/categorias-resumen', methods=['GET'])
 @jwt_required()
 def gastos_por_categoria():
@@ -1202,12 +1225,14 @@ def gastos_por_categoria():
             extract("year", Gasto.fecha) == ano
         ).group_by(Gasto.categoria).all()
 
-        resultado = [{"categoria": r.categoria or "Sin categoría", "total": float(r.total)} for r in resumen]
+        resultado = [{"categoria": r.categoria or "Sin categoría",
+                      "total": float(r.total)} for r in resumen]
 
         return jsonify(resultado), 200
 
     except Exception as e:
         return jsonify({"msg": "Error interno", "error": str(e)}), 500
+
 
 @api.route("/ventas/resumen-diario", methods=["GET"])
 @jwt_required()
@@ -1239,11 +1264,10 @@ def resumen_ventas_diario():
             extract("day", Venta.fecha)
         ).all()
 
-        resultado = [{"dia": int(row.dia), "monto": float(row.monto)} for row in ventas_diarias]
+        resultado = [{"dia": int(row.dia), "monto": float(row.monto)}
+                     for row in ventas_diarias]
 
         return jsonify(resultado), 200
 
     except Exception as e:
         return jsonify({"msg": "Error interno", "error": str(e)}), 500
-
-

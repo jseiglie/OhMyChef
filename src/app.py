@@ -15,6 +15,7 @@ from api.admin import setup_admin
 from api.commands import setup_commands
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
+from api.mail.mail_config import mail
 
 # from models import Person
 
@@ -28,6 +29,15 @@ app.url_map.strict_slashes = False
 
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 jwt = JWTManager(app)
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = os.getenv('EMAIL_USER')
+app.config['MAIL_PASSWORD'] = os.getenv('EMAIL_PASS')
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv('EMAIL_USER')
+
+mail.init_app(app)
 
 # database condiguration
 db_url = os.getenv("DATABASE_URL")
