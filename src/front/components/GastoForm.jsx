@@ -84,19 +84,19 @@ export const GastoForm = () => {
   };
 
   return (
-    <div className="dashboard-container ps-2 row py-3 pt-4">
+    <div className="dashboard-container ps-0 row py-3 pt-4">
       <h2>Registrar Gastos del día</h2>
       <h5 className="text-muted mb-3">Mes actual: {nombreMes.toUpperCase()}</h5>
 
 
-      <div className="col-12 col-sm-12 col-md-9 col-lg-7 col-xl-7 col-xxl-6 mt-4">
+      <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-8 mt-4">
         <div className="mb-3">
           <label className="form-label">Fecha</label>
           <input
             type="date"
             value={fecha}
             onChange={(e) => setFecha(e.target.value)}
-            className="form-control"
+            className="form-control custom-gastos-fecha"
           />
         </div>
 

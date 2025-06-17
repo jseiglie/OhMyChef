@@ -1,74 +1,117 @@
 import React, { useState, useEffect } from 'react';
-import '../styles/UserModal.css'; 
+import '../../styles/UserModal.css'; 
 
-const UserModal = ({ isOpen, onClose, onSave, initialData }) => {
-  const [userData, setUserData] = useState({
+const UserFormModal = ({ user, onSave, onClose }) => {
+  const [formData, setFormData] = useState({
     name: '',
-    email: '',
-    role: 'chef',
-    status: 'active',
-    restaurant: '',
+    email: '', 
+    role: 'viewer', 
+    status: 'active', 
+    restaurant: '', 
   });
 
   useEffect(() => {
-    if (initialData) {
-      setUserData(initialData);
+    if (user) {
+      setFormData(user);
+    } else {
+      setFormData({
+        name: '',
+        email: '',
+        role: 'viewer',
+        status: 'active',
+        restaurant: '',
+      });
     }
-  }, [initialData]);
+  }, [user]);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setUserData(prev => ({ ...prev, [name]: value }));
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(userData);
-    onClose();
+    if (!formData.name || !formData.email || !formData.restaurant) {
+      alert('Por favor, completa todos los campos requeridos: Nombre, Email y Restaurante.');
+      return;
+    }
+    onSave(formData);
   };
-
-  if (!isOpen) return null;
 
   return (
-    <div className="modal-backdrop">
-      <div className="modal">
-        <h2>{initialData ? 'Editar Usuario' : 'Crear Usuario'}</h2>
-        <form onSubmit={handleSubmit} className="modal-form">
-          <input
-            type="text"
-            name="name"
-            placeholder="Nombre"
-            value={userData.name}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Correo electrónico"
-            value={userData.email}
-            onChange={handleChange}
-            required
-          />
-          <select name="role" value={userData.role} onChange={handleChange}>
-            <option value="admin">Admin</option>
-            <option value="chef">Chef</option>
-          </select>
-          <select name="status" value={userData.status} onChange={handleChange}>
-            <option value="active">Activo</option>
-            <option value="inactive">Inactivo</option>
-          </select>
-          <input
-            type="text"
-            name="restaurant"
-            placeholder="Restaurante"
-            value={userData.restaurant}
-            onChange={handleChange}
-            required
-          />
-          <div className="modal-actions">
-            <button type="button" onClick={onClose}>Cancelar</button>
-            <button type="submit">Guardar</button>
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <h2>{user ? 'Editar Usuario' : 'Añadir Nuevo Usuario'}</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="name">Nombre:</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="email">Email:</label>
+            <input
+              type="email" 
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="role">Rol:</label>
+            <select
+              id="role"
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+            >
+              <option value="admin">Admin</option>
+              <option value="chef">Chef</option>
+              <option value="viewer">Viewer</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="status">Estado:</label>
+            <select
+              id="status"
+              name="status"
+              value={formData.status}
+              onChange={handleChange}
+            >
+              <option value="active">Activo</option>
+              <option value="inactive">Inactivo</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="restaurant">Restaurante:</label>
+            <input
+              type="text"
+              id="restaurant"
+              name="restaurant"
+              value={formData.restaurant}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-actions">
+            <button type="submit" className="save-button">Guardar</button>
+            <button type="button" className="cancel-button" onClick={onClose}>Cancelar</button>
           </div>
         </form>
       </div>
@@ -76,4 +119,4 @@ const UserModal = ({ isOpen, onClose, onSave, initialData }) => {
   );
 };
 
-export default UserModal;
+export default UserFormModal;

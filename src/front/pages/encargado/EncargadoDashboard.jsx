@@ -79,8 +79,13 @@ export const EncargadoDashboard = () => {
               <div className="icono-circular rounded-circle bg-white text-info d-inline-flex align-items-center justify-content-center mb-2">
                 📈
               </div>
+<<<<<<< HEAD
+              <h6 className="fw-bold text-info strong">Promedio diario</h6>
+              <div className="fs-5 text-info strong">{promedioDiario} €</div>
+=======
               <h6 className="fw-bold text-info">Promedio diario</h6>
               <div className="fs-5 text-info">{promedioDiario}{simbolo}</div>
+>>>>>>> ce187c70b42819f43d9d0144d998fa2db81a6931
             </div>
 
             <div className="rounded shadow-sm p-3 text-center bg-success-subtle w-100">
@@ -113,7 +118,7 @@ export const EncargadoDashboard = () => {
               <div className="icono-circular rounded-circle bg-white text-info d-inline-flex align-items-center justify-content-center mb-2">
                 💸
               </div>
-              <h6 className="fw-bold text-info">Gastos Actuales</h6>
+              <h6 className="fw-bold text-info strong">Gastos Actuales</h6>
               <div className="fs-4 fw-bold text-dark">
                 {gasto}{simbolo}
               </div>
