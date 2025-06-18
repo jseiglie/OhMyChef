@@ -8,7 +8,7 @@ from flask_cors import CORS
 from sqlalchemy import select, func, extract
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, decode_token
 from werkzeug.security import generate_password_hash, check_password_hash
-from api.mail.mailer import send_email
+from api.mail.mailer import send_reset_email
 import json
 import traceback
 from api.email_utils import send_email
@@ -27,7 +27,7 @@ def forgot_password():
         if not user:
             return jsonify({'success': False, 'msg': 'Correo no registrado'}), 404
         token = create_access_token(identity=str(user.id))
-        result = send_email(email, token)
+        result = send_reset_email(email, token)
         if result['success']:
             return jsonify({'success': True, 'msg': 'Revisa tu correo electrónico', 'token': token}), 200
         else:
