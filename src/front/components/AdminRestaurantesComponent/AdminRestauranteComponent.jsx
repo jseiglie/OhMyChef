@@ -8,9 +8,9 @@ import '../../styles/AdminRestauranteComponent.css';
 const AdminRestauranteComponent = () => {
     const location = useLocation();
     return (
-        <div className="dashboard-container all-center">
-            <h1 className="dashboard-title align-self-start">Restaurantes</h1>
-            <p className="dashboard-welcome align-self-start mb-2">Añade tu Restaurante</p>
+        <div className="dashboard-container">
+            <h1 className="dashboard-title">Restaurantes</h1>
+            <p className="dashboard-welcome mb-2">Añade tu Restaurante</p>
 
             <div className="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-8 col-xxl-7 mt-4">
                 <ul className="nav nav-tabs">

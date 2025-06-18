@@ -135,7 +135,7 @@ const AdminRestaurantePestania = () => {
 
                     <div className="col-12 col-md-12">
                         <div className="mb-3">
-                            <label className="form-label">Company Name</label>
+                            <label className="form-label">Nombre del Restaurante</label>
                             <input
                                 type="text"
                                 className="form-control"
@@ -147,7 +147,7 @@ const AdminRestaurantePestania = () => {
                         </div>
 
                         <div className="mb-3">
-                            <label className="form-label">Business Address</label>
+                            <label className="form-label">Dirección</label>
                             <textarea
                                 className="form-control"
                                 name="direccion"
@@ -171,7 +171,7 @@ const AdminRestaurantePestania = () => {
                                 />
                             </div>
                             <div className="col-12 col-md-6 mb-3">
-                                <label className="form-label">Phone Number</label>
+                                <label className="form-label">Número de teléfono</label>
                                 <input
                                     type="text"
                                     className="form-control"

@@ -55,8 +55,8 @@ export const Sidebar = () => {
                     <i className="bi bi-house me-2"></i>Dashboard
                   </Link>
                 </li>
-                <li className={`nav-item ${location.pathname === "/admin/restaurantes/restaurant" ? "color-orange-bold" : ""}`}>
-                  <Link className="nav-link" to="/admin/restaurantes">
+                <li className={`nav-item ${(location.pathname === "/admin/restaurantes/expense" || location.pathname === "/admin/restaurantes/restaurant") ? "color-orange-bold" : ""}`}>
+                  <Link className="nav-link" to="/admin/restaurantes/expense">
                     <i className="bi bi-shop me-2"></i>Restaurantes
                   </Link>
                 </li>

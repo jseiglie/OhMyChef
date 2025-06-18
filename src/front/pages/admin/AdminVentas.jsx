@@ -6,7 +6,7 @@ import AdminVentasCalendario from "../../components/AdminVentasCalendario";
 export const AdminVentas = () => {
   return (
     <>
-      <div className="dashboard-container all-center">
+      <div className="dashboard-container">
 
         <h1 className="dashboard-title align-self-start">Ventas</h1>
         <p class="dashboard-welcome  align-self-start mb-4">Introduce tus ventas</p>

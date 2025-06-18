@@ -14,12 +14,12 @@ const RestaurantCard = ({
 }) => {
   return (
     <div className="bg-white rounded-lg shadow-md p-4 flex flex-col justify-between">
-      
+
       <h3 className="text-gray-700 font-semibold text-lg mb-4">{name}</h3>
 
-      
+
       <div className="flex justify-between items-center mb-4">
-        
+
         <div>
           <p className="text-sm text-gray-500 uppercase">Ventas mes</p>
           <p className="text-2xl font-bold text-gray-800">{sales} <span className="text-base font-medium">$</span></p>
@@ -29,7 +29,7 @@ const RestaurantCard = ({
           </p>
         </div>
 
-        
+
         <div>
           <p className="text-sm text-gray-500 uppercase">Gastos mes</p>
           <p className="text-2xl font-bold text-gray-800">{expensesPercent}%</p>
@@ -37,7 +37,7 @@ const RestaurantCard = ({
         </div>
       </div>
 
-      
+
       <div className="mt-auto text-right">
         {isLastCard ? (
           <button className="text-red-600 text-sm font-medium hover:underline">
@@ -109,8 +109,8 @@ const AdminDashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      
+    <div className="p-6">
+
       <header className="mb-8">
         <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
         <p className="text-gray-600 mt-1">
@@ -118,7 +118,7 @@ const AdminDashboard = () => {
         </p>
       </header>
 
-      
+
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {restaurantes.map((r, idx) => (
           <RestaurantCard
@@ -133,7 +133,7 @@ const AdminDashboard = () => {
         ))}
       </section>
 
-      
+
       <section className="mt-12">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-semibold text-gray-800">Quick Actions</h2>
