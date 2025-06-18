@@ -264,34 +264,8 @@ def login():
         return jsonify({"error": str(e)}), 500
 
 
-@api.route("/forgot-password", methods=["POST"])
-def forgot_password():
-    data = request.get_json()
-    email = data.get("email")
-    if not email:
-        return jsonify({"msg": "Correo electrónico requerido"}), 400
-    user = Usuario.query.filter_by(email=email).first()
-    if not user:
-        return jsonify({"msg": "No existe ninguna cuenta con ese correo"}), 404
-    # Simulación de envío de email
-    print(
-        f"Simulando envío de email a {email} con enlace para restablecer contraseña.")
-    return jsonify({"msg": "Revisa tu correo electrónico"}), 200
 
 
-@api.route("/reset-password", methods=["POST"])
-def reset_password():
-    data = request.get_json()
-    email = data.get("email")
-    new_password = data.get("new_password")
-    if not email or not new_password:
-        return jsonify({"msg": "Datos incompletos"}), 400
-    user = Usuario.query.filter_by(email=email).first()
-    if not user:
-        return jsonify({"msg": "Usuario no encontrado"}), 404
-    user.password = generate_password_hash(new_password)
-    db.session.commit()
-    return jsonify({"msg": "Contraseña actualizada correctamente"}), 200
 
 
 @api.route('/ventas', methods=['POST'])
