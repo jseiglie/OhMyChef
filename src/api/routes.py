@@ -264,10 +264,6 @@ def login():
         return jsonify({"error": str(e)}), 500
 
 
-
-
-
-
 @api.route('/ventas', methods=['POST'])
 @jwt_required()
 def crear_venta():
