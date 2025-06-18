@@ -118,54 +118,45 @@ export const EncargadoVentas = () => {
               <div className="fs-5 text-info strong">Total: €{total.toFixed(2)}</div>
             </div>
           </div>
-
-
-
-
-
-
-
-          <table className="table table-striped border mt-3">
-            <thead>
-              <tr>
-                <th>Fecha</th>
-                <th>Monto ({simbolo})</th>
-                <th>Turno</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ventas.map((v) => (
-                <tr key={v.id}>
-                  <td>{v.fecha}</td>
-                  <td>{v.monto}</td>
-                  <td>{v.turno || "-"}</td>
-                  <td>
-                    <button
-                      className="btn btn-outline-warning btn-sm me-1"
-                      title="Editar"
-                      onClick={() => abrirModalEdicion(v)}
-                    >
-                      <i className="bi bi-pencil-square"></i>
-                    </button>
-
-                    <button
-                      className="btn btn-outline-danger btn-sm"
-                      title="Eliminar"
-                      onClick={() => eliminarVenta(v.id)}
-                    >
-                      <i className="bi bi-trash3"></i>
-                    </button>
-
-                  </td>
+          <div className="table-responsive">
+            <table className="table table-striped users-table mt-3 ps-0">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Monto ({simbolo})</th>
+                  <th>Turno</th>
+                  <th>Acciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          <p className="mt-3">
-            <strong>Total:</strong> {simbolo}{total.toFixed(2)}<br />
-            <strong>Promedio diario:</strong> {simbolo}{promedio.toFixed(2)}
-          </p>
+              </thead>
+              <tbody>
+                {ventas.map((v) => (
+                  <tr key={v.id}>
+                    <td>{v.fecha}</td>
+                    <td>{v.monto}</td>
+                    <td>{v.turno || "-"}</td>
+                    <td>
+                      <button
+                        className="btn btn-outline-warning btn-sm me-1"
+                        title="Editar"
+                        onClick={() => abrirModalEdicion(v)}
+                      >
+                        <i className="bi bi-pencil-square"></i>
+                      </button>
+
+                      <button
+                        className="btn btn-outline-danger btn-sm"
+                        title="Eliminar"
+                        onClick={() => eliminarVenta(v.id)}
+                      >
+                        <i className="bi bi-trash3"></i>
+                      </button>
+
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </>
       )}
 

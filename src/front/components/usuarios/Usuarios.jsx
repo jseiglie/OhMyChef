@@ -12,7 +12,7 @@ const Users = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
 
- 
+
   const [users, setUsers] = useState([
     { id: 1, name: 'Sarah Johnson', email: 'sarah@ohmychef.com', role: 'admin', status: 'active', restaurant: 'Italian Bistro' },
     { id: 2, name: 'Marco Rossi', email: 'marco@ohmychef.com', role: 'chef', status: 'active', restaurant: 'Sushi Central' },
@@ -23,8 +23,8 @@ const Users = () => {
 
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) || user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRole = selectedRole === 'All Roles' || user.role === selectedRole.toLowerCase(); 
-    const matchesStatus = selectedStatus === 'All Status' || user.status === selectedStatus.toLowerCase(); 
+    const matchesRole = selectedRole === 'All Roles' || user.role === selectedRole.toLowerCase();
+    const matchesStatus = selectedStatus === 'All Status' || user.status === selectedStatus.toLowerCase();
     return matchesSearch && matchesRole && matchesStatus;
   });
 
@@ -56,7 +56,7 @@ const Users = () => {
     }
   };
 
-   const handleRemoveRole = (userId) => {
+  const handleRemoveRole = (userId) => {
     const userToUpdate = users.find(user => user.id === userId);
 
     if (!userToUpdate) {
@@ -78,7 +78,7 @@ const Users = () => {
         );
         alert(`El rol de ${userToUpdate.name} ha sido cambiado a 'viewer'.`);
         console.log(`Rol del usuario ${userId} actualizado a 'viewer' en el estado local.`);
-      }, 500); 
+      }, 500);
     }
   };
 
@@ -112,13 +112,13 @@ const Users = () => {
 
 
   return (
-    <div className="users-container">
+    <div className="dashboard-container users-container">
       <div className="users-header">
         <div className="header-text">
           <h1>Usuarios</h1>
           <p>Maneja todos tus usuarios</p>
         </div>
-        <button className="add-user-button" onClick={handleAddUser}>
+        <button className="btn btn-success" onClick={handleAddUser}>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-plus">
             <line x1="12" y1="5" x2="12" y2="19"></line>
             <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -154,75 +154,77 @@ const Users = () => {
           <option value="Inactive">Inactive</option>
         </select>
       </div>
-      <table className="users-table">
-        <thead>
-          <tr>
-            <th>User</th>
-            <th>Role</th>
-            <th>Status</th>
-            <th>Restaurant</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredUsers.map(user => (
-            <tr key={user.id}>
-              <td>
-                <div className="user-info">
-                  <div className="user-avatar">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-user">
-                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                      <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                  </div>
-                  <div className="user-details">
-                    <div className="user-name">{user.name}</div>
-                    <div className="user-email">{user.email}</div>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <span className={`badge bg-${user.role === 'admin' ? 'primary' : 'warning'} text-white`}>
-                  {user.role}
-                </span>
-              </td>
-              <td>
-                <span className={`badge bg-${user.status === 'active' ? 'success' : 'secondary'}`}>
-                  {user.status}
-                </span>
-              </td>
-              <td>{user.restaurant}</td>
-              <td>
-                <div className="d-flex justify-content-start gap-2">
-                  <button
-                    className="btn btn-sm btn-outline-primary"
-                    onClick={() => handleEdit(user)}
-                    title="Edit"
-                  >
-                    :lápiz2:
-                  </button>
-                  <button
-                    className="btn btn-sm btn-outline-danger"
-                    onClick={() => handleDelete(user.id)}
-                    title="Delete"
-                  >
-                    :papelera:
-                  </button>
-                  {user.status === 'inactive' && (
-                    <button
-                      className="btn btn-sm btn-outline-success"
-                      onClick={() => handleActivateUser(user.id)}
-                      title="Activate"
-                    >
-                      :marca_de_verificación_blanca:
-                    </button>
-                  )}
-                </div>
-              </td>
+      <div className="table-responsive">
+        <table className="table table-striped users-table">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Restaurant</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredUsers.map(user => (
+              <tr key={user.id}>
+                <td>
+                  <div className="user-info">
+                    <div className="user-avatar">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-user">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                      </svg>
+                    </div>
+                    <div className="user-details">
+                      <div className="user-name">{user.name}</div>
+                      <div className="user-email">{user.email}</div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span className={`badge bg-${user.role === 'admin' ? 'primary' : 'warning'} text-white`}>
+                    {user.role}
+                  </span>
+                </td>
+                <td>
+                  <span className={`badge bg-${user.status === 'active' ? 'success' : 'secondary'}`}>
+                    {user.status}
+                  </span>
+                </td>
+                <td>{user.restaurant}</td>
+                <td>
+                  <div className="d-flex justify-content-start gap-2">
+                    <button
+                      className="btn btn-sm btn-outline-primary"
+                      onClick={() => handleEdit(user)}
+                      title="Edit"
+                    >
+                      :lápiz2:
+                    </button>
+                    <button
+                      className="btn btn-sm btn-outline-danger"
+                      onClick={() => handleDelete(user.id)}
+                      title="Delete"
+                    >
+                      :papelera:
+                    </button>
+                    {user.status === 'inactive' && (
+                      <button
+                        className="btn btn-sm btn-outline-success"
+                        onClick={() => handleActivateUser(user.id)}
+                        title="Activate"
+                      >
+                        :marca_de_verificación_blanca:
+                      </button>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       {isModalOpen && (
         <UserModal
           user={currentUser}

@@ -17,7 +17,7 @@ export const ProveedorRestauranteDetail = () => {
 
     if (!restaurante) {
         return (
-            <div className="detail-container">
+            <div className="dashboard-container float-start detail-container">
                 <h1>Restaurante no encontrado</h1>
                 <button onClick={() => navigate('/admin/proveedores')} className="back-button">Volver al Dashboard</button>
             </div>
@@ -25,14 +25,16 @@ export const ProveedorRestauranteDetail = () => {
     }
 
     return (
-        <div className="detail-container">
+        <div className="dashboard-container">
             <button onClick={() => navigate('/admin/proveedores')} className="back-button">← Volver a Proveedores</button>
-            <h1>Detalles de {restaurante.name}</h1>
-            <p><strong>Ciudad:</strong> {restaurante.city}</p>
-            <p><strong>Zona:</strong> {restaurante.zone}</p>
-            <p><strong>Porcentaje:</strong> {restaurante.percentage}%</p>
-            <p><strong>Estado:</strong> <span className="status-detail">{restaurante.status}</span></p>
-            <p><strong>Descripción:</strong> {restaurante.description}</p>
+            <h1 className="dashboard-title mb-4">Detalles de <span className="color-orange">{restaurante.name}</span></h1>
+            <div className="proveedor-card col-12 col-sm-12 col-md-12 col-lg-12 col-xl-8 col-xxl-6">
+                <p><strong>Ciudad:</strong> {restaurante.city}</p>
+                <p><strong>Zona:</strong> {restaurante.zone}</p>
+                <p><strong>Porcentaje:</strong> {restaurante.percentage}%</p>
+                <p><strong>Estado:</strong> <span className="status-detail">{restaurante.status}</span></p>
+                <p><strong>Descripción:</strong> {restaurante.description}</p>
+            </div>
         </div>
     );
 };
