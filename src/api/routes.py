@@ -8,7 +8,7 @@ from flask_cors import CORS
 from sqlalchemy import select, func, extract
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, decode_token
 from werkzeug.security import generate_password_hash, check_password_hash
-from api.mail.mailer import send_email
+from api.mail.mailer import send_reset_email
 import json
 import traceback
 from api.email_utils import send_email
@@ -27,14 +27,16 @@ def forgot_password():
         if not user:
             return jsonify({'success': False, 'msg': 'Correo no registrado'}), 404
         token = create_access_token(identity=str(user.id))
-        result = send_email(email, token)
+        result = send_reset_email(email, token)
         if result['success']:
             return jsonify({'success': True, 'msg': 'Revisa tu correo electrónico', 'token': token}), 200
         else:
             return jsonify({'success': False, 'msg': result['msg']}), 500
     except Exception as e:
-        print(" Error en forgot-password:", str(e))
+        print(":x: Error en forgot-password:", str(e))
         return jsonify({'success': False, 'msg': str(e)}), 500
+    
+    
 
 
 @api.route('/reset-password', methods=['POST'])
@@ -167,44 +169,73 @@ def obtener_usuario(id):
 @api.route('/usuarios/<int:id>', methods=['PUT'])
 @jwt_required()
 def editar_usuario(id):
-    usuario = Usuario.query.get(id)
+    try: 
+        data = request.json 
+        current_user_id = get_jwt_identity()
+        current_user = db.session.get(Usuario, current_user_id)
 
-    if usuario is None:
-        return jsonify({"msg": "Usuario no encontrado"}), 404
+        if not current_user or current_user.rol != "admin":
+            return jsonify({"error": "Solo el admin puede actualizar usuarios"}), 403
 
-    data = request.get_json()
-    if not data:
-        return jsonify({"msg": "Datos no recibidos"}), 400
+        user_to_update = db.session.get(
+            Usuario, id) 
+        if not user_to_update:
+            return jsonify({"error": "Usuario no encontrado"}), 404
 
-    usuario.nombre = data.get("nombre", usuario.nombre)
-    usuario.email = data.get("email", usuario.email)
-    usuario.password = data.get("password", usuario.password)
-    usuario.rol = data.get("rol", usuario.rol)
-    usuario.restaurante_id = data.get("restaurante_id", usuario.restaurante_id)
+        admin_password = data.get("adminPassword")
+        if not admin_password or not check_password_hash(current_user.password, admin_password):
+            return jsonify({"error": "Contraseña del administrador incorrecta"}), 401
 
-    try:
+        user_to_update.nombre = data.get("nombre", user_to_update.nombre)
+        user_to_update.email = data.get("email", user_to_update.email)
+        if data.get("password"):  
+            user_to_update.password = generate_password_hash(data["password"])
+
+        new_rol = data.get("rol", user_to_update.rol)
+        if new_rol == "admin":
+            existing_admin = db.session.scalar(
+                select(Usuario).where(Usuario.rol == "admin"))
+            if existing_admin and existing_admin.id != user_to_update.id:
+                return jsonify({"error": "Ya existe un administrador en el sistema."}), 400
+        user_to_update.rol = new_rol
+
+        if user_to_update.rol in ["chef", "encargado"] and not data.get("restaurante_id"):
+            return jsonify({"error": "Chef o encargado debe tener restaurante asignado"}), 400
+        user_to_update.restaurante_id = data.get(
+            "restaurante_id", user_to_update.restaurante_id) if user_to_update.rol != "admin" else None
+
         db.session.commit()
-        return jsonify({"msg": "Usuario actualizado"}), 200
+        return jsonify(user_to_update.serialize()), 200
+
     except Exception as e:
         db.session.rollback()
-        return jsonify({"msg": "Error al actualizar el usuario", "error": str(e)}), 500
+        return jsonify({"error": "Error al actualizar usuario", "detalle": str(e)}), 500
 
 
 @api.route('/usuarios/<int:id>', methods=['DELETE'])
 @jwt_required()
 def eliminar_usuario(id):
-    usuario = Usuario.query.get(id)
-
-    if usuario is None:
-        return jsonify({"msg": "Usuario no encontrado"}), 404
-
     try:
-        db.session.delete(usuario)
+        current_user_id = get_jwt_identity()
+        current_user = db.session.get(Usuario, current_user_id)
+
+        if not current_user or current_user.rol != "admin":
+            return jsonify({"error": "Solo el admin puede eliminar usuarios"}), 403
+
+        user_to_delete = db.session.get(
+            Usuario, id) 
+        if not user_to_delete:
+            return jsonify({"error": "Usuario no encontrado"}), 404
+
+        if user_to_delete.id == current_user_id:
+            return jsonify({"error": "No puedes eliminar tu propia cuenta de administrador"}), 400
+
+        db.session.delete(user_to_delete)
         db.session.commit()
         return jsonify({"msg": "Usuario eliminado correctamente"}), 200
     except Exception as e:
         db.session.rollback()
-        return jsonify({"msg": "Error al eliminar el usuario", "error": str(e)}), 500
+        return jsonify({"error": "Error al eliminar usuario", "detalle": str(e)}), 500
 
 
 @api.route('/ventas', methods=['GET'])
@@ -262,10 +293,6 @@ def login():
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
-
-
-
-
 
 
 @api.route('/ventas', methods=['POST'])

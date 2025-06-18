@@ -1,117 +1,134 @@
-import React, { useState, useEffect } from 'react';
-import '../../styles/UserModal.css'; 
+import React, { useEffect, useState } from "react";
+import "../../styles/UserModal.css";
 
-const UserFormModal = ({ user, onSave, onClose }) => {
+const UserModal = ({ user, onSave, onClose, restaurants }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '', 
-    role: 'viewer', 
-    status: 'active', 
-    restaurant: '', 
+    nombre: "",
+    email: "",
+    password: "",
+    rol: "chef",
+    restaurante_id: "",
+    adminPassword: ""
   });
 
   useEffect(() => {
     if (user) {
-      setFormData(user);
-    } else {
       setFormData({
-        name: '',
-        email: '',
-        role: 'viewer',
-        status: 'active',
-        restaurant: '',
+        nombre: user.nombre || "",
+        email: user.email || "",
+        password: "", 
+        rol: user.rol || "chef",
+        restaurante_id: user.restaurante_id || "",
+        adminPassword: "" 
       });
+    } else {
+        setFormData({
+            nombre: "",
+            email: "",
+            password: "",
+            rol: "chef",
+            restaurante_id: "",
+            adminPassword: ""
+        });
     }
   }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value,
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.restaurant) {
-      alert('Por favor, completa todos los campos requeridos: Nombre, Email y Restaurante.');
-      return;
-    }
     onSave(formData);
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <h2>{user ? 'Editar Usuario' : 'Añadir Nuevo Usuario'}</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="name">Nombre:</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </div>
+    <div className="modaal-backdrop">
+      <div className="modaal">
+        <h2>{user ? "Editar Usuario" : "Crear Usuario"}</h2>
+        <form onSubmit={handleSubmit} className="modaal-form">
+          <input
+            type="text"
+            name="nombre"
+            placeholder="Nombre"
+            value={formData.nombre}
+            onChange={handleChange}
+            required
+          />
 
-          <div className="form-group">
-            <label htmlFor="email">Email:</label>
-            <input
-              type="email" 
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
+          <input
+            type="email"
+            name="email"
+            placeholder="Correo electrónico"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
 
-          <div className="form-group">
-            <label htmlFor="role">Rol:</label>
+          <input
+            type="password"
+            name="password"
+            placeholder={user ? "Nueva contraseña (opcional)" : "Contraseña del nuevo usuario"}
+            value={formData.password}
+            onChange={handleChange}
+            required={!user} 
+          />
+
+          <select
+            name="rol"
+            value={formData.rol}
+            onChange={handleChange}
+            required
+          >
+            <option value="admin">Administrador</option>
+            <option value="encargado">Encargado</option>
+            <option value="chef">Chef</option>
+          </select>
+
+          {formData.rol !== "admin" && (
             <select
-              id="role"
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-            >
-              <option value="admin">Admin</option>
-              <option value="chef">Chef</option>
-              <option value="viewer">Viewer</option>
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="status">Estado:</label>
-            <select
-              id="status"
-              name="status"
-              value={formData.status}
-              onChange={handleChange}
-            >
-              <option value="active">Activo</option>
-              <option value="inactive">Inactivo</option>
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="restaurant">Restaurante:</label>
-            <input
-              type="text"
-              id="restaurant"
-              name="restaurant"
-              value={formData.restaurant}
+              name="restaurante_id"
+              value={formData.restaurante_id}
               onChange={handleChange}
               required
-            />
-          </div>
+            >
+              <option value="">Selecciona un restaurante</option>
+              {Array.isArray(restaurants) && restaurants.map((r) => (
+                <option key={r.id} value={r.id}>
+                  {r.nombre}
+                </option>
+              ))}
+            </select>
+          )}
 
-          <div className="form-actions">
-            <button type="submit" className="save-button">Guardar</button>
-            <button type="button" className="cancel-button" onClick={onClose}>Cancelar</button>
+          <select
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
+            required
+          >
+            <option value="active">Activo</option>
+            <option value="inactive">Inactivo</option>
+          </select>
+
+          <input
+            type="password"
+            name="adminPassword"
+            placeholder="Contraseña del administrador para confirmar"
+            value={formData.adminPassword}
+            onChange={handleChange}
+            required
+          />
+
+          <div className="modaal-actions">
+            <button type="button" onClick={onClose}>
+              Cancelar
+            </button>
+            <button type="submit">Guardar</button>
           </div>
         </form>
       </div>
@@ -119,4 +136,4 @@ const UserFormModal = ({ user, onSave, onClose }) => {
   );
 };
 
-export default UserFormModal;
+export default UserModal;

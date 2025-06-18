@@ -10,6 +10,7 @@ export const Login = () => {
   const navigate = useNavigate();
   const [FormData, setFormData] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState("");
+  
   useEffect(() => {
     if (errorMessage) {
       const timer = setTimeout(() => setErrorMessage(""), 3000);
@@ -28,6 +29,9 @@ export const Login = () => {
           setErrorMessage("Credenciales incorrectas");
         } else {
           sessionStorage.setItem("token", data.access_token);
+          if (data.user && data.user.rol === "admin") {
+            localStorage.setItem("adminEmail", data.user.email);
+          }
           dispatch({ type: "get_user_info", payload: data.user });
           navigate(`/${data.user.rol}/dashboard`);
         }
