@@ -32,7 +32,7 @@ def forgot_password():
         else:
             return jsonify({'success': False, 'msg': result['msg']}), 500
     except Exception as e:
-        print(" Error en forgot-password:", str(e))
+        print(":x: Error en forgot-password:", str(e))
         return jsonify({'success': False, 'msg': str(e)}), 500
 
 
