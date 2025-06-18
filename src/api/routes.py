@@ -8,9 +8,10 @@ from flask_cors import CORS
 from sqlalchemy import select, func, extract
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, decode_token
 from werkzeug.security import generate_password_hash, check_password_hash
-from api.mail.mailer import send_email
+from api.mail.mailer import send_reset_email
 import json
 import traceback
+from api.email_utils import send_email
 
 api = Blueprint('api', __name__)
 
@@ -26,7 +27,7 @@ def forgot_password():
         if not user:
             return jsonify({'success': False, 'msg': 'Correo no registrado'}), 404
         token = create_access_token(identity=str(user.id))
-        result = send_email(email, token)
+        result = send_reset_email(email, token)
         if result['success']:
             return jsonify({'success': True, 'msg': 'Revisa tu correo electrónico', 'token': token}), 200
         else:
@@ -34,6 +35,8 @@ def forgot_password():
     except Exception as e:
         print(":x: Error en forgot-password:", str(e))
         return jsonify({'success': False, 'msg': str(e)}), 500
+    
+    
 
 
 @api.route('/reset-password', methods=['POST'])
@@ -119,6 +122,23 @@ def register():
         )
         db.session.add(new_user)
         db.session.commit()
+
+        from api.email_utils import send_email
+
+        subject = "Bienvenido a OhMyChef!"
+        html_content = f"""
+        <h3>Hola {data['nombre']},</h3>
+        <p>Tu cuenta en <strong>OhMyChef!</strong> ha sido creada exitosamente.</p>
+        <ul>
+          <li><strong>Rol:</strong> {data['rol']}</li>
+          <li><strong>Email:</strong> {data['email']}</li>
+        </ul>
+        <p>Ingresa al sistema con tu email y la contraseña asignada.</p>
+        <p><em>Este mensaje ha sido generado automáticamente.</em></p>
+        """
+
+        send_email(to_email=data["email"],
+                   subject=subject, html_content=html_content)
 
         return jsonify({"msg": "Usuario creado correctamente"}), 201
 
