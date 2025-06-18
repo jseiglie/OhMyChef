@@ -2,7 +2,7 @@ from flask_mail import Message
 from api.mail.mail_config import mail
 import os
 
-def send_email(address, token):
+def send_reset_email(address, token):
     try:
         # URL del frontend
         frontend_url = "https://congenial-space-halibut-4jwx9rr9jv6gfp99-3000.app.github.dev"
