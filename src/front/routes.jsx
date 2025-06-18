@@ -55,6 +55,7 @@ export const router = createBrowserRouter(
         <Route element={<Layout />}>
           {/* Admin */}
           <Route path="admin/dashboard" element={<AdminDashboard />} />
+          
           <Route path="admin/restaurantes" element={<AdminRestaurante />} />
           <Route path="admin/restaurantes/*" element={<AdminRestaurante />} />
           <Route path="admin/crear-restaurante" element={<CrearRestaurante />} />
