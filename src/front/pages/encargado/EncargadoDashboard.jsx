@@ -113,7 +113,7 @@ export const EncargadoDashboard = () => {
               <div className="icono-circular rounded-circle bg-white text-info d-inline-flex align-items-center justify-content-center mb-2">
                 💸
               </div>
-              <h6 className="fw-bold text-info">Gastos Actuales</h6>
+              <h6 className="fw-bold text-info strong">Gastos Actuales</h6>
               <div className="fs-4 fw-bold text-dark">
                 {gasto}{simbolo}
               </div>

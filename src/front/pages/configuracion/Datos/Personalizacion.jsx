@@ -13,7 +13,7 @@ export const Personalizacion = () => {
         <option value="claro">Claro</option>
         <option value="oscuro">Oscuro</option>
       </select>
-      <button className="btn btn-primary mt-3">Aplicar cambios</button>
+      <button className="btn bg-organge mt-3">Aplicar cambios</button>
     </div>
   );
 };

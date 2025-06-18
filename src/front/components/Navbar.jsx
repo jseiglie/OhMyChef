@@ -9,7 +9,7 @@ export const Navbar = () => {
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom py-2">
-      <div className="container-fluid mx-4">
+      <div className="container-fluid align-items-center mx-4">
         <a className="navbar-brand" href="#">
           <img
             src="/docs/assets/ohmychef 312.png"
@@ -33,11 +33,10 @@ export const Navbar = () => {
         </div>
         <ul className="navbar-nav ms-auto d-flex align-items-center ps-md-4 gap-3">
           <li className="nav-item position-relative">
-            <i className="bi bi-bell fs-4"></i>
+            <i className="bi bi-bell me-0 fs-t"></i>
             <span className="notify-dot bg-danger rounded-circle position-absolute top-0 start-100 translate-middle p-1"></span>
           </li>
           <li className="nav-item d-flex align-items-center gap-2">
-            <i className="bi bi-person-circle fs-1"></i>
             <div className="text-end">
               <p className="mb-0 name">{user.nombre}</p>
               <p className="mb-0 role text-muted small text-capitalize">{user.rol}</p>
@@ -45,6 +44,7 @@ export const Navbar = () => {
                 {user.restaurante_nombre || "Sin restaurante asignado"}
               </p>
             </div>
+            <i className="bi bi-person-circle fs-1"></i>
           </li>
         </ul>
       </div>

@@ -339,7 +339,7 @@ const Users = () => {
       <div className="users-header">
         <div className="header-text">
           <h1>Usuarios</h1>
-          <p>maneja todos tus usuarios</p>
+          <p>Maneja todos tus usuarios</p>
         </div>
         <button className="add-user-button" onClick={handleAddUser}>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-plus">
@@ -349,7 +349,6 @@ const Users = () => {
           Add User
         </button>
       </div>
-
       <div className="users-filters">
         <input
           type="text"
@@ -377,13 +376,13 @@ const Users = () => {
           <option value="Inactive">Inactive</option>
         </select>
       </div>
-
       <table className="users-table">
         <thead>
           <tr>
             <th>User</th>
             <th>Role</th>
             <th>Status</th>
+            <th>Restaurant</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -408,7 +407,9 @@ const Users = () => {
                 <span className={`badge badge-${user.rol}`}>{user.rol}</span>
               </td>
               <td>
-                <span className={`badge badge-${user.status}`}>{user.status}</span>
+                <span className={`badge bg-${user.status === 'active' ? 'success' : 'secondary'}`}>
+                  {user.status}
+                </span>
               </td>
               <td className="actions-cell">
                 {user.rol !== 'chef' && (
@@ -446,7 +447,6 @@ const Users = () => {
           ))}
         </tbody>
       </table>
-
       {isModalOpen && (
         <UserModal
           user={currentUser}
@@ -458,5 +458,22 @@ const Users = () => {
     </div>
   );
 };
-
 export default Users;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

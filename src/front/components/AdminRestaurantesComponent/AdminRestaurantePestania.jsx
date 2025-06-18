@@ -25,7 +25,6 @@ const AdminRestaurantePestania = () => {
 
     // ✅ Corrección aquí (nueva línea 15 aprox.)
     useEffect(() => {
-        debugger
         if (restaurante) {
             SetRestaurantes(restaurante);
         }
@@ -52,7 +51,6 @@ const AdminRestaurantePestania = () => {
 
     // INICIO FUNCIONES ///////////////
     const handleChange = (e) => {
-        debugger
         const { name, value } = e.target;
         SetRestaurantes((prev) => ({
             ...prev,
@@ -71,7 +69,6 @@ const AdminRestaurantePestania = () => {
     };
 
     const handleSubmit = (e) => {
-        debugger
         e.preventDefault();
         if (restaurante) {
             therestaurant.actualizarRestaurante(restaurantes)

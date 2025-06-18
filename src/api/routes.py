@@ -6,12 +6,65 @@ from api.models import db, Usuario, Venta, Gasto, FacturaAlbaran, Proveedor, Mar
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from sqlalchemy import select, func, extract
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, decode_token
 from werkzeug.security import generate_password_hash, check_password_hash
+from api.mail.mailer import send_email
 import json
 import traceback
+from api.email_utils import send_email
 
 api = Blueprint('api', __name__)
+
+
+@api.route('/forgot-password', methods=['POST'])
+def forgot_password():
+    try:
+        data = request.get_json()
+        email = data.get('email')
+        if not email:
+            return jsonify({'success': False, 'msg': 'Correo requerido'}), 400
+        user = Usuario.query.filter_by(email=email).first()
+        if not user:
+            return jsonify({'success': False, 'msg': 'Correo no registrado'}), 404
+        token = create_access_token(identity=str(user.id))
+        result = send_email(email, token)
+        if result['success']:
+            return jsonify({'success': True, 'msg': 'Revisa tu correo electrónico', 'token': token}), 200
+        else:
+            return jsonify({'success': False, 'msg': result['msg']}), 500
+    except Exception as e:
+        print(":x: Error en forgot-password:", str(e))
+        return jsonify({'success': False, 'msg': str(e)}), 500
+    
+    
+
+
+@api.route('/reset-password', methods=['POST'])
+def reset_password():
+    try:
+        data = request.get_json()
+        token = data.get("token")
+        new_password = data.get("new_password")
+        if not token or not new_password:
+            return jsonify({"msg": "Faltan datos"}), 400
+        # DEBUG: Verificamos el contenido del token
+        try:
+            print("TOKEN RECIBIDO:", token)
+            decoded = decode_token(token)
+            print("TOKEN DECODIFICADO:", decoded)
+            user_id = decoded["sub"]
+        except Exception as e:
+            print("ERROR AL DECODIFICAR TOKEN:", str(e))
+            return jsonify({"msg": "Token inválido o expirado"}), 401
+        user = db.session.get(Usuario, user_id)
+        if not user:
+            return jsonify({"msg": "Usuario no encontrado"}), 404
+        user.password = generate_password_hash(new_password)
+        db.session.commit()
+        return jsonify({"msg": "Contraseña actualizada correctamente"}), 200
+    except Exception as e:
+        print("ERROR GENERAL:", str(e))
+        return jsonify({"msg": "Error al cambiar contraseña", "error": str(e)}), 500
 
 
 @api.route('/usuarios', methods=['GET'])
@@ -69,6 +122,23 @@ def register():
         )
         db.session.add(new_user)
         db.session.commit()
+
+        from api.email_utils import send_email
+
+        subject = "Bienvenido a OhMyChef!"
+        html_content = f"""
+        <h3>Hola {data['nombre']},</h3>
+        <p>Tu cuenta en <strong>OhMyChef!</strong> ha sido creada exitosamente.</p>
+        <ul>
+          <li><strong>Rol:</strong> {data['rol']}</li>
+          <li><strong>Email:</strong> {data['email']}</li>
+        </ul>
+        <p>Ingresa al sistema con tu email y la contraseña asignada.</p>
+        <p><em>Este mensaje ha sido generado automáticamente.</em></p>
+        """
+
+        send_email(to_email=data["email"],
+                   subject=subject, html_content=html_content)
 
         return jsonify({"msg": "Usuario creado correctamente"}), 201
 
@@ -223,36 +293,6 @@ def login():
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
-
-
-@api.route("/forgot-password", methods=["POST"])
-def forgot_password():
-    data = request.get_json()
-    email = data.get("email")
-    if not email:
-        return jsonify({"msg": "Correo electrónico requerido"}), 400
-    user = Usuario.query.filter_by(email=email).first()
-    if not user:
-        return jsonify({"msg": "No existe ninguna cuenta con ese correo"}), 404
-    # Simulación de envío de email
-    print(
-        f"Simulando envío de email a {email} con enlace para restablecer contraseña.")
-    return jsonify({"msg": "Revisa tu correo electrónico"}), 200
-
-
-@api.route("/reset-password", methods=["POST"])
-def reset_password():
-    data = request.get_json()
-    email = data.get("email")
-    new_password = data.get("new_password")
-    if not email or not new_password:
-        return jsonify({"msg": "Datos incompletos"}), 400
-    user = Usuario.query.filter_by(email=email).first()
-    if not user:
-        return jsonify({"msg": "Usuario no encontrado"}), 404
-    user.password = generate_password_hash(new_password)
-    db.session.commit()
-    return jsonify({"msg": "Contraseña actualizada correctamente"}), 200
 
 
 @api.route('/ventas', methods=['POST'])
