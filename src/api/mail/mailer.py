@@ -1,6 +1,7 @@
 from flask_mail import Message
 from api.mail.mail_config import mail
 import os
+
 def send_email(address, token):
     try:
         # URL del frontend

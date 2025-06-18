@@ -35,6 +35,8 @@ def forgot_password():
     except Exception as e:
         print(":x: Error en forgot-password:", str(e))
         return jsonify({'success': False, 'msg': str(e)}), 500
+    
+    
 
 
 @api.route('/reset-password', methods=['POST'])
