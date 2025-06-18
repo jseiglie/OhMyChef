@@ -42,6 +42,7 @@ import { GastoForm } from "./components/GastoForm";
 
 
 import ForgotPage from "./pages/configuracion/ForgotPage.jsx";
+import ResetPassword from "./pages/configuracion/ResetPassword.jsx"
 
 
 
@@ -51,6 +52,7 @@ export const router = createBrowserRouter(
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/forgot-password" element={<ForgotPage />} />
+      <Route path="/reset" element={<ResetPassword />} />
       <Route element={<RutaPrivada allowedRoles={["admin", "encargado", "chef"]} />}>
         <Route element={<Layout />}>
           {/* Admin */}
