@@ -10,6 +10,9 @@ html,
   color: rgb(255, 255, 255) !important;
   color: #ff7741 !important;
 }
+.color-orange{
+    color: #ff7741 !important;
+}
 .color-orange-bold {
   color: #ff7741 !important;
   font-weight: 500 !important;
@@ -33,9 +36,7 @@ html,
 button.bg-orange:hover {
   background-color: #f55d21 !important;
 }
-.dashboard-container {
-  background-color: #f3f3f3b5;
-}
+
 .fs-7 {
   font-size: 0.9rem;
 }
@@ -89,9 +90,11 @@ table thead tr th {
   direction: ltr;
   text-align: left;
 }
+
 .dashboard-container {
   direction: ltr;
   align-self: flex-start;
+  background-color: #f3f3f3b5;
 }
 .custom-sidebar {
   overflow: scroll !important;
