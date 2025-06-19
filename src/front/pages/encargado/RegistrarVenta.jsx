@@ -42,18 +42,19 @@ export const RegistrarVenta = () => {
   };
 
   return (
-    <div className="dashboard-container ps-2 row py-3 pt-4">
-      <h2>Registrar Venta</h2>
-      <h5 className="text-muted mb-3">Mes actual: {nombreMes.toUpperCase()}</h5>
+    <div className="dashboard-container ps-0 row py-3 pt-4">
+      <h1 className="dashboard-title">Registrar Venta</h1>
+      <h5 className="dashboard-welcome text-muted mt-2 mb-4">Mes actual: {nombreMes.toUpperCase()}</h5>
 
-      <form onSubmit={handleSubmit} className="card p-4 shadow-sm mt-3  col-12 col-sm-12 col-md-10 col-lg-7 col-xl-7 col-xxl-5 ">
+      <form onSubmit={handleSubmit} className="proveedor-card col-12 col-sm-12 col-md-12 col-lg-12 col-xl-8 col-xxl-8 ">
         {/* Fecha */}
+
         <div className="mb-3">
           <label className="form-label">Fecha</label>
           <input
             type="date"
             name="fecha"
-            className="form-control"
+            className="form-control custom-gastos-fecha"
             value={form.fecha}
             onChange={handleChange}
             required
