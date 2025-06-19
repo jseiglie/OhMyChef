@@ -76,12 +76,15 @@ const ListaRestaurantes = ({ restaurantes }) => {
               key={restaurante.id}
               className="list-group-item d-flex justify-content-between align-items-center"
             >
+
               <div>
                 <strong>{restaurante.nombre}</strong>
                 <br />
                 <small className="text-muted">{restaurante.direccion}</small>
                 <br />
                 <small className="text-muted">{restaurante.email_contacto}</small>
+                <br />
+                <small className="text-muted">ID: {restaurante.id}</small>
                 <br />
                 {restaurante.telefono &&
                   <small className="text-muted">{restaurante.telefono}</small>
@@ -90,7 +93,7 @@ const ListaRestaurantes = ({ restaurantes }) => {
               </div>
 
               <div className="d-flex align-items-center gap-2">
-                <span className="badge bg-secondary">{`ID: ${restaurante.id}`}</span>
+
 
                 <button
                   type="button"

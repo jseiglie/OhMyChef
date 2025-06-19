@@ -101,7 +101,7 @@ export const DetalleGastosMensual = () => {
             </p>
           </div>
           <div className="table-responsive ">
-            <table className="table table-hover table-bordered table-striped ">
+            <table className="table table-striped users-table">
               <thead>
                 <tr>
                   <th rowSpan="2">Proveedor</th>
@@ -115,7 +115,7 @@ export const DetalleGastosMensual = () => {
               <tbody>
                 {monthlyData.proveedores.map(prov => (
                   <tr key={prov}>
-                    <td><strong>{prov}</strong></td>
+                    <td className="fs-7"><strong>{prov}</strong></td>
                     {monthlyData.dias.map(d => (
                       <td key={d} className="text-end">
                         {monthlyData.datos[prov]?.[d]?.toFixed(2) || '-'}
@@ -153,7 +153,7 @@ export const DetalleGastosMensual = () => {
             </select>
           </div>
           <div className="table-responsive">
-            <table className="table table-striped border">
+            <table className="table table-striped users-table">
               <thead>
                 <tr>
                   <th>Proveedor</th>

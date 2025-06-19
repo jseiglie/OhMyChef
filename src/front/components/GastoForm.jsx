@@ -85,11 +85,11 @@ export const GastoForm = () => {
 
   return (
     <div className="dashboard-container ps-0 row py-3 pt-4">
-      <h2>Registrar Gastos del día</h2>
-      <h5 className="text-muted mb-3">Mes actual: {nombreMes.toUpperCase()}</h5>
+      <h1 className="dashboard-title">Registrar Gastos del día</h1>
+      <h5 className="dashboard-welcome text-muted mt-2 mb-4">Mes actual: {nombreMes.toUpperCase()}</h5>
 
 
-      <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-8 mt-4">
+      <div className="proveedor-card col-12 col-sm-12 col-md-12 col-lg-12 col-xl-8 col-xxl-8">
         <div className="mb-3">
           <label className="form-label">Fecha</label>
           <input
@@ -103,7 +103,7 @@ export const GastoForm = () => {
         <form onSubmit={handleSubmit}>
           {gastos.map((gasto, index) => (
             <div className="row align-items-end mb-3" key={index}>
-              <div className="col-md-3">
+              <div className="col-md-3 mt-2">
                 <label className="form-label">Proveedor</label>
                 <select
                   className="form-select"
@@ -177,7 +177,7 @@ export const GastoForm = () => {
             </div>
           ))}
 
-          <div className="mb-3">
+          <div className="mb-3 mt-4">
             <button
               type="button"
               className="btn btn-outline-secondary me-2"

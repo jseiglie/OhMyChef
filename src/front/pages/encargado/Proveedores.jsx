@@ -75,7 +75,7 @@ export const Proveedores = () => {
   return (
     <div className="dashboard-container ps-2 row py-3 pt-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2>Proveedores</h2>
+        <h2 className="dashboard-title">Proveedores</h2>
         <button className="btn btn-success" onClick={abrirModalCrear}>
           + Nuevo Proveedor
         </button>
@@ -89,37 +89,39 @@ export const Proveedores = () => {
       ) : proveedores.length === 0 ? (
         <p>No hay proveedores registrados.</p>
       ) : (
-        <table className="table table-striped border">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Categoría</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {proveedores.map(p => (
-              <tr key={p.id}>
-                <td>{p.nombre}</td>
-                <td>{p.categoria}</td>
-                <td>
-                  <button
-                    className="btn btn-outline-warning btn-sm me-2"
-                    onClick={() => abrirModalEditar(p.id)}
-                  >
-                    Editar
-                  </button>
-                  <button
-                    className="btn btn-outline-danger btn-sm"
-                    onClick={() => eliminar(p.id)}
-                  >
-                    Eliminar
-                  </button>
-                </td>
+        <div className="table-responsive">
+          <table className="table table-striped users-table ">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Acciones</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {proveedores.map(p => (
+                <tr key={p.id}>
+                  <td>{p.nombre}</td>
+                  <td>{p.categoria}</td>
+                  <td>
+                    <button
+                      className="btn btn-outline-warning btn-sm me-2"
+                      onClick={() => abrirModalEditar(p.id)}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className="btn btn-outline-danger btn-sm"
+                      onClick={() => eliminar(p.id)}
+                    >
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
       {mostrarModal && (

@@ -18,7 +18,7 @@ export const ProveedoresDashboard = () => {
     };
 
     return (
-        <div className="dashboard-container p-6 bg-gray-100 min-h-screen">
+        <div className="dashboard-container p-6">
             <header className="mb-6">
                 <h1 className="text-3xl font-bold mb-1">Proveedor</h1>
                 <p className="text-gray-600">Proveedor por restaurante</p>

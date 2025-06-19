@@ -19,7 +19,8 @@ export const Navbar = () => {
           />
         </a>
 
-        <div className="wrapper-for">
+        {/* barra centra de search comentada */}
+        {/* <div className="wrapper-for">
           <div className="" id="navbarContent">
             <form className="d-flex mx-auto my-2 my-lg-0">
               <input
@@ -30,7 +31,7 @@ export const Navbar = () => {
               />
             </form>
           </div>
-        </div>
+        </div> */}
         <ul className="navbar-nav ms-auto d-flex align-items-center ps-md-4 gap-3">
           <li className="nav-item position-relative">
             <i className="bi bi-bell me-0 fs-t"></i>
