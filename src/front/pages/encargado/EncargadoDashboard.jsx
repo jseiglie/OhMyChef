@@ -60,8 +60,8 @@ export const EncargadoDashboard = () => {
 
   return (
     <div className="dashboard-container ps-2 row py-3 pt-4">
-      <h1 className="dashboard-title">Ventas</h1>
-      <p class="dashboard-welcome mb-4">Configura tus ventas</p>
+      <h1 className="dashboard-title">Resumen De Tu Restaurante</h1>
+      <p class="dashboard-welcome mb-4">Configura tus Restaurante</p>
       <div className="card shadow-sm border rounded p-4 mb-4">
         <div className="row align-items-center">
           <div className="col-md-3 d-flex flex-column gap-4 align-items-center">
