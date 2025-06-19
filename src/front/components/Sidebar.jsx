@@ -70,7 +70,7 @@ export const Sidebar = () => {
                     <i className="bi bi-cash-coin me-2"></i>Gastos
                   </Link>
                 </li>
-                <li className={`nav-item ${location.pathname === "/admin/proveedores" ? "color-orange-bold" : ""}`}>
+                <li className={`nav-item ${(location.pathname === "/admin/proveedores" || location.pathname.includes("admin/proveedores/restaurante")) ? "color-orange-bold" : ""}`}>
                   <Link className="nav-link" to="/admin/proveedores">
                     <i className="bi bi-shop me-2"></i>Proveedores
                   </Link>
@@ -95,12 +95,12 @@ export const Sidebar = () => {
                     <i className="bi bi-house me-2"></i>Dashboard
                   </Link>
                 </li>
-                <li className={`nav-item ${location.pathname === "/encargado/ventas" ? "color-orange-bold" : ""}`}>
+                <li className={`nav-item ${location.pathname === "/encargado/ventas" || location.pathname === "/encargado/registrar-venta" ? "color-orange-bold" : ""}`}>
                   <Link className="nav-link" to="/encargado/ventas">
                     <i className="bi bi-bar-chart me-2"></i>Ventas
                   </Link>
                 </li>
-                <li className={`nav-item ${location.pathname === "/encargado/gastos" ? "color-orange-bold" : ""}`}>
+                <li className={`nav-item ${location.pathname === "/encargado/gastos" || location.pathname === "/encargado/gastos/registrar" ? "color-orange-bold" : ""}`}>
                   <Link className="nav-link" to="/encargado/gastos">
                     <i className="bi bi-cash-stack me-2"></i>Gastos
                   </Link>
@@ -129,7 +129,8 @@ export const Sidebar = () => {
                     <i className="bi bi-truck me-2"></i>Proveedores
                   </Link>
                 </li>
-                <li className={`nav-item ${location.pathname === "/chef/gastos" ? "color-orange-bold" : ""}`}>
+
+                <li className={`nav-item ${(location.pathname === "/chef/gastos" || location.pathname === "/chef/gastos/registrar") ? "color-orange-bold" : ""}`}>
                   <Link className="nav-link" to="/chef/gastos">
                     <i className="bi bi-receipt me-2"></i>Gastos
                   </Link>

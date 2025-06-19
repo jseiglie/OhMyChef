@@ -87,7 +87,7 @@ export const DetalleGastosMensual = () => {
       {view === 'mensual' ? (
         <>
           <div className="mb-3 justify-content-start">
-            <div className="d-flex justify-content-start align-items-center mb-3 mt-2">
+            <div className="d-flex justify-content-start flex-wrap align-items-center mb-3 mt-2">
               <h5 className="text-muted me-4">Mes seleccionado: {nombreMes.toUpperCase()}</h5>
               <input
                 type="month"

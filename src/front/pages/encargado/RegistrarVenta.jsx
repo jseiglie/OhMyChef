@@ -46,49 +46,53 @@ export const RegistrarVenta = () => {
       <h1 className="dashboard-title">Registrar Venta</h1>
       <h5 className="dashboard-welcome text-muted mt-2 mb-4">Mes actual: {nombreMes.toUpperCase()}</h5>
 
-      <form onSubmit={handleSubmit} className="proveedor-card col-12 col-sm-12 col-md-12 col-lg-12 col-xl-8 col-xxl-8 ">
+      <form onSubmit={handleSubmit} className="proveedor-card col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6 col-xxl-6 ">
         {/* Fecha */}
 
-        <div className="mb-3">
-          <label className="form-label">Fecha</label>
-          <input
-            type="date"
-            name="fecha"
-            className="form-control custom-gastos-fecha"
-            value={form.fecha}
-            onChange={handleChange}
-            required
-          />
+        <div className="row align-items-end mb-3">
+          <div className="col-12 col-sm-12 col-md-12 col-lg-6 mt-2">
+            <label className="form-label">Fecha</label>
+            <input
+              type="date"
+              name="fecha"
+              className="form-control col-12 col-sm-12 col-md-12 col-lg-6 "
+              value={form.fecha}
+              onChange={handleChange}
+              required
+            />
+          </div>
         </div>
-
         {/* Monto */}
-        <div className="mb-3">
-          <label className="form-label">Monto ({simbolo})</label>
-          <input
-            type="number"
-            name="monto"
-            className="form-control"
-            value={form.monto}
-            onChange={handleChange}
-            required
-            min="0"
-            step="0.01"
-          />
-        </div>
+        <div className="row align-items-end mb-3">
+          <div className="col-12 col-sm-12 col-md-12 col-lg-6 mt-2">
+            <label className="form-label">Monto ({simbolo})</label>
+            <input
+              type="number"
+              name="monto"
+              className="form-control"
+              value={form.monto}
+              onChange={handleChange}
+              required
+              min="0"
+              step="0.01"
+            />
+          </div>
 
-        {/* Turno */}
-        <div className="mb-3">
-          <label className="form-label">Turno</label>
-          <select name="turno" className="form-select" value={form.turno} onChange={handleChange}>
-            <option value="mañana">Mañana</option>
-            <option value="tarde">Tarde</option>
-            <option value="noche">Noche</option>
-          </select>
+          {/* Turno */}
+          <div className="col-12 col-sm-12 col-md-12 col-lg-6 mt-2">
+            <label className="form-label">Turno</label>
+            <select name="turno" className="form-select" value={form.turno} onChange={handleChange}>
+              <option value="mañana">Mañana</option>
+              <option value="tarde">Tarde</option>
+              <option value="noche">Noche</option>
+            </select>
+          </div>
         </div>
-
-        <button type="submit" className="btn btn-success" disabled={estado.loading}>
-          {estado.loading ? "Guardando..." : "Registrar Venta"}
-        </button>
+        <div>
+          <button type="submit" className="btn btn-success mt-3" disabled={estado.loading}>
+            {estado.loading ? "Guardando..." : "Registrar Venta"}
+          </button>
+        </div>
 
         {estado.mensaje && (
           <div className={`alert mt-3 ${estado.error ? "alert-danger" : "alert-success"}`}>
