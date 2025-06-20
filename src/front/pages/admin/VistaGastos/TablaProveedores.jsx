@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Card, Table, Form, Button } from "react-bootstrap";
 
 const TablaProveedores = () => {
@@ -7,6 +7,10 @@ const TablaProveedores = () => {
     { nombre: "Grupo Alimentario", total: 3100, restaurantes: 7 },
     { nombre: "Hermanos López", total: 2300, restaurantes: 5 },
   ];
+  useEffect(() => {
+    const el = document.getElementsByClassName("custom-sidebar")[0];
+    if (el) el.scrollTo(0, 0);
+  }, []);
 
   return (
     <Card className="mb-4 shadow-sm">
@@ -30,7 +34,7 @@ const TablaProveedores = () => {
             </Form.Select>
           </div>
         </div>
-        <Table className="table table-bordered table-sm text-center">
+        <Table className="table table-responsive table-bordered table-sm text-center">
           <thead className="table-light">
             <tr>
               <th>Nombre proveedor</th>

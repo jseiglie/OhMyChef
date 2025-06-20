@@ -32,6 +32,8 @@ export const EncargadoVentas = () => {
 
   useEffect(() => {
     cargarVentas();
+    const el = document.getElementsByClassName("custom-sidebar")[0];
+    if (el) el.scrollTo(0, 0);
   }, []);
 
   const total = ventas.reduce((acc, v) => acc + parseFloat(v.monto), 0);
@@ -76,9 +78,9 @@ export const EncargadoVentas = () => {
   };
 
   return (
-    <div className="dashboard-container ps-2 row py-3 pt-4">
+    <div className="dashboard-container ps-2 py-3 pt-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2>Ventas del restaurante</h2>
+        <h1 className="dashboard-title">Ventas del restaurante</h1>
         <Link to="/encargado/registrar-venta" className="btn btn-success">
           <i className="bi bi-plus-circle me-2"></i>Registrar nueva venta
         </Link>

@@ -11,7 +11,7 @@ export const Home = () => {
         className="container-fluid landing-container"
         style={{ backgroundImage: `url(${bgforgot})` }}
       >
-        <div className="row align-items-center main-row">
+        <div className="row align-items-center main-row mx-auto">
           <div className="col-lg-6 col-12 text-center text-lg-start landing-message">
             <h1>Gestiona tus gastos</h1>
             <p className="fw-semibold text-dark">Inicia sesión para llevar un control de tu inversión culinaria.</p>

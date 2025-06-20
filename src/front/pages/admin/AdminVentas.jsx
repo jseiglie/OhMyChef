@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import VentasResumen from "../../components/VentasResumen";
 import AdminVentasCalendario from "../../components/AdminVentasCalendario";
 
 
 export const AdminVentas = () => {
+  useEffect(() => {
+    const el = document.getElementsByClassName("custom-sidebar")[0];
+    if (el) el.scrollTo(0, 0);
+  }, []);
   return (
     <>
       <div className="dashboard-container">

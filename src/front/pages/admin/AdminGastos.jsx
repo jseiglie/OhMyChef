@@ -7,8 +7,8 @@ import FiltrosGasto from "./VistaGastos/FiltrosGasto"
 
 export const AdminGastos = () => {
   return (
-    <div className="container-fluid px-2 py-2">
-      <h1 className="my-2 h4">Resumen de gastos globales</h1>
+    <div className="dashboard-container">
+      <h1 className="dashboard-title">Resumen de gastos globales</h1>
       <p className="text-muted mb-3 small">Comparativa mensual por restaurante y proveedor</p>
       {/* Resumen tarjetas */}
       <div className="row mb-3">
@@ -16,19 +16,19 @@ export const AdminGastos = () => {
       </div>
       {/* Gráfico barras y evolución */}
       <div className="row mb-3">
-        <div className="col-md-6 mb-3">
+        <div className="col-12 col-sm-12 col-md-12 col-lg-6 mb-3">
           <GastoPorRestauranteChart />
         </div>
-        <div className="col-md-6 mb-3">
+        <div className="col-12 col-sm-12 col-md-12 col-lg-6 mb-3">
           <EvolucionGastoMensual />
         </div>
       </div>
       {/* Tabla proveedores con filtros */}
       <div className="row mb-3">
-        <div className="col-md-8 mb-4">
+        <div className="col-12 col-sm-12 col-md-12 col-lg-6 mb-3">
           <TablaProveedores />
         </div>
-        <div className="col-md-4 mb-4">
+        <div className="col-12 col-sm-12 col-md-12 col-lg-6 mb-3">
           <FiltrosGasto />
         </div>
       </div>

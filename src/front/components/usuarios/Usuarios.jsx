@@ -383,7 +383,6 @@ const Users = () => {
             <th>Role</th>
             <th>Status</th>
             <th>Restaurant</th>
-            <th>Actions</th>
           </tr>
         </thead>
         <tbody>

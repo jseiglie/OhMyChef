@@ -10,6 +10,7 @@ export const ChefDashboard = () => {
   const [resumenMensual, setResumenMensual] = useState(null);
 
   useEffect(() => {
+
     const fecha = new Date();
     const mes = fecha.getMonth() + 1;
     const ano = fecha.getFullYear();
@@ -27,6 +28,8 @@ export const ChefDashboard = () => {
     chefServices.resumenGastoMensual(mes, ano)
       .then((resumen) => setResumenMensual(resumen))
       .catch((err) => console.error(err));
+    const el = document.getElementsByClassName("custom-sidebar")[0];
+    if (el) el.scrollTo(0, 0);
   }, []);
 
   const porcentaje = resumenMensual?.porcentaje || 0;
@@ -48,7 +51,7 @@ export const ChefDashboard = () => {
   }
 
   return (
-    <div className="dashboard-container ps-2 row py-3 pt-4">
+    <div className="dashboard-container ps-2 py-3 pt-4">
       <h1 className="dashboard-title">Graficas en Porcentajes</h1>
       <p className="dashboard-welcome mb-4">Graficas de gastos</p>
       <div className="row justify-content-start">

@@ -4,6 +4,7 @@ import useGlobalReducer from "../hooks/useGlobalReducer";
 import gastoServices from "../services/GastoServices";
 
 export const GastoForm = () => {
+
   const { store } = useGlobalReducer();
   const user = store.user;
   const navigate = useNavigate();
@@ -30,8 +31,12 @@ export const GastoForm = () => {
     }
   }, [user]);
 
-  const handleChange = (index, e) => {
+  useEffect(() => {
+    const el = document.getElementsByClassName("custom-sidebar")[0];
+    if (el) el.scrollTo(0, 0);
+  }, []);
 
+  const handleChange = (index, e) => {
     const updatedGastos = [...gastos];
     updatedGastos[index][e.target.name] = e.target.value;
     setGastos(updatedGastos);
@@ -84,7 +89,8 @@ export const GastoForm = () => {
   };
 
   return (
-    <div className="dashboard-container ps-0 row py-3 pt-4">
+    <div className="dashboard-container ps-0  py-3 pt-4">
+      <button onClick={() => navigate(`/${user.rol}/gastos`)} className="back-button">← Volver a gastos</button>
       <h1 className="dashboard-title">Registrar Gastos del día</h1>
       <h5 className="dashboard-welcome text-muted mt-2 mb-4">Mes actual: {nombreMes.toUpperCase()}</h5>
 

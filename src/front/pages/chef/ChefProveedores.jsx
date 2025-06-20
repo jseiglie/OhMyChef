@@ -29,6 +29,8 @@ export const ChefProveedores = () => {
 
   useEffect(() => {
     cargar();
+    const el = document.getElementsByClassName("custom-sidebar")[0];
+    if (el) el.scrollTo(0, 0);
   }, []);
 
   const eliminar = async (id) => {
@@ -73,9 +75,9 @@ export const ChefProveedores = () => {
   };
 
   return (
-    <div className="dashboard-container ps-2 row py-3 pt-4">
+    <div className="dashboard-container ps-2 py-3 pt-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2 className="dashboard-title">Proveedores</h2>
+        <h1 className="dashboard-title">Proveedores</h1>
         <button className="btn btn-success" onClick={abrirModalCrear}>
           + Nuevo Proveedor
         </button>

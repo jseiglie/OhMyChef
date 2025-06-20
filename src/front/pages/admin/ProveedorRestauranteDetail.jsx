@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../../styles/ProveedorRestauranteDetail.css';
 
 export const ProveedorRestauranteDetail = () => {
+
+    useEffect(() => {
+        const el = document.getElementsByClassName("custom-sidebar")[0];
+        if (el) el.scrollTo(0, 0);
+    }, []);
+
+
     const { id } = useParams();
     const navigate = useNavigate();
 

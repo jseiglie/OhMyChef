@@ -23,6 +23,7 @@ const Main = () => {
             <StoreProvider>
                 {/* Set up routing for the application */}
                 <RouterProvider router={router}>
+                   
                 </RouterProvider>
             </StoreProvider>
         </React.StrictMode>

@@ -31,6 +31,9 @@ import { EncargadoVentas } from "./pages/encargado/EncargadoVentas";
 import { EncargadoGastos } from "./pages/encargado/EncargadoGastos";
 import { ProveedorForm } from "./components/shared/ProveedorForm";
 import { Sobrenosotros } from "./components/Sobrenosotros";
+import { Contactoempresa } from "./components/Contactoempresa";
+
+
 
 
 import { ChefDashboard } from "./pages/chef/ChefDashboard";
@@ -53,6 +56,8 @@ export const router = createBrowserRouter(
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/sobrenosotros" element={<Sobrenosotros />} />
+      <Route path="/contactoempresa" element={<Contactoempresa />} />
+
       <Route path="/forgot-password" element={<ForgotPage />} />
       <Route path="/reset" element={<ResetPassword />} />
       <Route element={<RutaPrivada allowedRoles={["admin", "encargado", "chef"]} />}>
@@ -71,7 +76,7 @@ export const router = createBrowserRouter(
           <Route path="admin/proveedores" element={<ProveedoresDashboard />} />
           <Route path="admin/proveedores/restaurante/:id" element={<ProveedorRestauranteDetail />} />
           <Route path="/restaurante/:id" element={<AdminRestauranteDetalle />} />
-          
+
 
 
           {/* Encargado */}
