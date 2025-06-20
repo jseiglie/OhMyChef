@@ -104,18 +104,19 @@ export const ChefProveedores = () => {
                   <td>{p.nombre}</td>
                   <td>{p.categoria}</td>
                   <td>
-                    <button
-                      className="btn btn-outline-warning btn-sm me-2"
+                    <button class="action-icon-button edit-button"
                       onClick={() => abrirModalEditar(p.id)}
-                    >
-                      Editar
+                      title="Edit User"><svg xmlns="http://www.w3.org/2000/svg"
+                        width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"
+                        class="feather feather-edit-2">
+                        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z">
+                        </path>
+                      </svg>
                     </button>
-                    <button
-                      className="btn btn-outline-danger btn-sm"
-                      onClick={() => eliminar(p.id)}
-                    >
-                      Eliminar
-                    </button>
+
+
                   </td>
                 </tr>
               ))}

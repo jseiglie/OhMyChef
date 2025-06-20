@@ -1,5 +1,6 @@
 from flask_mail import Message
 from api.mail.mail_config import mail
+
 import os
 
 def send_reset_email(address, token):
