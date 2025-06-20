@@ -1,19 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { DatosPersonales } from "./Datos/DatosPersonales.jsx";
 import { CambiarContrasena } from "./Datos/CambiarContrasena.jsx";
 import { MonedaPrincipal } from "./Datos/MonedaPrincipal.jsx";
 
 
 export const ConfigAdmin = () => {
+  useEffect(() => {
+    const el = document.getElementsByClassName("custom-sidebar")[0];
+    if (el) el.scrollTo(0, 0);
+  }, []);
   return (
-    <div className="dashboard-container ps-2 row py-3 pt-4 ">
+    <div className="dashboard-container ps-2 py-3 pt-4">
       <h1 className="dashboard-title">Configuración del Administrador</h1>
       <p className="dashboard-welcome mb-4">Configura tu usuario</p>
-      <DatosPersonales />
+      <div className="d-flex flex-wrap">
+        <DatosPersonales />
 
-      <CambiarContrasena />
+        <CambiarContrasena />
 
-      <MonedaPrincipal />
-    </div>
+        <MonedaPrincipal />
+      </div>
+    </div >
   );
 };

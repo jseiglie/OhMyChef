@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import adminService from "../services/adminService"; 
+import adminService from "../services/adminService";
 import "../styles/AdminDashboardBB.css";
 
 const AdminRestauranteDetalle = () => {
@@ -29,8 +29,8 @@ const AdminRestauranteDetalle = () => {
   }, [id]);
 
   return (
-    <div className="container mt-4">
-      <h2 className="mb-4">Detalle Restaurante #{id}</h2>
+    <div className="dashboard-container ps-2 py-3 pt-4">
+      <h1 className="dashboard-title mb-4">Detalle Restaurante #{id}</h1>
 
       {resumen && (
         <div className="mb-4">

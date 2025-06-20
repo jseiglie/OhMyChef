@@ -10,12 +10,12 @@ const ForgotPage = () => {
       className="container-fluid landing-container"
       style={{ backgroundImage: `url(${forgotBg})` }}
     >
-      <div className="row align-items-center main-row">
+      <div className="row align-items-center main-row mx-auto">
         <div className="col-lg-6 col-12 text-center text-lg-start landing-message">
           <h1>Recupera el acceso a tu cocina digital</h1>
           <p className="fw-semibold text-dark">Vuelve a tomar el control de tu gestión culinaria en segundos.</p>
         </div>
-        <div className="col-lg-5 col-md-8 col-11 mx-auto auth-overlay">
+        <div className="col-10 col-sm-8 col-md-8 col-lg-6 col-xl-5 col-xxl-3 mx-auto auth-overlay">
           <ForgotPassword />
         </div>
       </div>

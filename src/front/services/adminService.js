@@ -1,5 +1,4 @@
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
 const token = () => sessionStorage.getItem("token");
 
 const adminService = {

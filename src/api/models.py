@@ -33,8 +33,12 @@ class Usuario(db.Model):
     nombre = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(250), nullable=False)
-    rol = db.Column(db.Enum('admin', 'encargado', 'chef',name='roles'), nullable=False)
-    restaurante_id = db.Column(db.Integer, db.ForeignKey('restaurantes.id'), nullable=True)
+    rol = db.Column(db.Enum('admin', 'encargado', 'chef',
+                    name='roles'), nullable=False)
+    restaurante_id = db.Column(db.Integer, db.ForeignKey(
+        'restaurantes.id'), nullable=True)
+
+    moneda = db.Column(db.String(10), nullable=True)
 
     def serialize(self):
         return {
@@ -43,6 +47,7 @@ class Usuario(db.Model):
             "email": self.email,
             "rol": self.rol,
             "restaurante_id": self.restaurante_id,
+            "moneda": self.moneda,
         }
 
 
@@ -74,7 +79,8 @@ class Proveedor(db.Model):
     telefono = db.Column(db.String(50))
     email_contacto = db.Column(db.String(100))
     observaciones = db.Column(db.Text)
-    restaurante_id = db.Column(db.Integer, db.ForeignKey('restaurantes.id'), nullable=False)
+    restaurante_id = db.Column(db.Integer, db.ForeignKey(
+        'restaurantes.id'), nullable=False)
 
     def serialize(self):
         return {

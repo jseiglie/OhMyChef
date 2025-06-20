@@ -104,8 +104,8 @@ const AdminDashboardBB = () => {
       </div>
 
       <div className="">
-  <QuickActionsAdmin />
-</div>
+        <QuickActionsAdmin />
+      </div>
     </div>
   );
 };

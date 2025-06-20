@@ -21,7 +21,10 @@ const ListaRestaurantes = ({ restaurantes }) => {
     }
   }, [restaurantes]);
 
-
+  useEffect(() => {
+    const el = document.getElementsByClassName("custom-sidebar")[0];
+    if (el) el.scrollTo(0, 0);
+  }, []);
 
   // funcion editar
   const handlerditar = (restauranteSeleccionado) => {
@@ -74,7 +77,7 @@ const ListaRestaurantes = ({ restaurantes }) => {
           {restaurantesLocal && restaurantesLocal.map(restaurante => (
             <li
               key={restaurante.id}
-              className="list-group-item d-flex justify-content-between align-items-center"
+              className="list-group-item d-flex justify-content-between flex-wrap align-items-center"
             >
 
               <div>

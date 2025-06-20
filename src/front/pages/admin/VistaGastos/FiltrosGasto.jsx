@@ -2,7 +2,7 @@ import React from "react";
 
 const FiltrosGasto = () => {
   return (
-    <div className="d-flex justify-content-between align-items-end mt-4 flex-wrap">
+    <div className="d-flex justify-content-start align-items-end mt-4 flex-wrap">
       <div className="mb-2 me-3">
         <label htmlFor="selectRestaurante" className="form-label fw-bold">
           Restaurante

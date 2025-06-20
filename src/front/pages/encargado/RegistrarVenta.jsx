@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 import ventaServices from "../../services/ventaServices";
 import { useNavigate } from "react-router-dom";
 import { MonedaSimbolo } from "../../services/MonedaSimbolo";
 
 export const RegistrarVenta = () => {
+  useEffect(() => {
+    const el = document.getElementsByClassName("custom-sidebar")[0];
+    if (el) el.scrollTo(0, 0);
+  }, []);
   const simbolo = MonedaSimbolo();
 
   const { store } = useGlobalReducer();
@@ -42,7 +46,8 @@ export const RegistrarVenta = () => {
   };
 
   return (
-    <div className="dashboard-container ps-0 row py-3 pt-4">
+    <div className="dashboard-container ps-2 py-3 pt-4">
+      <button onClick={() => navigate('/encargado/ventas')} className="back-button">← Volver a ventas</button>
       <h1 className="dashboard-title">Registrar Venta</h1>
       <h5 className="dashboard-welcome text-muted mt-2 mb-4">Mes actual: {nombreMes.toUpperCase()}</h5>
 
