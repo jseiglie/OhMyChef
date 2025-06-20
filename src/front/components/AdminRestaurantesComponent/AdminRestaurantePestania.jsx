@@ -190,7 +190,7 @@ const AdminRestaurantePestania = () => {
                             </select>
                         </div> */}
                             <div className="col-12 col-md-12 mb-3 d-flex align-items-end justify-content-end" >
-                                <button type="submit" className="btn w250 bg-orange text-white px-3">Save Changes</button>
+                                <button type="submit" className="btn w250 bg-orange text-white px-3">Guardar</button>
                             </div>
                         </div>
                         {mensaje && (

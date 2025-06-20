@@ -1,8 +1,11 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Sobrenosotros = () => {
+    const navigate = useNavigate();
     return (
         <div className="card container p-5 shadow mt-5">
+            <button onClick={() => navigate('/')} className="back-button col-4 col-sm-8 col-lg-3">← Volver</button>
             <h1 className="mb-4 ms-5 ">Sobre Nosotros</h1>
             <div className="row d-flex justify-content-around">
                 <div className="col-md-8">
