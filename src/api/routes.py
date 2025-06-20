@@ -1291,3 +1291,9 @@ def resumen_ventas_diario():
 
     except Exception as e:
         return jsonify({"msg": "Error interno", "error": str(e)}), 500
+
+
+
+
+
+
