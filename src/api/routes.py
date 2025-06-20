@@ -1320,3 +1320,111 @@ def resumen_ventas_diario():
 
     except Exception as e:
         return jsonify({"msg": "Error interno", "error": str(e)}), 500
+
+@api.route('/admin/resumen-general', methods=['GET'])
+@jwt_required()
+def resumen_general_admin():
+    try:
+        # Obtener mes y año actual si no se pasan como query
+        from datetime import datetime
+        mes = int(request.args.get("mes", datetime.now().month))
+        anio = int(request.args.get("ano", datetime.now().year))
+
+        restaurantes = Restaurante.query.all()
+        resumen = []
+
+        for r in restaurantes:
+            # Ventas totales del mes
+            total_ventas = db.session.query(
+                db.func.sum(Venta.monto)
+            ).filter(
+                Venta.restaurante_id == r.id,
+                db.extract("month", Venta.fecha) == mes,
+                db.extract("year", Venta.fecha) == anio
+            ).scalar() or 0
+
+            # Gastos totales del mes
+            total_gastos = db.session.query(
+                db.func.sum(Gasto.monto)
+            ).filter(
+                Gasto.restaurante_id == r.id,
+                db.extract("month", Gasto.fecha) == mes,
+                db.extract("year", Gasto.fecha) == anio
+            ).scalar() or 0
+
+            porcentaje_gasto = round((total_gastos / total_ventas) * 100, 2) if total_ventas > 0 else 0
+
+            resumen.append({
+                "restaurante_id": r.id,
+                "nombre": r.nombre,
+                "venta_total": round(total_ventas, 2),
+                "porcentaje_gasto": porcentaje_gasto
+            })
+
+        return jsonify(resumen), 200
+
+    except Exception as e:
+        return jsonify({"msg": "Error al generar el resumen", "error": str(e)}), 500
+
+@api.route("/admin/ventas-diarias", methods=["GET"])
+@jwt_required()
+def ventas_diarias_admin():
+    try:
+        restaurante_id = request.args.get("restaurante_id")
+        mes = int(request.args.get("mes"))
+        ano = int(request.args.get("ano"))
+
+        if not restaurante_id or not mes or not ano:
+            return jsonify({"msg": "Faltan parámetros"}), 400
+
+        ventas = db.session.query(Venta).filter(
+            Venta.restaurante_id == restaurante_id,
+            extract("month", Venta.fecha) == mes,
+            extract("year", Venta.fecha) == ano
+        ).order_by(Venta.fecha.asc()).all()
+
+        return jsonify([v.serialize() for v in ventas]), 200
+
+    except Exception as e:
+        return jsonify({"msg": "Error cargando ventas diarias", "error": str(e)}), 500
+    
+
+@api.route('/admin/resumen-porcentaje', methods=['GET'])
+@jwt_required()
+def admin_resumen_porcentaje():
+    try:
+        restaurante_id = request.args.get("restaurante_id")
+        mes = int(request.args.get("mes"))
+        ano = int(request.args.get("ano"))
+
+        if not restaurante_id or not mes or not ano:
+            return jsonify({"msg": "Parámetros incompletos"}), 400
+
+        total_ventas = db.session.query(func.sum(Venta.monto)).filter(
+            Venta.restaurante_id == restaurante_id,
+            extract('month', Venta.fecha) == mes,
+            extract('year', Venta.fecha) == ano
+        ).scalar() or 0
+
+        total_gastos = db.session.query(func.sum(Gasto.monto)).filter(
+            Gasto.restaurante_id == restaurante_id,
+            extract('month', Gasto.fecha) == mes,
+            extract('year', Gasto.fecha) == ano
+        ).scalar() or 0
+
+        porcentaje = round((total_gastos / total_ventas) * 100, 2) if total_ventas > 0 else 0
+        promedio_diario = round(total_ventas / 30, 2) if total_ventas > 0 else 0
+        proyeccion = round((total_ventas / (mes * 30)) * 30, 2) if mes > 0 and total_ventas > 0 else 0
+
+        return jsonify({
+            "total_ventas": round(total_ventas, 2),
+            "total_gastos": round(total_gastos, 2),
+            "porcentaje_gasto": porcentaje,
+            "promedio_diario": promedio_diario,
+            "proyeccion_mensual": proyeccion
+        }), 200
+
+    except Exception as e:
+        return jsonify({"msg": "Error interno", "error": str(e)}), 500
+
+
