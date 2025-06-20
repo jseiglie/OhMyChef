@@ -1321,6 +1321,10 @@ def resumen_ventas_diario():
     except Exception as e:
         return jsonify({"msg": "Error interno", "error": str(e)}), 500
 
+
+
+
+
 @api.route('/admin/resumen-general', methods=['GET'])
 @jwt_required()
 def resumen_general_admin():
@@ -1424,6 +1428,50 @@ def admin_resumen_porcentaje():
             "proyeccion_mensual": proyeccion
         }), 200
 
+    except Exception as e:
+        return jsonify({"msg": "Error interno", "error": str(e)}), 500
+
+@api.route('/admin/gastos/resumen', methods=['GET'])
+@jwt_required()
+def resumen_admin_gastos():
+    try:
+        user_id = int(get_jwt_identity())
+        usuario = Usuario.query.get(user_id)
+        if not usuario or usuario.rol != "admin":
+            return jsonify({"msg": "Acceso no autorizado"}), 403
+        mes = int(request.args.get("mes", 0))
+        anio = int(request.args.get("ano", 0))
+        if not mes or not anio:
+            return jsonify({"msg": "Mes y año requeridos"}), 400
+        # Total gastado en todos los restaurantes
+        total_gastado = db.session.query(func.sum(Gasto.monto)).filter(
+            extract("month", Gasto.fecha) == mes,
+            extract("year", Gasto.fecha) == anio
+        ).scalar() or 0
+        # Restaurantes activos
+        restaurantes_activos = db.session.query(Restaurante.id).filter(Restaurante.activo == True).count()
+        # Proveedor más utilizado (por número de gastos registrados)
+        proveedor_mas_usado = db.session.query(
+            Proveedor.nombre, func.count(Gasto.id).label("cantidad")
+        ).join(Gasto).filter(
+            extract("month", Gasto.fecha) == mes,
+            extract("year", Gasto.fecha) == anio
+        ).group_by(Proveedor.nombre).order_by(desc("cantidad")).first()
+        proveedor_nombre = proveedor_mas_usado[0] if proveedor_mas_usado else "Sin datos"
+        # Restaurante con más gasto total
+        restaurante_top = db.session.query(
+            Restaurante.nombre, func.sum(Gasto.monto).label("total")
+        ).join(Gasto).filter(
+            extract("month", Gasto.fecha) == mes,
+            extract("year", Gasto.fecha) == anio
+        ).group_by(Restaurante.nombre).order_by(desc("total")).first()
+        restaurante_nombre = restaurante_top[0] if restaurante_top else "Sin datos"
+        return jsonify({
+            "total_gastado": round(total_gastado, 2),
+            "restaurantes_activos": restaurantes_activos,
+            "proveedor_top": proveedor_nombre,
+            "restaurante_top": restaurante_nombre
+        }), 200
     except Exception as e:
         return jsonify({"msg": "Error interno", "error": str(e)}), 500
 
