@@ -17,6 +17,7 @@ import { CrearUsuario } from "./pages/admin/CrearUsuario";
 import { ConfigAdmin } from "./pages/configuracion/ConfigAdmin.jsx";
 import { ProveedoresDashboard } from "./pages/admin/ProveedoresDashboard";
 import { ProveedorRestauranteDetail } from "./pages/admin/ProveedorRestauranteDetail";
+import AdminRestauranteDetalle from "./components/AdminRestauranteDetalle";
 
 
 
@@ -69,7 +70,8 @@ export const router = createBrowserRouter(
           <Route path="admin/settings" element={<ConfigAdmin />} />
           <Route path="admin/proveedores" element={<ProveedoresDashboard />} />
           <Route path="admin/proveedores/restaurante/:id" element={<ProveedorRestauranteDetail />} />
-
+          <Route path="/restaurante/:id" element={<AdminRestauranteDetalle />} />
+          
 
 
           {/* Encargado */}
