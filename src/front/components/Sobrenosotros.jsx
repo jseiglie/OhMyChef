@@ -25,7 +25,6 @@ export const Sobrenosotros = () => {
                 </div>
                 <div className="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-2 col-xxl-2 d-flex text-center">
                     <img src="/src/front/assets/img/logo.svg" alt="Chef Logo" class="img-fluid mb-3"
-                        alt="Oficinas de GastroSoft"
                         className="img-fluid"
                     />
                 </div>
