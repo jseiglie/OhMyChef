@@ -1,6 +1,6 @@
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 const token = () => sessionStorage.getItem("token");
-git
+
 const adminService = {
   getRestaurantes: async () => {
     const res = await fetch(`${backendUrl}/api/restaurantes`, {

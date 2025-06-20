@@ -36,7 +36,7 @@ class Usuario(db.Model):
     rol = db.Column(db.Enum('admin', 'encargado', 'chef',name='roles'), nullable=False)
     restaurante_id = db.Column(db.Integer, db.ForeignKey('restaurantes.id'), nullable=True)
 
-    moneda = db.Colum(db.String(10), nullable=True)
+    moneda = db.Column(db.String(10), nullable=True)
 
     def serialize(self):
         return {
