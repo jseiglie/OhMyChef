@@ -1,73 +1,116 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { FaPlus, FaUsers, FaHome } from 'react-icons/fa';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import adminService from '../services/adminService';
 import '../styles/AdminDashboardBB.css';
-import QuickActionCard from '../components/QuickActionCard';
-import { QuickActionsEncargado } from "../components/QuickActionsEncargado";
-const restaurants = [1, 2, 3, 4];
+import { QuickActionsAdmin } from '../components/QuickActionsAdmin';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+
+const MonedaSimbolo = () => '€';
+
+const GastosChefAdmin = ({ datos, alto, xAxisProps, yAxisProps, tooltipProps, lineProps }) => (
+  <ResponsiveContainer width="100%" height={alto}>
+    <BarChart data={datos}>
+      <XAxis {...xAxisProps} />
+      <YAxis {...yAxisProps} />
+      <Tooltip {...tooltipProps} />
+      <Bar {...lineProps} />
+    </BarChart>
+  </ResponsiveContainer>
+);
 
 const AdminDashboardBB = () => {
+  const navigate = useNavigate();
+  const simbolo = MonedaSimbolo();
+  const [resumenes, setResumenes] = useState([]);
+  const [gastoDiario, setGastoDiario] = useState({});
+
+  useEffect(() => {
+    const fetchResumen = async () => {
+      const now = new Date();
+      const mes = now.getMonth() + 1;
+      const ano = now.getFullYear();
+
+      try {
+        const data = await adminService.getResumenGeneral(mes, ano);
+        setResumenes(data);
+
+        const diarioData = {};
+        for (const r of data) {
+          const res = await adminService.getResumenGastoDiario(r.restaurante_id, mes, ano);
+          diarioData[r.restaurante_id] = res;
+        }
+        setGastoDiario(diarioData);
+      } catch (err) {
+        console.error("Error al cargar resumen general", err);
+      }
+    };
+
+    fetchResumen();
+  }, []);
+
+  const getColorClasses = (porcentaje) => {
+    if (porcentaje > 36) return ['bg-danger-subtle', 'text-danger', '🚨', 'Alto'];
+    if (porcentaje > 33) return ['bg-warning-subtle', 'text-warning', '⚠️', 'Atención'];
+    return ['bg-success-subtle', 'text-success', '✅', 'Dentro de rango'];
+  };
+
   return (
-    <>
-      <div className="dashboard-container">
-        <h1 className="dashboard-title">Admin Dashboarddd</h1>
-        <p className="dashboard-welcome">Welcome back, Sarah. Here's what's happening today.</p>
+    <div className="dashboard-container">
+      <p className="dashboard-welcome ">Bienvenido de nuevo, Aquí tienes tu resumen actual.</p>
 
-        <div className="restaurant-cards">
-          {restaurants.map((num) => (
-            <div key={num} className="restaurant-card">
-              <h3>RESTAURANTE
-                <span className="color-orange"> # {num}</span>
-              </h3>
-              <div className="card-metrics">
-                <div className="metric">
-                  <p className="label">VENTAS mes</p>
-                  <p className="value">$2500</p>
-                  <p className="change down">-8.2% vs last month</p>
+      <div className="restaurant-cards }">
+        {[...resumenes]
+          .sort((a, b) => b.venta_total - a.venta_total)
+          .map((r, index) => {
+            const [bgClass, textClass, icono, status] = getColorClasses(r.porcentaje_gasto);
+            const gastoDia = gastoDiario[r.restaurante_id] || [];
+
+            return (
+              <div key={r.restaurante_id} className={`restaurant-card ${isTop1(index) ? 'top-one-card' : ''}`} >
+                <h4 className="mb-2 text-center fw-bold" style={{ color: '#ffa500' }}>{isTop1(index) ? '🌟 ' : ''}{r.nombre}</h4>
+
+                <div className="d-flex justify-content-between gap-2 mb-3">
+                  <div className="card shadow-sm border rounded p-2 bg-warning-subtle" style={{ width: '48%' }}>
+                    <div className="text-center">
+                      <div className="icono-circular bg-white rounded-circle mb-1 d-inline-flex align-items-center justify-content-center" style={{ width: '24px', height: '24px' }}>
+                        💰
+                      </div>
+                      <p className="fw-bold text-warning mb-0 small">Ventas</p>
+                      <p className="fw-bold text-dark mb-0" style={{ fontSize: '0.75rem' }}>{r.venta_total.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' ' + simbolo}</p>
+                    </div>
+                  </div>
+
+                  <div className={`card shadow-sm border rounded p-2 ${bgClass}`} style={{ width: '48%' }}>
+                    <div className="text-center">
+                      <div className="icono-circular bg-white rounded-circle mb-1 d-inline-flex align-items-center justify-content-center" style={{ width: '24px', height: '24px' }}>
+                        {icono}
+                      </div>
+                      <p className={`fw-bold ${textClass} mb-0 small`}>% Gasto</p>
+                      <p className={`fw-bold ${textClass} mb-0`} style={{ fontSize: '0.75rem' }}>{r.venta_total > 0 ? r.porcentaje_gasto + '%' : '0%'}</p>
+                    </div>
+                  </div>
                 </div>
-                <div className="metric">
-                  <p className="label">GASTOS mes</p>
-                  <p className="value">27%</p>
-                  <p className="status">Dentro rango</p>
-                </div>
+
+                <button
+                  className="view-link mt-2"
+                  style={{ fontSize: '0.85rem' }}
+                  onClick={() => navigate(`/restaurante/${r.restaurante_id}`)}
+                >
+                  Ver todo
+                </button>
               </div>
-              <Link to={`/restaurante/${num}`} className="view-link">View All</Link>
-            </div>
-          ))}
-        </div>
-
-        {/* <div className="quick-actions-section">
-          <div className="quick-actions-header">
-            <h2>Quick Actions</h2>
-          </div>
-          <div className="actions-grid">
-            <QuickActionCard
-              icon={<FaPlus />}
-              title="Crear Restaurante"
-              subtitle="Editar Restaurante"
-              onClick={() => console.log('Crear Restaurante')}
-            />
-            <QuickActionCard
-              icon={<FaUsers />}
-              title="Manage Users"
-              subtitle="Editar usuarios"
-              onClick={() => console.log('Manage Users')}
-            />
-            <QuickActionCard
-              icon={<FaHome />}
-              title="Volver Dashboard"
-              subtitle="Menú principal del admin"
-              onClick={() => console.log('Volver Dashboard')}
-            />
-          </div>
-        </div> */}
-        <div className="mt-4 rounded p-4">
-          <QuickActionsEncargado />
-        </div>
+            );
+          })}
       </div>
 
-    </>
+      <div className="">
+  <QuickActionsAdmin />
+</div>
+    </div>
   );
 };
+
+// 🏆 Añadir estrella al top 1 visualmente
+const isTop1 = (index) => index === 0;
 
 export default AdminDashboardBB;
