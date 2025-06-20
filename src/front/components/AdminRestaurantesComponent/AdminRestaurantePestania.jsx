@@ -135,7 +135,7 @@ const AdminRestaurantePestania = () => {
 
                     <div className="col-12 col-md-12">
                         <div className="mb-3">
-                            <label className="form-label">Company Name</label>
+                            <label className="form-label">Nombre del Restaurante</label>
                             <input
                                 type="text"
                                 className="form-control"
@@ -147,7 +147,7 @@ const AdminRestaurantePestania = () => {
                         </div>
 
                         <div className="mb-3">
-                            <label className="form-label">Business Address</label>
+                            <label className="form-label">Dirección</label>
                             <textarea
                                 className="form-control"
                                 name="direccion"
@@ -171,7 +171,7 @@ const AdminRestaurantePestania = () => {
                                 />
                             </div>
                             <div className="col-12 col-md-6 mb-3">
-                                <label className="form-label">Phone Number</label>
+                                <label className="form-label">Número de teléfono</label>
                                 <input
                                     type="text"
                                     className="form-control"
@@ -182,15 +182,15 @@ const AdminRestaurantePestania = () => {
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div className="row">
                             {/* <div class="col-12 col-md-6 mb-3"><label class="form-label">Responsable</label>
                             <select class="form-select" name="responsable">
                                 <option>Encargado</option>
                                 <option>Subencargado</option>
                             </select>
                         </div> */}
-                            <div class="col-12 col-md-12 mb-3 d-flex align-items-end justify-content-end" >
-                                <button type="submit" class="btn w250 bg-orange text-white px-3">Save Changes</button>
+                            <div className="col-12 col-md-12 mb-3 d-flex align-items-end justify-content-end" >
+                                <button type="submit" className="btn w250 bg-orange text-white px-3">Save Changes</button>
                             </div>
                         </div>
                         {mensaje && (

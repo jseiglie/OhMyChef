@@ -21,7 +21,7 @@
 /* Frase izquierda */
 .landing-message {
   color: #111;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
   padding: 2rem;
 }
 
@@ -36,7 +36,6 @@
   color: #555;
 }
 
-
 .auth-overlay {
   background-color: rgba(255, 255, 255, 0.902);
   border-radius: 16px;
@@ -48,17 +47,23 @@
   animation: fadeInRight 0.8s ease-in-out;
 }
 
-
 /* Footer */
 .footer-landing {
   text-align: center;
   background-color: transparent;
   color: #6c757d;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
   font-size: 0.9rem;
   padding: 1rem 0;
 }
-
+.footer-landing span:first-child:hover {
+  cursor: pointer;
+  color: #ff7741;
+}
+.footer-landing span:last-child:hover {
+  cursor: pointer;
+  color: #ff7741;
+}
 /* Animación */
 @keyframes fadeInRight {
   from {
@@ -78,11 +83,11 @@ form input {
 }
 
 /* Control de scroll */
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
 }
-
 
 /* Móviles pequeños (≤ 576px) */
 @media (max-width: 576px) {
@@ -128,5 +133,3 @@ html, body {
     max-width: 90%;
   }
 }
-
-

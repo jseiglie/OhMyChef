@@ -16,7 +16,8 @@ import { UsuariosDashboard } from "./pages/admin/UsuariosDashboard";
 import { CrearUsuario } from "./pages/admin/CrearUsuario";
 import { ConfigAdmin } from "./pages/configuracion/ConfigAdmin.jsx";
 import { ProveedoresDashboard } from "./pages/admin/ProveedoresDashboard";
-import { ProveedorRestauranteDetail }  from "./pages/admin/ProveedorRestauranteDetail";
+import { ProveedorRestauranteDetail } from "./pages/admin/ProveedorRestauranteDetail";
+import AdminRestauranteDetalle from "./components/AdminRestauranteDetalle";
 
 
 
@@ -29,7 +30,7 @@ import { Proveedores as ProveedoresEncargado } from "./pages/encargado/Proveedor
 import { EncargadoVentas } from "./pages/encargado/EncargadoVentas";
 import { EncargadoGastos } from "./pages/encargado/EncargadoGastos";
 import { ProveedorForm } from "./components/shared/ProveedorForm";
-
+import { Sobrenosotros } from "./components/Sobrenosotros";
 
 
 import { ChefDashboard } from "./pages/chef/ChefDashboard";
@@ -51,12 +52,14 @@ export const router = createBrowserRouter(
     <>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/sobrenosotros" element={<Sobrenosotros />} />
       <Route path="/forgot-password" element={<ForgotPage />} />
       <Route path="/reset" element={<ResetPassword />} />
       <Route element={<RutaPrivada allowedRoles={["admin", "encargado", "chef"]} />}>
         <Route element={<Layout />}>
           {/* Admin */}
           <Route path="admin/dashboard" element={<AdminDashboard />} />
+
           <Route path="admin/restaurantes" element={<AdminRestaurante />} />
           <Route path="admin/restaurantes/*" element={<AdminRestaurante />} />
           <Route path="admin/crear-restaurante" element={<CrearRestaurante />} />
@@ -67,6 +70,7 @@ export const router = createBrowserRouter(
           <Route path="admin/settings" element={<ConfigAdmin />} />
           <Route path="admin/proveedores" element={<ProveedoresDashboard />} />
           <Route path="admin/proveedores/restaurante/:id" element={<ProveedorRestauranteDetail />} />
+          <Route path="/restaurante/:id" element={<AdminRestauranteDetalle />} />
           
 
 
@@ -76,16 +80,16 @@ export const router = createBrowserRouter(
           <Route path="/encargado/gastos/registrar" element={<GastoForm />} />
           <Route path="encargado/proveedores" element={<ProveedoresEncargado />} />
           <Route path="encargado/proveedores/crear" element={<ProveedorForm />} />
-          <Route path="encargado/proveedores/editar/:id" element={<ProveedorForm />} /> 
+          <Route path="encargado/proveedores/editar/:id" element={<ProveedorForm />} />
           <Route path="encargado/ventas" element={<EncargadoVentas />} />
           <Route path="encargado/gastos" element={<DetalleGastosMensual />} />
           <Route path="/encargado/settings" element={<ConfigEncargado />} />
-          
+
 
           {/* Chef */}
 
           <Route path="chef/dashboard" element={<ChefDashboard />} />
-          
+
           <Route path="chef/facturas" element={<Facturas />} />
           <Route path="/chef/settings" element={<ConfigChef />} />
           <Route path="chef/gastos" element={<DetalleGastosMensual />} />

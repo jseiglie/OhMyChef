@@ -1,19 +1,21 @@
-.modal-overlay {
+
+.modaal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(255, 255, 255, 0.5); 
+  background-color: rgba(255, 255, 255, 0.5);/* rgba para una transparencia estándar del fondo */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
 }
 
-.modal-content {
-  background-color: white; 
-  color: #333; 
+.modaal {
+  display: flex;
+  background-color: rgb(255, 255, 255);
+  color: #000000;
   padding: 30px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(11, 11, 11, 0.2);
@@ -21,11 +23,15 @@
   max-width: 500px;
   position: relative;
   animation: fadeInScale 0.3s ease-out;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }
+
 
 @keyframes fadeInScale {
   from {
-    opacity: 0;
+    opacity: 0; 
     transform: scale(0.95);
   }
   to {
@@ -34,77 +40,120 @@
   }
 }
 
-.modal-content h2 {
+
+.modaal h2 {
   font-size: 24px;
-  color: #333;
+  color: #000000;
   margin-bottom: 25px;
   text-align: center;
   background-color: white;
+  width: 100%;
 }
 
+
+.modaal-form {
+  display: flex;
+  flex-direction: column; 
+  gap: 15px;
+  margin-top: 20px;
+  width: 100%; 
+  align-content: center; 
+  align-items: stretch; 
+  flex-wrap: wrap; 
+  justify-content: flex-end; 
+}
+
+.modaal-form input[type="text"],
+.modaal-form input[type="email"],
+.modaal-form input[type="password"],
+.modaal-form select {
+  width: 100%; 
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+/* Estilos de enfoque para los campos del formulario */
+.modaal-form input[type="email"]:focus,
+.modaal-form input[type="password"]:focus,
+.modaal-form select:focus {
+  border-color: #ff5722; /* Color de borde más estándar al enfocar */
+  outline: none;
+}
+
+
+.modaal-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+  font-size: 15px;
+}
+
+
 .form-group {
-  margin-bottom: 18px;
+  margin-bottom: 18px; 
+  width: 100%; 
 }
 
 .form-group label {
   display: block;
   margin-bottom: 8px;
   font-weight: bold;
-  color: #555;
-  font-size: 15px;
+  color: #ff5722;
 }
 
 .form-group input[type="text"],
 .form-group select {
-  width: calc(100% - 20px); 
+  width: calc(100% - 20px);
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 
 .form-group input[type="text"]:focus,
 .form-group select:focus {
-  border-color: #007bff;
+  border-color: #ff5722;
   outline: none;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  box-shadow: 0 0 0 3px #ff5722;
 }
 
-.form-actions {
+
+.modaal-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-end; 
   gap: 10px;
-  margin-top: 30px;
+  margin-top: 25px; 
+  width: 100%; 
 }
 
-.save-button,
-.cancel-button {
-  padding: 12px 25px;
+.modaal-actions button {
+  padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
-  font-weight: bold;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.3s ease;
 }
 
-.save-button {
-  background-color: #28a745; 
+.modaal-actions button[type="button"] {
+  background-color: #ff5722;
+  color: #ffffff;
+}
+
+.modaal-actions button[type="button"]:hover {
+  background-color: #ff5722;
+}
+
+.modaal-actions button[type="submit"] {
+  background-color: #008000;
   color: white;
 }
 
-.save-button:hover {
-  background-color: #218838;
-  transform: translateY(-1px);
-}
-
-.cancel-button {
-  background-color: #6c757d;
-  color: white;
-}
-
-.cancel-button:hover {
-  background-color: #5a6268;
-  transform: translateY(-1px);
+.modaal-actions button[type="submit"]:hover {
+  background-color: #008000;
 }
