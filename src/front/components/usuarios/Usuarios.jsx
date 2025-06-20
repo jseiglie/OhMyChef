@@ -25,7 +25,7 @@ const Users = () => {
     }
 
     try {
-      const usersRes = await fetch(import.meta.env.VITE_BACKEND_URL+"/api/usuarios", {
+      const usersRes = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/usuarios", {
         headers: { Authorization: `Bearer ${token}` }
       });
       const usersData = await usersRes.json();
@@ -41,7 +41,7 @@ const Users = () => {
     }
 
     try {
-      const restaurantsRes = await fetch(import.meta.env.VITE_BACKEND_URL+"/api/restaurantes", {
+      const restaurantsRes = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/restaurantes", {
         headers: { Authorization: `Bearer ${token}` }
       });
       const restaurantsData = await restaurantsRes.json();
@@ -376,7 +376,7 @@ const Users = () => {
           <option value="Inactive">Inactive</option>
         </select>
       </div>
-      <table className="users-table">
+      <table className="table table-responsive users-table mt-3 ps-0">
         <thead>
           <tr>
             <th>User</th>
