@@ -50,7 +50,7 @@ export const ChefDashboard = () => {
   return (
     <div className="dashboard-container ps-2 row py-3 pt-4">
       <h1 className="dashboard-title">Graficas en Porcentajes</h1>
-      <p class="dashboard-welcome mb-4">Graficas de gastos</p>
+      <p className="dashboard-welcome mb-4">Graficas de gastos</p>
       <div className="row justify-content-start">
         <div className="col-lg-11">
           <div className="card shadow-sm border rounded p-4">

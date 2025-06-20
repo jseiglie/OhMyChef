@@ -140,5 +140,8 @@
 
   
 }
-
-
+@media (max-width: 767px) {
+  .dashboard-container {
+    padding: 10px;
+  }
+}

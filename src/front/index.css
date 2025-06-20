@@ -1,9 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap");
+
+body,
+html,
+* {
+  font-family: "Quicksand", sans-serif !important;
+}
 .bg-orange {
   background-color: #ff7741 !important;
   color: rgb(255, 255, 255) !important;
-}
-.color-orange {
   color: #ff7741 !important;
+}
+.color-orange{
+    color: #ff7741 !important;
 }
 .color-orange-bold {
   color: #ff7741 !important;
@@ -28,13 +36,17 @@
 button.bg-orange:hover {
   background-color: #f55d21 !important;
 }
-.dashboard-container {
-  background-color: #f3f3f3b5;
-}
+
 .fs-7 {
   font-size: 0.9rem;
 }
-
+.footer-landing.contacto {
+  background: rgba(255, 255, 255, 0.6) !important;
+  width: 310px;
+  margin: 0 auto;
+  border-radius: 4px;
+  font-weight: bold;
+}
 .proveedor-header span.proveedor-zone {
   color: #000000 !important;
   background: #ffffff;
@@ -78,9 +90,11 @@ table thead tr th {
   direction: ltr;
   text-align: left;
 }
+
 .dashboard-container {
   direction: ltr;
   align-self: flex-start;
+  background-color: #f3f3f3b5;
 }
 .custom-sidebar {
   overflow: scroll !important;

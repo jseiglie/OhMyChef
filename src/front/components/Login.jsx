@@ -5,12 +5,12 @@ import logo from "../assets/img/logo.svg";
 import { useNavigate, Link } from "react-router-dom";
 
 export const Login = () => {
-  
+
   const { dispatch } = useGlobalReducer();
   const navigate = useNavigate();
   const [FormData, setFormData] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState("");
-  
+
   useEffect(() => {
     if (errorMessage) {
       const timer = setTimeout(() => setErrorMessage(""), 3000);
@@ -39,7 +39,7 @@ export const Login = () => {
       .catch(() => setErrorMessage("Hubo un error en el login"));
   };
   return (
-    <div className="auth-overlay text-center">
+    <div className="auth-overlay text-center mt-sm-0 mb-sm-4 mt-md-0">
       <img
         src={logo}
         alt="Chef Logo"
