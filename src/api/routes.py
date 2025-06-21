@@ -691,7 +691,9 @@ def get_proveedores():
             "id": p.id,
             "nombre": p.nombre,
             "categoria": p.categoria,
-            "restaurante_id": p.restaurante_id
+            "restaurante_id": p.restaurante_id,
+            "telefono": p.telefono,
+            "direccion": p.direccion
         })
 
     return jsonify(resultados), 200
@@ -708,6 +710,8 @@ def crear_proveedor():
     nombre = data.get("nombre")
     categoria = data.get("categoria")
     restaurante_id = data.get("restaurante_id")
+    telefono = data.get("telefono")
+    direccion = data.get("direccion")
 
     if not nombre or not restaurante_id:
         return jsonify({"msg": "Faltan campos obligatorios"}), 400
@@ -716,7 +720,9 @@ def crear_proveedor():
         nuevo_proveedor = Proveedor(
             nombre=nombre,
             categoria=categoria,
-            restaurante_id=restaurante_id
+            restaurante_id=restaurante_id,
+            telefono=telefono,
+            direccion=direccion,
         )
         db.session.add(nuevo_proveedor)
         db.session.commit()
@@ -738,7 +744,9 @@ def obtener_proveedor(id):
         "id": proveedor.id,
         "nombre": proveedor.nombre,
         "categoria": proveedor.categoria,
-        "restaurante_id": proveedor.restaurante_id
+        "restaurante_id": proveedor.restaurante_id,
+        "telefono": proveedor.telefono,
+        "direccion": proveedor.direccion
     }
 
     return jsonify(resultado), 200
@@ -760,6 +768,8 @@ def editar_proveedor(id):
     proveedor.categoria = data.get("categoria", proveedor.categoria)
     proveedor.restaurante_id = data.get(
         "restaurante_id", proveedor.restaurante_id)
+    proveedor.telefono = data.get("telefono", proveedor.telefono)
+    proveedor.direccion = data.get("direccion", proveedor.direccion)
 
     try:
         db.session.commit()
@@ -1516,7 +1526,8 @@ def gastos_por_dia_admin():
             extract("month", Gasto.fecha) == mes,
             extract("year", Gasto.fecha) == anio
         ).scalar() or 0
-        restaurantes_activos = db.session.query(Restaurante.id).filter(Restaurante.activo == True).count()
+        restaurantes_activos = db.session.query(
+            Restaurante.id).filter(Restaurante.activo == True).count()
         proveedor_mas_usado = db.session.query(
             Proveedor.nombre, func.count(Gasto.id).label("cantidad")
         ).join(Gasto).filter(
@@ -1540,6 +1551,7 @@ def gastos_por_dia_admin():
     except Exception as e:
         return jsonify({"msg": "Error interno", "error": str(e)}), 500
 
+
 @api.route('/api/admin/proveedores-gasto', methods=['GET'])
 @jwt_required()
 def top_proveedores_por_gasto():
@@ -1551,15 +1563,16 @@ def top_proveedores_por_gasto():
         resultados = db.session.query(
             Proveedor.nombre,
             func.sum(Gasto.monto).label("total_gastado"),
-            func.count(func.distinct(Gasto.restaurante_id)).label("restaurantes")
+            func.count(func.distinct(Gasto.restaurante_id)
+                       ).label("restaurantes")
         ).join(Gasto, Proveedor.id == Gasto.proveedor_id)\
          .filter(
             extract("month", Gasto.fecha) == mes,
             extract("year", Gasto.fecha) == ano
         )\
-         .group_by(Proveedor.nombre)\
-         .order_by(func.sum(Gasto.monto).desc())\
-         .limit(5).all()
+            .group_by(Proveedor.nombre)\
+            .order_by(func.sum(Gasto.monto).desc())\
+            .limit(5).all()
         data = [
             {
                 "nombre": r.nombre,
@@ -1584,14 +1597,15 @@ def gasto_por_restaurante():
             Restaurante.nombre,
             func.sum(Gasto.monto).label('total_gastado')
         ).join(Gasto, Restaurante.id == Gasto.restaurante_id)\
-        .filter(extract('month', Gasto.fecha) == mes)\
-        .filter(extract('year', Gasto.fecha) == ano)\
-        .group_by(Restaurante.id)\
-        .order_by(func.sum(Gasto.monto).desc())\
-        .limit(10).all()
+            .filter(extract('month', Gasto.fecha) == mes)\
+            .filter(extract('year', Gasto.fecha) == ano)\
+            .group_by(Restaurante.id)\
+            .order_by(func.sum(Gasto.monto).desc())\
+            .limit(10).all()
         if not results:
             return jsonify([]), 200
-        data = [{"restaurante": r.nombre, "total_gastado": float(r.total_gastado)} for r in results]
+        data = [{"restaurante": r.nombre, "total_gastado": float(
+            r.total_gastado)} for r in results]
         return jsonify(data), 200
     except Exception as e:
         raise APIException("Error al obtener los datos: " + str(e), 500)
