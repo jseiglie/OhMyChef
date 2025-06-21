@@ -1184,7 +1184,7 @@ def resumen_porcentaje(restaurante_id, mes, ano):
 
 @api.route("/gastos/resumen-diario", methods=["GET"])
 @jwt_required()
-def resumen_diario_gastos():
+def resumen_diario_chef_encargado():
     try:
         user_id = int(get_jwt_identity())
         usuario = Usuario.query.get(user_id)
@@ -1193,11 +1193,11 @@ def resumen_diario_gastos():
             return jsonify({"msg": "Usuario no válido"}), 404
 
         restaurante_id = usuario.restaurante_id
-        mes = int(request.args.get("mes", 0))
-        ano = int(request.args.get("ano", 0))
+        mes = request.args.get("mes", type=int)
+        ano = request.args.get("ano", type=int)
 
         if not mes or not ano:
-            return jsonify({"msg": "Mes y año requeridos"}), 400
+            return jsonify({"msg": "Faltan parámetros"}), 400
 
         ventas_diarias = db.session.query(
             extract("day", Venta.fecha).label("dia"),
@@ -1210,7 +1210,64 @@ def resumen_diario_gastos():
             extract("day", Venta.fecha)
         ).all()
 
-        # Obtener gastos por día
+        gastos_diarios = db.session.query(
+            extract("day", Gasto.fecha).label("dia"),
+            func.sum(Gasto.monto).label("gastos")
+        ).filter(
+            Gasto.restaurante_id == restaurante_id,
+            extract("month", Gasto.fecha) == mes,
+            extract("year", Gasto.fecha) == ano
+        ).group_by(
+            extract("day", Gasto.fecha)
+        ).all()
+
+        resumen = []
+        dias = set()
+
+        ventas_dict = {int(v.dia): float(v.ventas) for v in ventas_diarias}
+        gastos_dict = {int(g.dia): float(g.gastos) for g in gastos_diarios}
+        dias.update(ventas_dict.keys())
+        dias.update(gastos_dict.keys())
+
+        for dia in sorted(dias):
+            ventas = ventas_dict.get(dia, 0)
+            gastos = gastos_dict.get(dia, 0)
+            porcentaje = round((gastos / ventas) * 100, 2) if ventas > 0 else 0
+
+            resumen.append({
+                "dia": dia,
+                "ventas": ventas,
+                "gastos": gastos,
+                "porcentaje": porcentaje
+            })
+
+        return jsonify(resumen), 200
+
+    except Exception as e:
+        return jsonify({"msg": "Error interno", "error": str(e)}), 500
+
+@api.route("/admin/gastos/resumen-diario", methods=["GET"])
+@jwt_required()
+def resumen_diario_admin():
+    try:
+        restaurante_id = request.args.get("restaurante_id", type=int)
+        mes = request.args.get("mes", type=int)
+        ano = request.args.get("ano", type=int)
+
+        if not restaurante_id or not mes or not ano:
+            return jsonify({"msg": "Faltan parámetros"}), 400
+
+        ventas_diarias = db.session.query(
+            extract("day", Venta.fecha).label("dia"),
+            func.sum(Venta.monto).label("ventas")
+        ).filter(
+            Venta.restaurante_id == restaurante_id,
+            extract("month", Venta.fecha) == mes,
+            extract("year", Venta.fecha) == ano
+        ).group_by(
+            extract("day", Venta.fecha)
+        ).all()
+
         gastos_diarios = db.session.query(
             extract("day", Gasto.fecha).label("dia"),
             func.sum(Gasto.monto).label("gastos")
@@ -1431,47 +1488,31 @@ def admin_resumen_porcentaje():
     except Exception as e:
         return jsonify({"msg": "Error interno", "error": str(e)}), 500
 
-@api.route('/admin/gastos/resumen', methods=['GET'])
+@api.route("/admin/gastos/por-dia", methods=["GET"])
 @jwt_required()
-def resumen_admin_gastos():
+def gastos_por_dia_admin():
     try:
-        user_id = int(get_jwt_identity())
-        usuario = Usuario.query.get(user_id)
-        if not usuario or usuario.rol != "admin":
-            return jsonify({"msg": "Acceso no autorizado"}), 403
-        mes = int(request.args.get("mes", 0))
-        anio = int(request.args.get("ano", 0))
-        if not mes or not anio:
-            return jsonify({"msg": "Mes y año requeridos"}), 400
-        # Total gastado en todos los restaurantes
-        total_gastado = db.session.query(func.sum(Gasto.monto)).filter(
+        restaurante_id = request.args.get("restaurante_id", type=int)
+        mes = request.args.get("mes", type=int)
+        ano = request.args.get("ano", type=int)
+
+        if not restaurante_id or not mes or not ano:
+            return jsonify({"msg": "Faltan parámetros"}), 400
+
+        gastos_diarios = db.session.query(
+            extract("day", Gasto.fecha).label("dia"),
+            func.sum(Gasto.monto).label("gastos")
+        ).filter(
+            Gasto.restaurante_id == restaurante_id,
             extract("month", Gasto.fecha) == mes,
-            extract("year", Gasto.fecha) == anio
-        ).scalar() or 0
-        # Restaurantes activos
-        restaurantes_activos = db.session.query(Restaurante.id).filter(Restaurante.activo == True).count()
-        # Proveedor más utilizado (por número de gastos registrados)
-        proveedor_mas_usado = db.session.query(
-            Proveedor.nombre, func.count(Gasto.id).label("cantidad")
-        ).join(Gasto).filter(
-            extract("month", Gasto.fecha) == mes,
-            extract("year", Gasto.fecha) == anio
-        ).group_by(Proveedor.nombre).order_by(desc("cantidad")).first()
-        proveedor_nombre = proveedor_mas_usado[0] if proveedor_mas_usado else "Sin datos"
-        # Restaurante con más gasto total
-        restaurante_top = db.session.query(
-            Restaurante.nombre, func.sum(Gasto.monto).label("total")
-        ).join(Gasto).filter(
-            extract("month", Gasto.fecha) == mes,
-            extract("year", Gasto.fecha) == anio
-        ).group_by(Restaurante.nombre).order_by(desc("total")).first()
-        restaurante_nombre = restaurante_top[0] if restaurante_top else "Sin datos"
-        return jsonify({
-            "total_gastado": round(total_gastado, 2),
-            "restaurantes_activos": restaurantes_activos,
-            "proveedor_top": proveedor_nombre,
-            "restaurante_top": restaurante_nombre
-        }), 200
+            extract("year", Gasto.fecha) == ano
+        ).group_by(
+            extract("day", Gasto.fecha)
+        ).order_by("dia").all()
+
+        resultado = [{"dia": int(g.dia), "gastos": float(g.gastos)} for g in gastos_diarios]
+        return jsonify(resultado), 200
+
     except Exception as e:
         return jsonify({"msg": "Error interno", "error": str(e)}), 500
 
