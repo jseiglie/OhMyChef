@@ -19,6 +19,8 @@
   --badge-inactive-text: #606060;
   --badge-viewer-bg: #28649b;
   --badge-viewer-text: #0060e0;
+  --badge-encargado-bg: #25387c;
+  --badge-encargado-text: #155724;
 }
 
 .users-container {
@@ -232,6 +234,11 @@
   color: var(--badge-chef-text);
 }
 
+.badge-encargado {
+  background-color: var(--badge-encargado-bg);
+  color: var(--badge-encargado-text);
+}
+
 .badge-viewer {
   background-color: var(--badge-viewer-bg);
   color: var(--badge-viewer-text);
@@ -246,6 +253,7 @@
   background-color: var(--badge-inactive-bg);
   color: var(--badge-inactive-text);
 }
+
 
 .actions-cell {
   white-space: nowrap;
@@ -361,4 +369,5 @@ body {
     justify-content: flex-end;
     display: flex;
   }
+  
 }

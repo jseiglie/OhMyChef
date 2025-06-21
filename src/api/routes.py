@@ -35,8 +35,6 @@ def forgot_password():
     except Exception as e:
         print(":x: Error en forgot-password:", str(e))
         return jsonify({'success': False, 'msg': str(e)}), 500
-    
-    
 
 
 @api.route('/reset-password', methods=['POST'])
@@ -78,7 +76,10 @@ def get_usuarios():
             "id": u.id,
             "nombre": u.nombre,
             "email": u.email,
-            "rol": u.rol
+            "rol": u.rol,
+            "status": u.status,
+            "restaurante_id": u.restaurante_id,
+            "restaurante_nombre": u.restaurante.nombre if u.restaurante else None
         })
 
     return jsonify(resultados), 200
@@ -113,18 +114,21 @@ def register():
             return jsonify({"error": "Email ya registrado"}), 409
 
         hashed_password = generate_password_hash(data["password"])
+        status = data.get("status", "active")  # ✅ Default: active
+
         new_user = Usuario(
             nombre=data["nombre"],
             email=data["email"],
             password=hashed_password,
             rol=data["rol"],
+            status=status,
             restaurante_id=data.get("restaurante_id")
         )
         db.session.add(new_user)
         db.session.commit()
 
+        # ✅ Email opcional
         from api.email_utils import send_email
-
         subject = "Bienvenido a OhMyChef!"
         html_content = f"""
         <h3>Hola {data['nombre']},</h3>
@@ -136,7 +140,6 @@ def register():
         <p>Ingresa al sistema con tu email y la contraseña asignada.</p>
         <p><em>Este mensaje ha sido generado automáticamente.</em></p>
         """
-
         send_email(to_email=data["email"],
                    subject=subject, html_content=html_content)
 
@@ -160,7 +163,9 @@ def obtener_usuario(id):
         "nombre": usuario.nombre,
         "email": usuario.email,
         "rol": usuario.rol,
-        "restaurante_id": usuario.restaurante_id
+        "status": usuario.status,  # ✅ Añadido
+        "restaurante_id": usuario.restaurante_id,
+        "restaurante_nombre": usuario.restaurante.nombre if usuario.restaurante else None  # ✅ Añadido
     }
 
     return jsonify(resultado), 200
@@ -169,16 +174,15 @@ def obtener_usuario(id):
 @api.route('/usuarios/<int:id>', methods=['PUT'])
 @jwt_required()
 def editar_usuario(id):
-    try: 
-        data = request.json 
+    try:
+        data = request.json
         current_user_id = get_jwt_identity()
         current_user = db.session.get(Usuario, current_user_id)
 
         if not current_user or current_user.rol != "admin":
             return jsonify({"error": "Solo el admin puede actualizar usuarios"}), 403
 
-        user_to_update = db.session.get(
-            Usuario, id) 
+        user_to_update = db.session.get(Usuario, id)
         if not user_to_update:
             return jsonify({"error": "Usuario no encontrado"}), 404
 
@@ -188,9 +192,10 @@ def editar_usuario(id):
 
         user_to_update.nombre = data.get("nombre", user_to_update.nombre)
         user_to_update.email = data.get("email", user_to_update.email)
-        if data.get("password"):  
+        if data.get("password"):
             user_to_update.password = generate_password_hash(data["password"])
 
+        # Rol y validación
         new_rol = data.get("rol", user_to_update.rol)
         if new_rol == "admin":
             existing_admin = db.session.scalar(
@@ -203,6 +208,9 @@ def editar_usuario(id):
             return jsonify({"error": "Chef o encargado debe tener restaurante asignado"}), 400
         user_to_update.restaurante_id = data.get(
             "restaurante_id", user_to_update.restaurante_id) if user_to_update.rol != "admin" else None
+
+        # 👇 Aquí se actualiza el status
+        user_to_update.status = data.get("status", user_to_update.status)
 
         db.session.commit()
         return jsonify(user_to_update.serialize()), 200
@@ -223,7 +231,7 @@ def eliminar_usuario(id):
             return jsonify({"error": "Solo el admin puede eliminar usuarios"}), 403
 
         user_to_delete = db.session.get(
-            Usuario, id) 
+            Usuario, id)
         if not user_to_delete:
             return jsonify({"error": "Usuario no encontrado"}), 404
 
@@ -1246,6 +1254,7 @@ def resumen_diario_chef_encargado():
     except Exception as e:
         return jsonify({"msg": "Error interno", "error": str(e)}), 500
 
+
 @api.route("/admin/gastos/resumen-diario", methods=["GET"])
 @jwt_required()
 def resumen_diario_admin():
@@ -1379,9 +1388,6 @@ def resumen_ventas_diario():
         return jsonify({"msg": "Error interno", "error": str(e)}), 500
 
 
-
-
-
 @api.route('/admin/resumen-general', methods=['GET'])
 @jwt_required()
 def resumen_general_admin():
@@ -1413,7 +1419,8 @@ def resumen_general_admin():
                 db.extract("year", Gasto.fecha) == anio
             ).scalar() or 0
 
-            porcentaje_gasto = round((total_gastos / total_ventas) * 100, 2) if total_ventas > 0 else 0
+            porcentaje_gasto = round(
+                (total_gastos / total_ventas) * 100, 2) if total_ventas > 0 else 0
 
             resumen.append({
                 "restaurante_id": r.id,
@@ -1426,6 +1433,7 @@ def resumen_general_admin():
 
     except Exception as e:
         return jsonify({"msg": "Error al generar el resumen", "error": str(e)}), 500
+
 
 @api.route("/admin/ventas-diarias", methods=["GET"])
 @jwt_required()
@@ -1448,7 +1456,7 @@ def ventas_diarias_admin():
 
     except Exception as e:
         return jsonify({"msg": "Error cargando ventas diarias", "error": str(e)}), 500
-    
+
 
 @api.route('/admin/resumen-porcentaje', methods=['GET'])
 @jwt_required()
@@ -1473,9 +1481,12 @@ def admin_resumen_porcentaje():
             extract('year', Gasto.fecha) == ano
         ).scalar() or 0
 
-        porcentaje = round((total_gastos / total_ventas) * 100, 2) if total_ventas > 0 else 0
-        promedio_diario = round(total_ventas / 30, 2) if total_ventas > 0 else 0
-        proyeccion = round((total_ventas / (mes * 30)) * 30, 2) if mes > 0 and total_ventas > 0 else 0
+        porcentaje = round((total_gastos / total_ventas) *
+                           100, 2) if total_ventas > 0 else 0
+        promedio_diario = round(
+            total_ventas / 30, 2) if total_ventas > 0 else 0
+        proyeccion = round((total_ventas / (mes * 30)) * 30,
+                           2) if mes > 0 and total_ventas > 0 else 0
 
         return jsonify({
             "total_ventas": round(total_ventas, 2),
@@ -1487,6 +1498,7 @@ def admin_resumen_porcentaje():
 
     except Exception as e:
         return jsonify({"msg": "Error interno", "error": str(e)}), 500
+
 
 @api.route("/admin/gastos/por-dia", methods=["GET"])
 @jwt_required()
@@ -1510,10 +1522,9 @@ def gastos_por_dia_admin():
             extract("day", Gasto.fecha)
         ).order_by("dia").all()
 
-        resultado = [{"dia": int(g.dia), "gastos": float(g.gastos)} for g in gastos_diarios]
+        resultado = [{"dia": int(g.dia), "gastos": float(g.gastos)}
+                     for g in gastos_diarios]
         return jsonify(resultado), 200
 
     except Exception as e:
         return jsonify({"msg": "Error interno", "error": str(e)}), 500
-
-

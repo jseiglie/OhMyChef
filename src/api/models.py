@@ -33,11 +33,9 @@ class Usuario(db.Model):
     nombre = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(250), nullable=False)
-    rol = db.Column(db.Enum('admin', 'encargado', 'chef',
-                    name='roles'), nullable=False)
-    restaurante_id = db.Column(db.Integer, db.ForeignKey(
-        'restaurantes.id'), nullable=True)
-
+    rol = db.Column(db.Enum('admin', 'encargado', 'chef', name='roles'), nullable=False)
+    status = db.Column(db.String(20), default="active") 
+    restaurante_id = db.Column(db.Integer, db.ForeignKey('restaurantes.id'), nullable=True)
     moneda = db.Column(db.String(10), nullable=True)
 
     def serialize(self):
@@ -46,6 +44,7 @@ class Usuario(db.Model):
             "nombre": self.nombre,
             "email": self.email,
             "rol": self.rol,
+            "status": self.status,  # ✅ Añadir también al serialize
             "restaurante_id": self.restaurante_id,
             "moneda": self.moneda,
         }

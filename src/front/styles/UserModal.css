@@ -1,159 +1,110 @@
-
 .modaal-backdrop {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(255, 255, 255, 0.5);/* rgba para una transparencia estándar del fondo */
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 9999;
 }
 
 .modaal {
-  display: flex;
-  background-color: rgb(255, 255, 255);
-  color: #000000;
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(11, 11, 11, 0.2);
-  width: 90%;
-  max-width: 500px;
-  position: relative;
-  animation: fadeInScale 0.3s ease-out;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
+  background: #ffffff;
+  padding: 35px 30px;
+  border-radius: 14px;
+  width: 95%;
+  max-width: 480px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out;
+  font-family: "Inter", sans-serif;
 }
-
-
-@keyframes fadeInScale {
-  from {
-    opacity: 0; 
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
 
 .modaal h2 {
   font-size: 24px;
-  color: #000000;
-  margin-bottom: 25px;
+  color: #333;
+  margin-bottom: 20px;
   text-align: center;
-  background-color: white;
-  width: 100%;
 }
-
 
 .modaal-form {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   gap: 15px;
-  margin-top: 20px;
-  width: 100%; 
-  align-content: center; 
-  align-items: stretch; 
-  flex-wrap: wrap; 
-  justify-content: flex-end; 
 }
 
-.modaal-form input[type="text"],
-.modaal-form input[type="email"],
-.modaal-form input[type="password"],
+.modaal-form input,
 .modaal-form select {
-  width: 100%; 
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-  box-sizing: border-box;
-}
-
-/* Estilos de enfoque para los campos del formulario */
-.modaal-form input[type="email"]:focus,
-.modaal-form input[type="password"]:focus,
-.modaal-form select:focus {
-  border-color: #ff5722; /* Color de borde más estándar al enfocar */
-  outline: none;
-}
-
-
-.modaal-form label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-  color: #555;
+  padding: 12px 14px;
   font-size: 15px;
-}
-
-
-.form-group {
-  margin-bottom: 18px; 
-  width: 100%; 
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: bold;
-  color: #ff5722;
-}
-
-.form-group input[type="text"],
-.form-group select {
-  width: calc(100% - 20px);
-  padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-  box-sizing: border-box;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  transition: all 0.2s ease;
 }
 
-.form-group input[type="text"]:focus,
-.form-group select:focus {
+.modaal-form input:focus,
+.modaal-form select:focus {
   border-color: #ff5722;
+  box-shadow: 0 0 0 3px rgba(255, 87, 34, 0.15);
+  background-color: #fff;
   outline: none;
-  box-shadow: 0 0 0 3px #ff5722;
 }
-
 
 .modaal-actions {
   display: flex;
-  justify-content: flex-end; 
+  justify-content: flex-end;
   gap: 10px;
-  margin-top: 25px; 
-  width: 100%; 
+  margin-top: 10px;
 }
 
 .modaal-actions button {
-  padding: 10px 20px;
+  padding: 10px 18px;
+  font-weight: 600;
+  font-size: 15px;
+  border-radius: 8px;
   border: none;
-  border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.2s ease;
 }
 
 .modaal-actions button[type="button"] {
-  background-color: #ff5722;
-  color: #ffffff;
+  background-color: #d3d3d3;
+  color: #333;
 }
 
 .modaal-actions button[type="button"]:hover {
-  background-color: #ff5722;
+  background-color: #bbb;
 }
 
 .modaal-actions button[type="submit"] {
-  background-color: #008000;
+  background-color: var(--primary-color, #ff5722);
   color: white;
 }
 
 .modaal-actions button[type="submit"]:hover {
-  background-color: #008000;
+  background-color: #e04a1f;
+}
+.titulo {
+  background-color: #e04a1f;
+  color: white!important;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+  padding: 15px 20px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  margin: -20px -20px 20px -20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
