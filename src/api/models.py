@@ -10,6 +10,7 @@ class Restaurante(db.Model):
     direccion = db.Column(db.String(200))
     telefono = db.Column(db.String(11))
     email_contacto = db.Column(db.String(100))
+    activo = db.Column(db.Boolean, default=True, nullable=True)
     usuarios = db.relationship('Usuario', backref='restaurante', lazy=True)
     ventas = db.relationship('Venta', backref='restaurante', lazy=True)
     gastos = db.relationship('Gasto', backref='restaurante', lazy=True)
@@ -23,7 +24,8 @@ class Restaurante(db.Model):
             "direccion": self.direccion,
             "email_contacto": self.email_contacto,
             "usuarios": self.usuarios,
-            "telefono": self.telefono
+            "telefono": self.telefono,
+            "activo": self.activo
         }
 
 
@@ -33,9 +35,10 @@ class Usuario(db.Model):
     nombre = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(250), nullable=False)
-    rol = db.Column(db.Enum('admin', 'encargado', 'chef',name='roles'), nullable=False)
+    rol = db.Column(db.Enum('admin', 'encargado', 'chef', name='roles'), nullable=False)
     restaurante_id = db.Column(db.Integer, db.ForeignKey('restaurantes.id'), nullable=True)
-
+    moneda = db.Column(db.String(10), nullable=True)  # Nueva columna
+    
     def serialize(self):
         return {
             "id": self.id,
@@ -43,6 +46,7 @@ class Usuario(db.Model):
             "email": self.email,
             "rol": self.rol,
             "restaurante_id": self.restaurante_id,
+            "moneda": self.moneda  # Incluida en el serialize
         }
 
 

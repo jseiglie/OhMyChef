@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 23fb6da6bc4a
+Revision ID: 37229ab0445e
 Revises: 
-Create Date: 2025-06-20 08:08:26.555237
+Create Date: 2025-06-21 13:10:33.695746
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '23fb6da6bc4a'
+revision = '37229ab0445e'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -24,6 +24,7 @@ def upgrade():
     sa.Column('direccion', sa.String(length=200), nullable=True),
     sa.Column('telefono', sa.String(length=11), nullable=True),
     sa.Column('email_contacto', sa.String(length=100), nullable=True),
+    sa.Column('activo', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('margen_objetivo',
@@ -53,6 +54,7 @@ def upgrade():
     sa.Column('password', sa.String(length=250), nullable=False),
     sa.Column('rol', sa.Enum('admin', 'encargado', 'chef', name='roles'), nullable=False),
     sa.Column('restaurante_id', sa.Integer(), nullable=True),
+    sa.Column('moneda', sa.String(length=10), nullable=True),
     sa.ForeignKeyConstraint(['restaurante_id'], ['restaurantes.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email')

@@ -5,7 +5,7 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, Usuario, Venta, Gasto, FacturaAlbaran, Proveedor, MargenObjetivo, Restaurante
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
-from sqlalchemy import select, func, extract
+from sqlalchemy import select, func, extract, desc
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, decode_token
 from werkzeug.security import generate_password_hash, check_password_hash
 from api.mail.mailer import send_reset_email
@@ -1323,8 +1323,6 @@ def resumen_ventas_diario():
 
 
 
-
-
 @api.route('/admin/resumen-general', methods=['GET'])
 @jwt_required()
 def resumen_general_admin():
@@ -1443,14 +1441,11 @@ def resumen_admin_gastos():
         anio = int(request.args.get("ano", 0))
         if not mes or not anio:
             return jsonify({"msg": "Mes y año requeridos"}), 400
-        # Total gastado en todos los restaurantes
         total_gastado = db.session.query(func.sum(Gasto.monto)).filter(
             extract("month", Gasto.fecha) == mes,
             extract("year", Gasto.fecha) == anio
         ).scalar() or 0
-        # Restaurantes activos
         restaurantes_activos = db.session.query(Restaurante.id).filter(Restaurante.activo == True).count()
-        # Proveedor más utilizado (por número de gastos registrados)
         proveedor_mas_usado = db.session.query(
             Proveedor.nombre, func.count(Gasto.id).label("cantidad")
         ).join(Gasto).filter(
@@ -1458,7 +1453,6 @@ def resumen_admin_gastos():
             extract("year", Gasto.fecha) == anio
         ).group_by(Proveedor.nombre).order_by(desc("cantidad")).first()
         proveedor_nombre = proveedor_mas_usado[0] if proveedor_mas_usado else "Sin datos"
-        # Restaurante con más gasto total
         restaurante_top = db.session.query(
             Restaurante.nombre, func.sum(Gasto.monto).label("total")
         ).join(Gasto).filter(
@@ -1475,4 +1469,56 @@ def resumen_admin_gastos():
     except Exception as e:
         return jsonify({"msg": "Error interno", "error": str(e)}), 500
 
+@api.route('/api/admin/proveedores-gasto', methods=['GET'])
+@jwt_required()
+def top_proveedores_por_gasto():
+    try:
+        mes = request.args.get("mes", type=int)
+        ano = request.args.get("ano", type=int)
+        if mes is None or ano is None:
+            return jsonify({"error": "Parámetros 'mes' y 'ano' son requeridos"}), 400
+        resultados = db.session.query(
+            Proveedor.nombre,
+            func.sum(Gasto.monto).label("total_gastado"),
+            func.count(func.distinct(Gasto.restaurante_id)).label("restaurantes")
+        ).join(Gasto, Proveedor.id == Gasto.proveedor_id)\
+         .filter(
+            extract("month", Gasto.fecha) == mes,
+            extract("year", Gasto.fecha) == ano
+        )\
+         .group_by(Proveedor.nombre)\
+         .order_by(func.sum(Gasto.monto).desc())\
+         .limit(5).all()
+        data = [
+            {
+                "nombre": r.nombre,
+                "total_gastado": float(r.total_gastado),
+                "restaurantes": r.restaurantes
+            } for r in resultados
+        ]
+        return jsonify(data), 200
+    except Exception as e:
+        return jsonify({"error": "Error al obtener los datos", "detalle": str(e)}), 500
 
+@api.route('/api/admin/gasto-restaurantes', methods=['GET'])
+@jwt_required()
+def gasto_por_restaurante():
+    mes = request.args.get('mes', type=int)
+    ano = request.args.get('ano', type=int)
+    if not mes or not ano:
+        raise APIException("Parámetros 'mes' y 'ano' son requeridos", 400)
+    try:
+        results = db.session.query(
+            Restaurante.nombre,
+            func.sum(Gasto.monto).label('total_gastado')
+        ).join(Gasto, Restaurante.id == Gasto.restaurante_id)\
+        .filter(extract('month', Gasto.fecha) == mes)\
+        .filter(extract('year', Gasto.fecha) == ano)\
+        .group_by(Restaurante.id)\
+        .order_by(func.sum(Gasto.monto).desc())\
+        .limit(10).all()
+        # :apuntando_hacia_abajo: Aquí añade esta validación
+        if not results:
+            return jsonify([]), 200
+    except Exception as e:
+        raise APIException("Error al obtener los datos: " + str(e), 500)
