@@ -1,65 +1,62 @@
-import React, { useEffect } from "react";
-import { Card, Table, Form, Button } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Card, Table, Form, Button, Spinner } from "react-bootstrap";
+import DataLoaderWrapper from "./DataLoaderWrapper";
 
 const TablaProveedores = () => {
-  const proveedores = [
-    { nombre: "Distribuidora Gómez", total: 5400, restaurantes: 7 },
-    { nombre: "Grupo Alimentario", total: 3100, restaurantes: 7 },
-    { nombre: "Hermanos López", total: 2300, restaurantes: 5 },
-  ];
+  const [proveedores, setProveedores] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [mes, setMes] = useState("6");
+  const [ano, setAno] = useState("2025");
+  const fetchProveedores = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/admin/proveedores-gastos?mes=${mes}&ano=${ano}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (!response.ok) throw new Error("Error al obtener datos de proveedores");
+      const data = await response.json();
+      setProveedores(data);
+    } catch (error) {
+      console.error("Error:", error.message);
+      setProveedores(null);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     const el = document.getElementsByClassName("custom-sidebar")[0];
     if (el) el.scrollTo(0, 0);
+    fetchProveedores();
   }, []);
-
   return (
-    <Card className="mb-4 shadow-sm">
-      <Card.Body>
-        <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3">
-          <Card.Title className="h6 mb-0">Top proveedores por gasto total</Card.Title>
-          <div className="d-flex gap-2">
-            <Form.Select size="sm">
-              <option>Mes</option>
-              <option>Enero</option>
-              <option>Febrero</option>
-              <option>Marzo</option>
-              <option>Abril</option>
-              <option>Mayo</option>
-              <option>Junio</option>
-            </Form.Select>
-            <Form.Select size="sm">
-              <option>Año</option>
-              <option>2024</option>
-              <option selected>2025</option>
-            </Form.Select>
-          </div>
-        </div>
-        <Table className="table table-responsive table-bordered table-sm text-center">
-          <thead className="table-light">
-            <tr>
-              <th>Nombre proveedor</th>
-              <th>Total gastado</th>
-              <th>Nº restaurantes</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {proveedores.map((prov, index) => (
-              <tr key={index}>
-                <td>{prov.nombre}</td>
-                <td>€{prov.total.toLocaleString()}</td>
-                <td>{prov.restaurantes}</td>
-                <td>
-                  <Button variant="outline-primary" size="sm">
-                    Ver detalle
-                  </Button>
-                </td>
+    <DataLoaderWrapper loading={loading} data={proveedores} emptyMsg="No hay datos de proveedores este mes.">
+      <Card className="mb-4 shadow-sm">
+        <Card.Body>
+          <Card.Title className="h6">Tabla de proveedores</Card.Title>
+          <Table striped bordered hover size="sm">
+            <thead>
+              <tr>
+                <th>Proveedor</th>
+                <th>Total gastado (€)</th>
+                <th>Nº restaurantes</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
-      </Card.Body>
-    </Card>
+            </thead>
+            <tbody>
+              {proveedores.map((prov, index) => (
+                <tr key={index}>
+                  <td>{prov.nombre}</td>
+                  <td>{prov.total.toLocaleString()}</td>
+                  <td>{prov.restaurantes}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Card.Body>
+      </Card>
+    </DataLoaderWrapper>
   );
 };
 export default TablaProveedores;

@@ -5,7 +5,7 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, Usuario, Venta, Gasto, FacturaAlbaran, Proveedor, MargenObjetivo, Restaurante
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
-from sqlalchemy import select, func, extract
+from sqlalchemy import select, func, extract, desc
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, decode_token
 from werkzeug.security import generate_password_hash, check_password_hash
 from api.mail.mailer import send_reset_email
@@ -1504,27 +1504,94 @@ def admin_resumen_porcentaje():
 @jwt_required()
 def gastos_por_dia_admin():
     try:
-        restaurante_id = request.args.get("restaurante_id", type=int)
-        mes = request.args.get("mes", type=int)
-        ano = request.args.get("ano", type=int)
-
-        if not restaurante_id or not mes or not ano:
-            return jsonify({"msg": "Faltan parámetros"}), 400
-
-        gastos_diarios = db.session.query(
-            extract("day", Gasto.fecha).label("dia"),
-            func.sum(Gasto.monto).label("gastos")
-        ).filter(
-            Gasto.restaurante_id == restaurante_id,
+        user_id = int(get_jwt_identity())
+        usuario = Usuario.query.get(user_id)
+        if not usuario or usuario.rol != "admin":
+            return jsonify({"msg": "Acceso no autorizado"}), 403
+        mes = int(request.args.get("mes", 0))
+        anio = int(request.args.get("ano", 0))
+        if not mes or not anio:
+            return jsonify({"msg": "Mes y año requeridos"}), 400
+        total_gastado = db.session.query(func.sum(Gasto.monto)).filter(
             extract("month", Gasto.fecha) == mes,
-            extract("year", Gasto.fecha) == ano
-        ).group_by(
-            extract("day", Gasto.fecha)
-        ).order_by("dia").all()
-
-        resultado = [{"dia": int(g.dia), "gastos": float(g.gastos)}
-                     for g in gastos_diarios]
-        return jsonify(resultado), 200
-
+            extract("year", Gasto.fecha) == anio
+        ).scalar() or 0
+        restaurantes_activos = db.session.query(Restaurante.id).filter(Restaurante.activo == True).count()
+        proveedor_mas_usado = db.session.query(
+            Proveedor.nombre, func.count(Gasto.id).label("cantidad")
+        ).join(Gasto).filter(
+            extract("month", Gasto.fecha) == mes,
+            extract("year", Gasto.fecha) == anio
+        ).group_by(Proveedor.nombre).order_by(desc("cantidad")).first()
+        proveedor_nombre = proveedor_mas_usado[0] if proveedor_mas_usado else "Sin datos"
+        restaurante_top = db.session.query(
+            Restaurante.nombre, func.sum(Gasto.monto).label("total")
+        ).join(Gasto).filter(
+            extract("month", Gasto.fecha) == mes,
+            extract("year", Gasto.fecha) == anio
+        ).group_by(Restaurante.nombre).order_by(desc("total")).first()
+        restaurante_nombre = restaurante_top[0] if restaurante_top else "Sin datos"
+        return jsonify({
+            "total_gastado": round(total_gastado, 2),
+            "restaurantes_activos": restaurantes_activos,
+            "proveedor_top": proveedor_nombre,
+            "restaurante_top": restaurante_nombre
+        }), 200
     except Exception as e:
         return jsonify({"msg": "Error interno", "error": str(e)}), 500
+
+@api.route('/api/admin/proveedores-gasto', methods=['GET'])
+@jwt_required()
+def top_proveedores_por_gasto():
+    try:
+        mes = request.args.get("mes", type=int)
+        ano = request.args.get("ano", type=int)
+        if mes is None or ano is None:
+            return jsonify({"error": "Parámetros 'mes' y 'ano' son requeridos"}), 400
+        resultados = db.session.query(
+            Proveedor.nombre,
+            func.sum(Gasto.monto).label("total_gastado"),
+            func.count(func.distinct(Gasto.restaurante_id)).label("restaurantes")
+        ).join(Gasto, Proveedor.id == Gasto.proveedor_id)\
+         .filter(
+            extract("month", Gasto.fecha) == mes,
+            extract("year", Gasto.fecha) == ano
+        )\
+         .group_by(Proveedor.nombre)\
+         .order_by(func.sum(Gasto.monto).desc())\
+         .limit(5).all()
+        data = [
+            {
+                "nombre": r.nombre,
+                "total_gastado": float(r.total_gastado),
+                "restaurantes": r.restaurantes
+            } for r in resultados
+        ]
+        return jsonify(data), 200
+    except Exception as e:
+        return jsonify({"error": "Error al obtener los datos", "detalle": str(e)}), 500
+
+
+@api.route('/api/admin/gasto-restaurantes', methods=['GET'])
+@jwt_required()
+def gasto_por_restaurante():
+    mes = request.args.get('mes', type=int)
+    ano = request.args.get('ano', type=int)
+    if not mes or not ano:
+        raise APIException("Parámetros 'mes' y 'ano' son requeridos", 400)
+    try:
+        results = db.session.query(
+            Restaurante.nombre,
+            func.sum(Gasto.monto).label('total_gastado')
+        ).join(Gasto, Restaurante.id == Gasto.restaurante_id)\
+        .filter(extract('month', Gasto.fecha) == mes)\
+        .filter(extract('year', Gasto.fecha) == ano)\
+        .group_by(Restaurante.id)\
+        .order_by(func.sum(Gasto.monto).desc())\
+        .limit(10).all()
+        if not results:
+            return jsonify([]), 200
+        data = [{"restaurante": r.nombre, "total_gastado": float(r.total_gastado)} for r in results]
+        return jsonify(data), 200
+    except Exception as e:
+        raise APIException("Error al obtener los datos: " + str(e), 500)
