@@ -8,7 +8,7 @@ const UserModal = ({ user, onSave, onClose, restaurants }) => {
     password: "",
     rol: "chef",
     restaurante_id: "",
-    adminPassword: ""
+    status: "active"
   });
 
   useEffect(() => {
@@ -16,20 +16,20 @@ const UserModal = ({ user, onSave, onClose, restaurants }) => {
       setFormData({
         nombre: user.nombre || "",
         email: user.email || "",
-        password: "", 
+        password: "",
         rol: user.rol || "chef",
         restaurante_id: user.restaurante_id || "",
-        adminPassword: "" 
+        status: user.status || "active"
       });
     } else {
-        setFormData({
-            nombre: "",
-            email: "",
-            password: "",
-            rol: "chef",
-            restaurante_id: "",
-            adminPassword: ""
-        });
+      setFormData({
+        nombre: "",
+        email: "",
+        password: "",
+        rol: "chef",
+        restaurante_id: "",
+        status: "active"
+      });
     }
   }, [user]);
 
@@ -49,7 +49,7 @@ const UserModal = ({ user, onSave, onClose, restaurants }) => {
   return (
     <div className="modaal-backdrop">
       <div className="modaal">
-        <h2>{user ? "Editar Usuario" : "Crear Usuario"}</h2>
+        <h2 className="titulo">{user ? "Editar Usuario" : "Crear Usuario"}</h2>
         <form onSubmit={handleSubmit} className="modaal-form">
           <input
             type="text"
@@ -75,7 +75,7 @@ const UserModal = ({ user, onSave, onClose, restaurants }) => {
             placeholder={user ? "Nueva contraseña (opcional)" : "Contraseña del nuevo usuario"}
             value={formData.password}
             onChange={handleChange}
-            required={!user} 
+            required={!user}
           />
 
           <select
@@ -84,26 +84,23 @@ const UserModal = ({ user, onSave, onClose, restaurants }) => {
             onChange={handleChange}
             required
           >
-            <option value="admin">Administrador</option>
             <option value="encargado">Encargado</option>
             <option value="chef">Chef</option>
           </select>
 
-          {formData.rol !== "admin" && (
-            <select
-              name="restaurante_id"
-              value={formData.restaurante_id}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Selecciona un restaurante</option>
-              {Array.isArray(restaurants) && restaurants.map((r) => (
-                <option key={r.id} value={r.id}>
-                  {r.nombre}
-                </option>
-              ))}
-            </select>
-          )}
+          <select
+            name="restaurante_id"
+            value={formData.restaurante_id}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Selecciona un restaurante</option>
+            {Array.isArray(restaurants) && restaurants.map((r) => (
+              <option key={r.id} value={r.id}>
+                {r.nombre}
+              </option>
+            ))}
+          </select>
 
           <select
             name="status"
@@ -114,15 +111,6 @@ const UserModal = ({ user, onSave, onClose, restaurants }) => {
             <option value="active">Activo</option>
             <option value="inactive">Inactivo</option>
           </select>
-
-          <input
-            type="password"
-            name="adminPassword"
-            placeholder="Contraseña del administrador para confirmar"
-            value={formData.adminPassword}
-            onChange={handleChange}
-            required
-          />
 
           <div className="modaal-actions">
             <button type="button" onClick={onClose}>

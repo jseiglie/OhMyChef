@@ -1,28 +1,42 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 import ventaServices from "../../services/ventaServices";
-import { Link } from "react-router-dom";
 import { MonedaSimbolo } from "../../services/MonedaSimbolo";
 
-export const EncargadoVentas = () => {
-
+export const AdminVentasDetalle = () => {
   const simbolo = MonedaSimbolo();
+  const navigate = useNavigate();
   const { store } = useGlobalReducer();
   const user = store.user;
+  const query = new URLSearchParams(window.location.search);
+  const restaurante_id = query.get("restaurante_id") || user?.restaurante_id;
 
+  const [selectedDate, setSelectedDate] = useState("");
   const [ventas, setVentas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [ventaSeleccionada, setVentaSeleccionada] = useState(null);
   const [nuevoMonto, setNuevoMonto] = useState("");
   const [mensaje, setMensaje] = useState("");
 
+  const fechaActual = new Date();
+  const mes = fechaActual.getMonth() + 1;
+  const ano = fechaActual.getFullYear();
+
   const cargarVentas = async () => {
     try {
-      const data = await ventaServices.getVentas();
-      const ventasRestaurante = data.filter(
-        (venta) => venta.restaurante_id === user.restaurante_id
+      const data = await ventaServices.getVentas(mes, ano);
+
+      let filtradas = data.filter(
+        (v) => Number(v.restaurante_id) === Number(restaurante_id)
       );
-      setVentas(ventasRestaurante);
+
+      if (selectedDate) {
+        filtradas = filtradas.filter((v) => v.fecha === selectedDate);
+      }
+
+      filtradas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+      setVentas(filtradas);
     } catch (error) {
       setMensaje("Error al cargar ventas");
     } finally {
@@ -34,7 +48,7 @@ export const EncargadoVentas = () => {
     cargarVentas();
     const el = document.getElementsByClassName("custom-sidebar")[0];
     if (el) el.scrollTo(0, 0);
-  }, []);
+  }, [selectedDate]);
 
   const total = ventas.reduce((acc, v) => acc + parseFloat(v.monto), 0);
   const diasUnicos = [...new Set(ventas.map((v) => v.fecha))];
@@ -79,22 +93,29 @@ export const EncargadoVentas = () => {
 
   return (
     <div className="dashboard-container ps-2 py-3 pt-4">
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h1 className="dashboard-title">Ventas del restaurante</h1>
-        <Link to="/encargado/registrar-venta" className="btn btn-success">
-          <i className="bi bi-plus-circle me-2"></i>Registrar nueva venta
-        </Link>
+      <div className="mb-2">
+        <button className="btn btn-outline-secondary btn-sm" onClick={() => navigate("/admin/dashboard")}>
+          ← Volver
+        </button>
       </div>
 
-      {/* Mensaje tipo GastoForm */}
+      <h1 className="dashboard-title mb-3">Ventas del restaurante</h1>
+
+      <div className="d-flex align-items-center mb-3 flex-wrap gap-2">
+        <label className="me-2">Filtrar por fecha:</label>
+        <input
+          type="date"
+          className="form-control w-auto me-2"
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(e.target.value)}
+        />
+        <button className="btn btn-success" onClick={() => setSelectedDate("")}>
+          Ver todo el mes
+        </button>
+      </div>
+
       {mensaje && (
-        <div
-          className={`alert mt-2 ${mensaje.toLowerCase().includes("éxito") ||
-            mensaje.toLowerCase().includes("eliminada")
-            ? "alert-success"
-            : "alert-danger"
-            }`}
-        >
+        <div className={`alert mt-2 ${mensaje.includes("éxito") || mensaje.includes("eliminada") ? "alert-success" : "alert-danger"}`}>
           {mensaje}
         </div>
       )}
@@ -102,24 +123,17 @@ export const EncargadoVentas = () => {
       {loading ? (
         <p>Cargando...</p>
       ) : ventas.length === 0 ? (
-        <p>No hay ventas registradas.</p>
+        <p>No hay ventas registradas este mes.</p>
       ) : (
         <>
-          {/* <p className="mt-3">
-            <strong>Total:</strong> €{total.toFixed(2)}<br />
-            <strong>Promedio diario:</strong> €{promedio.toFixed(2)}
-          </p>
- */}
-
-
-          <div className="rounded shadow-sm p-2 col-sm-12 col-md-7 col-lg-6 col-xl-4 col-xxl-3 text-center bg-info-subtle  d-flex flex-direction-row  ">
-            <div className="icono-circular ms-2 me-4 rounded-circle bg-white text-info mt-1">
-              📈</div>
+          <div className="rounded shadow-sm p-2 col-sm-12 col-md-7 col-lg-6 col-xl-4 col-xxl-3 text-center bg-info-subtle d-flex flex-direction-row">
+            <div className="icono-circular ms-2 me-4 rounded-circle bg-white text-info mt-1">📈</div>
             <div className="d-flex flex-column text-start">
-              <h6 className="fw-bold text-info strong">Promedio diario: €{promedio.toFixed(2)}</h6>
-              <div className="fs-5 text-info strong">Total: €{total.toFixed(2)}</div>
+              <h6 className="fw-bold text-info">Promedio diario: €{promedio.toFixed(2)}</h6>
+              <div className="fs-5 text-info">Total: €{total.toFixed(2)}</div>
             </div>
           </div>
+
           <div className="table-responsive">
             <table className="table table-striped users-table mt-3 ps-0">
               <thead>
@@ -137,31 +151,11 @@ export const EncargadoVentas = () => {
                     <td>{v.monto}</td>
                     <td>{v.turno || "-"}</td>
                     <td>
-
-                      <button class="action-icon-button edit-button"
-                        onClick={() => abrirModalEdicion(v)}
-                        title="Edit User"><svg
-                          xmlns="http://www.w3.org/2000/svg" width="20"
-                          height="20" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                          stroke-linejoin="round" class="feather feather-edit-2">
-                          <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z">
-                          </path>
-                        </svg>
+                      <button className="action-icon-button edit-button" onClick={() => abrirModalEdicion(v)} title="Editar">
+                        ✏️
                       </button>
-
-                      <button class="action-icon-button delete-button"
-                        onClick={() => eliminarVenta(v.id)}
-                        title="Delete User"><svg xmlns="http://www.w3.org/2000/svg"
-                          width="20" height="20" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                          stroke-linejoin="round" class="feather feather-trash-2">
-                          <polyline points="3 6 5 6 21 6"></polyline>
-                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                          </path>
-                          <line x1="10" y1="11" x2="10" y2="17">
-                          </line><line x1="14" y1="11" x2="14" y2="17"></line>
-                        </svg>
+                      <button className="action-icon-button delete-button" onClick={() => eliminarVenta(v.id)} title="Eliminar">
+                        🗑️
                       </button>
                     </td>
                   </tr>
@@ -172,6 +166,7 @@ export const EncargadoVentas = () => {
         </>
       )}
 
+      {/* Modal de edición */}
       <div className="modal fade" id="editarModal" tabIndex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
@@ -202,3 +197,4 @@ export const EncargadoVentas = () => {
     </div>
   );
 };
+

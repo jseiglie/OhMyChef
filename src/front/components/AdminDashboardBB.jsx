@@ -94,7 +94,7 @@ const AdminDashboardBB = () => {
                 <button
                   className="view-link mt-2"
                   style={{ fontSize: '0.85rem' }}
-                  onClick={() => navigate(`/restaurante/${r.restaurante_id}`)}
+                  onClick={() => navigate(`/admin/restaurante/${r.restaurante_id}`)}
                 >
                   Ver todo
                 </button>
@@ -104,8 +104,8 @@ const AdminDashboardBB = () => {
       </div>
 
       <div className="">
-  <QuickActionsAdmin />
-</div>
+        <QuickActionsAdmin />
+      </div>
     </div>
   );
 };

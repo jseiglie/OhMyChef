@@ -5,14 +5,12 @@ const gastoServices = {};
 
 gastoServices.getProveedores = async (restaurante_id) => {
   const token = sessionStorage.getItem("token");
-  const response = await fetch(`${backendUrl}/api/proveedores`, {
+  const response = await fetch(`${backendUrl}/api/proveedores?restaurante_id=${restaurante_id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   if (!response.ok) throw new Error("Error al obtener proveedores");
-  const data = await response.json();
-  return data.filter((p) => p.restaurante_id === restaurante_id);
+  return await response.json();
 };
-
 
 gastoServices.registrarGasto = async (gastoData) => {
   const token = sessionStorage.getItem("token");
@@ -43,10 +41,10 @@ gastoServices.registrarGastoMultiple = async (gastos) => {
 };
 
 
-gastoServices.resumenMensual = async (mes, ano) => {
+gastoServices.resumenMensual = async (mes, ano, restaurante_id) => {
   const token = sessionStorage.getItem("token");
   const resp = await fetch(
-    `${backendUrl}/api/gastos/resumen-mensual?mes=${mes}&ano=${ano}`,
+    `${backendUrl}/api/gastos/resumen-mensual?mes=${mes}&ano=${ano}&restaurante_id=${restaurante_id}`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
   if (!resp.ok) throw new Error("Error al obtener resumen");

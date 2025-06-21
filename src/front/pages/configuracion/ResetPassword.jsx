@@ -33,12 +33,12 @@ const ResetPassword = () => {
   };
   return (
     <div className="container-fluid landing-container" style={{ backgroundImage: `url(${forgotBg})` }}>
-      <div className="row align-items-center main-row">
+      <div className="row align-items-center main-row mx-auto">
         <div className="col-lg-6 col-12 text-center text-lg-start landing-message">
           <h1>Restablece tu contraseña</h1>
           <p className="fw-semibold text-dark">Introduce tu nueva contraseña segura para volver a tu cocina digital.</p>
         </div>
-        <div className="col-lg-5 col-md-8 col-11 mx-auto auth-overlay text-center px-4">
+        <div className="col-10 col-sm-8 col-md-8 col-lg-6 col-xl-5 col-xxl-3 mx-auto auth-overlay">
           <img src={logo} alt="Logo" className="img-fluid mb-3" style={{ height: "100px" }} />
           <h2 className="login-title text-black text-center mt-3 mb-3">Nueva contraseña</h2>
           {message && <div className="alert alert-info text-start">{message}</div>}

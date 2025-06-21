@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ProveedoresCardRestaurante } from '../../components/ProveedoresCardRestaurante.jsx';
 import '../../styles/ProveedoresDashboard.css';
 
 export const ProveedoresDashboard = () => {
+     useEffect(() => {
+        const el = document.getElementsByClassName("custom-sidebar")[0];
+        if (el) el.scrollTo(0, 0);
+    }, []);
     const navigate = useNavigate();
 
     const restaurantes = [
