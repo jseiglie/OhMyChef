@@ -19,7 +19,6 @@ export const ProveedoresDashboard = () => {
 
 
     const cargar = async () => {
-        debugger
         setLoading(true);
         try {
             const list = await proveedorServices.getProveedores(restaurante_id);

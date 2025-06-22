@@ -48,7 +48,6 @@ export const ProveedorForm = ({ proveedor = null, onSuccess, onCancel }) => {
       if (proveedor) {
         await proveedorServices.editarProveedor(proveedor.id, payload);
       } else {
-        debugger
         await proveedorServices.crearProveedor(payload);
       }
 
