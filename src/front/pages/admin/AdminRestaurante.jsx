@@ -105,7 +105,7 @@ const AdminRestaurante = () => {
           placeholder="Buscar por nombre..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="filter-search-input"
+          className="filter-search-input col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4"
         />
       </div>
 

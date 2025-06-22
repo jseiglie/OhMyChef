@@ -5,6 +5,19 @@ html,
 * {
   font-family: "Quicksand", sans-serif !important;
 }
+.enlacevertodo {
+  text-decoration: none;
+  padding: 4px;
+  background: #ff5d1d;
+  border-radius: 6px;
+  color: #fff;
+  border: 1px solid #db3e00;
+  font-size: 0.8rem !important;
+}
+.enlacevertodo:hover {
+  cursor: pointer;
+  background: #bb3e0c;
+}
 .bg-orange {
   background-color: #ff7741 !important;
   color: rgb(255, 255, 255) !important;
