@@ -94,7 +94,7 @@ export const DetalleGastosMensual = () => {
         <>
           <div className="mb-3 justify-content-start">
             <div className="d-flex justify-content-start flex-wrap align-items-center mb-3 mt-2">
-              <h5 className="text-white me-4">Mes seleccionado: {nombreMes.toUpperCase()}</h5>
+              <h5 className="me-4">Mes seleccionado: {nombreMes.toUpperCase()}</h5>
               <input
                 type="month"
                 className="form-control w-auto"

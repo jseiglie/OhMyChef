@@ -26,8 +26,8 @@ export const QuickActionsAdmin = () => {
   ];
 
   return (
-    <div className="mt-1 text-center">
-      <h5 className="mb-3 fw-bold">⚡ Acciones Rápidas</h5>
+    <div className="mt-0 text-center">
+      <h5 className="mb-3 fw-bold barralarga">⚡ Acciones Rápidas</h5>
 
       <div className="d-flex flex-wrap justify-content-center gap-4">
         {actions.map((a, i) => (

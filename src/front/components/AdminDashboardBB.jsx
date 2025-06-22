@@ -103,7 +103,7 @@ const AdminDashboardBB = () => {
           })}
       </div>
 
-      <div className="card mt-4 shadow-sm border rounded p-4">
+      <div className="card mt-4 shadow-sm border rounded p-4 px-0 pt-0">
         <QuickActionsAdmin />
       </div>
     </div>

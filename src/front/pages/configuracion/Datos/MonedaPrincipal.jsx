@@ -30,7 +30,7 @@ export const MonedaPrincipal = () => {
     }
   };
   return (
-    <div className="card col-sm-12 col-md-12 col-lg-10 me-4 col-xl-5 p-4 mb-4">
+    <div className="card col-sm-12 col-md-12 col-lg-10 me-4 col-xl-4 p-4 mb-4">
       <h4>Moneda principal</h4>
       <form onSubmit={handleSubmit}>
         <label className="form-label">Selecciona tu moneda</label>

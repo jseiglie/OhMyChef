@@ -18,6 +18,13 @@ html,
   cursor: pointer;
   background: #bb3e0c;
 }
+.barralarga{
+      padding: 10px;
+    background: #ff5d1d;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    color: #fff;
+}
 .bg-orange {
   background-color: #ff7741 !important;
   color: rgb(255, 255, 255) !important;
