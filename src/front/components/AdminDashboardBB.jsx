@@ -56,9 +56,9 @@ const AdminDashboardBB = () => {
 
   return (
     <div className="dashboard-container">
-      <p className="dashboard-welcome ">Bienvenido de nuevo, Aquí tienes tu resumen actual.</p>
+      <h1 className="dashboard-welcome mb-4">Tu resumen actual.</h1>
 
-      <div className="restaurant-cards }">
+      <div className="card shadow-sm border rounded p-4 mb-4 d-flex flex-row justify-content-start">
         {[...resumenes]
           .sort((a, b) => b.venta_total - a.venta_total)
           .map((r, index) => {
@@ -66,8 +66,8 @@ const AdminDashboardBB = () => {
             const gastoDia = gastoDiario[r.restaurante_id] || [];
 
             return (
-              <div key={r.restaurante_id} className={`restaurant-card ${isTop1(index) ? 'top-one-card' : ''}`} >
-                <h4 className="mb-2 text-center fw-bold" style={{ color: '#ffa500' }}>{isTop1(index) ? '🌟 ' : ''}{r.nombre}</h4>
+              <div key={r.restaurante_id} className={`restaurant-card me-4 ${isTop1(index) ? 'top-one-card' : ''}`} >
+                <h4 className="mb-2 text-center fw-bold">{isTop1(index) ? '🌟 ' : ''}{r.nombre}</h4>
 
                 <div className="d-flex justify-content-between gap-2 mb-3">
                   <div className="card shadow-sm border rounded p-2 bg-warning-subtle" style={{ width: '48%' }}>
@@ -91,19 +91,19 @@ const AdminDashboardBB = () => {
                   </div>
                 </div>
 
-                <button
-                  className="view-link mt-2"
+                <a
+                  className="mt-2 enlacevertodo"
                   style={{ fontSize: '0.85rem' }}
                   onClick={() => navigate(`/admin/restaurante/${r.restaurante_id}`)}
                 >
                   Ver todo
-                </button>
+                </a>
               </div>
             );
           })}
       </div>
 
-      <div className="">
+      <div className="card mt-4 shadow-sm border rounded p-4">
         <QuickActionsAdmin />
       </div>
     </div>

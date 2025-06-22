@@ -133,6 +133,7 @@ export const AdminVentasDetalle = () => {
               <div className="fs-5 text-info">Total: €{total.toFixed(2)}</div>
             </div>
           </div>
+          
 
           <div className="table-responsive">
             <table className="table table-striped users-table mt-3 ps-0">

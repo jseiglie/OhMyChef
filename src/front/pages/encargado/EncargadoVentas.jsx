@@ -15,13 +15,42 @@ export const EncargadoVentas = () => {
   const [ventaSeleccionada, setVentaSeleccionada] = useState(null);
   const [nuevoMonto, setNuevoMonto] = useState("");
   const [mensaje, setMensaje] = useState("");
+  const meses = [
+    "enero",
+    "febrero",
+    "marzo",
+    "abril",
+    "mayo",
+    "junio",
+    "julio",
+    "agosto",
+    "septiembre",
+    "octubre",
+    "noviembre",
+    "diciembre"
+  ];
+
+  debugger
+  const fechaactual = new Date();
+  const mesactual = fechaactual.getMonth() + 1;
+
+  const getFecha = (thefecha) => {
+    debugger
+    const fecha = new Date(thefecha);
+    const mes = fecha.getMonth() + 1; // +1 porque getMonth() da 0 para enero
+    return mes
+
+  }
 
   const cargarVentas = async () => {
     try {
+      debugger
       const data = await ventaServices.getVentas();
+
       const ventasRestaurante = data.filter(
-        (venta) => venta.restaurante_id === user.restaurante_id
+        (venta) => (venta.restaurante_id === user.restaurante_id && getFecha(venta.fecha) === mesactual)
       );
+
       setVentas(ventasRestaurante);
     } catch (error) {
       setMensaje("Error al cargar ventas");
@@ -116,8 +145,9 @@ export const EncargadoVentas = () => {
             <div className="icono-circular ms-2 me-4 rounded-circle bg-white text-info mt-1">
               📈</div>
             <div className="d-flex flex-column text-start">
-              <h6 className="fw-bold text-info strong">Promedio diario: €{promedio.toFixed(2)}</h6>
-              <div className="fs-5 text-info strong">Total: €{total.toFixed(2)}</div>
+              <h6 className="fw-bold text-info strong">Promedio diario: <span className="fw-bold">€{promedio.toFixed(2)}</span> </h6>
+              <div className="fs-5 text-info strong">Total: <span className="fw-bold">€{total.toFixed(2)}</span></div>
+              <p className="fs-5 text-info strong mb-0"> mes: <span className="color-orange">{meses[mesactual - 1].toUpperCase()}</span></p>
             </div>
           </div>
           <div className="table-responsive">

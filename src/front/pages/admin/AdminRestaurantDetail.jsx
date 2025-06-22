@@ -66,102 +66,106 @@ const AdminRestaurantDetail = () => {
   }
 
   return (
-    <div className="dashboard-container ps-2 py-3 pt-4">
-      <h1 className="dashboard-title"> {restaurante?.nombre ? ` ${restaurante.nombre}` : `Restaurante #${id}`}</h1>
-      <p className="dashboard-welcome mb-4">Detalle del negocio</p>
+    <>
 
-      {/* Ventas */}
-      <div className="card shadow-sm border rounded p-4 mb-4">
-        <div className="row align-items-center">
-          <div className="col-md-3 d-flex flex-column gap-4 align-items-center">
-            <ResumenCard icon="💰" color="warning" label="Ventas actuales" value={totalVentas} simbolo={simbolo} />
-            <ResumenCard icon="📈" color="info" label="Promedio diario" value={promedioDiario} simbolo={simbolo} />
-            <ResumenCard icon="📊" color="success" label="Proyección mensual" value={proyeccionMensual} simbolo={simbolo} />
-          </div>
-          <div className="col-md-9">
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={ventas}>
-                <XAxis dataKey="dia" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="monto" fill="#ffa94d" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      </div>
+      <div className="dashboard-container ps-2 py-3 pt-4">
+        <button onClick={() => navigate('/admin/dashboard')} className="back-button">← Volver a dashboard</button>
+        <h1 className="dashboard-title"> {restaurante?.nombre ? ` ${restaurante.nombre}` : `Restaurante #${id}`}</h1>
+        <p className="dashboard-welcome mb-4">Detalle del negocio</p>
 
-      {/* Gastos */}
-      <div className="card shadow-sm border rounded p-4 mb-4">
-        <h5 className="mb-3 fw-bold">GASTOS</h5>
-        <div className="row align-items-center">
-          <div className="col-md-3 d-flex flex-column gap-4 align-items-center">
-            <ResumenCard icon="💸" color="info" label="Gastos actuales" value={gasto} simbolo={simbolo} />
-            <div className={`rounded shadow-sm p-3 text-center w-100 ${bgClass}`}>
-              <div className={`icono-circular rounded-circle ${textClass} bg-white d-inline-flex align-items-center justify-content-center mb-2`}>
-                {icono}
-              </div>
-              <h6 className={`fw-bold ${textClass}`}>% Gastos</h6>
-              <div className={`fs-4 fw-bold ${textClass}`}>{porcentaje} %</div>
+        {/* Ventas */}
+        <div className="card shadow-sm border rounded p-4 mb-4">
+          <div className="row align-items-center">
+            <div className="col-md-3 d-flex flex-column gap-4 align-items-center">
+              <ResumenCard icon="💰" color="warning" label="Ventas actuales" value={totalVentas} simbolo={simbolo} />
+              <ResumenCard icon="📈" color="info" label="Promedio diario" value={promedioDiario} simbolo={simbolo} />
+              <ResumenCard icon="📊" color="success" label="Proyección mensual" value={proyeccionMensual} simbolo={simbolo} />
+            </div>
+            <div className="col-md-9">
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={ventas}>
+                  <XAxis dataKey="dia" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="monto" fill="#ffa94d" />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </div>
+        </div>
 
-          <div className="col-md-9">
-            <h6 className="text-center mb-3">Gráfico Diario de Gastos</h6>
-            <ResponsiveContainer width="100%" height={250}>
-              <LineChart data={gastoDatos}>
-                <XAxis dataKey="dia" />
-                <YAxis />
-                <Tooltip formatter={(v) => [`${v}${simbolo}`, "Gasto"]} labelFormatter={(label) => `Día ${label}`} />
-                <Line type="monotone" dataKey="gasto" stroke="#82ca9d" strokeWidth={2} dot={{ r: 3 }} />
-              </LineChart>
-            </ResponsiveContainer>
+        {/* Gastos */}
+        <div className="card shadow-sm border rounded p-4 mb-4">
+          <h5 className="mb-3 fw-bold">GASTOS</h5>
+          <div className="row align-items-center">
+            <div className="col-md-3 d-flex flex-column gap-4 align-items-center">
+              <ResumenCard icon="💸" color="info" label="Gastos actuales" value={gasto} simbolo={simbolo} />
+              <div className={`rounded shadow-sm p-3 text-center w-100 ${bgClass}`}>
+                <div className={`icono-circular rounded-circle ${textClass} bg-white d-inline-flex align-items-center justify-content-center mb-2`}>
+                  {icono}
+                </div>
+                <h6 className={`fw-bold ${textClass}`}>% Gastos</h6>
+                <div className={`fs-4 fw-bold ${textClass}`}>{porcentaje} %</div>
+              </div>
+            </div>
+
+            <div className="col-md-9">
+              <h6 className="text-center mb-3">Gráfico Diario de Gastos</h6>
+              <ResponsiveContainer width="100%" height={250}>
+                <LineChart data={gastoDatos}>
+                  <XAxis dataKey="dia" />
+                  <YAxis />
+                  <Tooltip formatter={(v) => [`${v}${simbolo}`, "Gasto"]} labelFormatter={(label) => `Día ${label}`} />
+                  <Line type="monotone" dataKey="gasto" stroke="#82ca9d" strokeWidth={2} dot={{ r: 3 }} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
+
+        {/* Acciones rápidas */}
+        <div className="mt-5 text-center">
+          <h5 className="mb-4">⚡ Acciones Rápidas</h5>
+          <div className="d-flex flex-wrap justify-content-center gap-4">
+            {[
+              {
+                icon: "📊",
+                title: "Ventas Detalladas",
+                subtitle: "Ver ventas día a día",
+                link: `/admin/ventas-detalle?restaurante_id=${id}`,
+                bg: "bg-warning-subtle"
+              },
+              {
+                icon: "💸",
+                title: "Gastos Detallados",
+                subtitle: "Ver gastos por fecha",
+                link: `/admin/gastos-detalle?restaurante_id=${id}`,
+                bg: "bg-info-subtle"
+              },
+            ].map((a, i) => (
+              <Link
+                to={a.link}
+                key={i}
+                className="text-decoration-none text-dark"
+                style={{ flex: "1 1 200px", maxWidth: "230px" }}
+              >
+                <div className="card shadow-sm rounded p-3 h-100 text-center hover-shadow">
+                  <div
+                    className={`rounded-circle ${a.bg} d-flex align-items-center justify-content-center mx-auto mb-3`}
+                    style={{ width: "60px", height: "60px", fontSize: "1.5rem" }}
+                  >
+                    {a.icon}
+                  </div>
+                  <h6 className="fw-bold">{a.title}</h6>
+                  <small className="text-muted">{a.subtitle}</small>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
       </div>
-
-    {/* Acciones rápidas */}
-<div className="mt-5 text-center">
-  <h5 className="mb-4">⚡ Acciones Rápidas</h5>
-  <div className="d-flex flex-wrap justify-content-center gap-4">
-    {[
-      {
-        icon: "📊",
-        title: "Ventas Detalladas",
-        subtitle: "Ver ventas día a día",
-        link: `/admin/ventas-detalle?restaurante_id=${id}`,
-        bg: "bg-warning-subtle"
-      },
-      {
-        icon: "💸",
-        title: "Gastos Detallados",
-        subtitle: "Ver gastos por fecha",
-        link: `/admin/gastos-detalle?restaurante_id=${id}`,
-        bg: "bg-info-subtle"
-      },
-    ].map((a, i) => (
-      <Link
-        to={a.link}
-        key={i}
-        className="text-decoration-none text-dark"
-        style={{ flex: "1 1 200px", maxWidth: "230px" }}
-      >
-        <div className="card shadow-sm rounded p-3 h-100 text-center hover-shadow">
-          <div
-            className={`rounded-circle ${a.bg} d-flex align-items-center justify-content-center mx-auto mb-3`}
-            style={{ width: "60px", height: "60px", fontSize: "1.5rem" }}
-          >
-            {a.icon}
-          </div>
-          <h6 className="fw-bold">{a.title}</h6>
-          <small className="text-muted">{a.subtitle}</small>
-        </div>
-      </Link>
-    ))}
-  </div>
-</div>
-
-    </div>
+    </>
   );
 };
 

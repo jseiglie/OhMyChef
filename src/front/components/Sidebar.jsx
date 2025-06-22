@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
-
+import { useParams } from 'react-router-dom';
 export const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [seemenu, setSeemenu] = useState(true);
@@ -9,7 +9,7 @@ export const Sidebar = () => {
   const { store, dispatch } = useGlobalReducer();
   const navigate = useNavigate();
   const rol = store?.user?.rol;
-
+  const { id } = useParams();
   const toggleCollapse = () => {
     setCollapsed(!collapsed);
     setSeemenu(!seemenu);
@@ -50,7 +50,7 @@ export const Sidebar = () => {
           <ul className="nav nav-pills flex-column">
             {rol === "admin" && (
               <>
-                <li className={`nav-item ${location.pathname === "/admin/dashboard" ? "color-orange-bold" : ""}`}>
+                <li className={`nav-item ${location.pathname === "/admin/dashboard" || location.pathname.includes(`admin/restaurante/${id}`) ? "color-orange-bold" : ""}`}>
                   <Link className="nav-link" to="/admin/dashboard">
                     <i className="bi bi-house me-2"></i>Dashboard
                   </Link>
