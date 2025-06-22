@@ -21,6 +21,7 @@ import AdminRestaurantDetail from "./pages/admin/AdminRestaurantDetail";
 import {AdminVentasDetalle} from "./pages/admin/AdminVentasDetalle";
 import AdminGastosDetalle from "./pages/admin/AdminGastosDetalle";
 
+
 import { EncargadoDashboard } from "./pages/encargado/EncargadoDashboard";
 import { RegistrarVenta } from "./pages/encargado/RegistrarVenta";
 import { ReporteVentas } from "./pages/encargado/ReporteVentas";
