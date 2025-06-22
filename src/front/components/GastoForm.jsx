@@ -92,7 +92,7 @@ export const GastoForm = () => {
     <div className="dashboard-container ps-0  py-3 pt-4">
       <button onClick={() => navigate(`/${user.rol}/gastos`)} className="back-button">← Volver a gastos</button>
       <h1 className="dashboard-title">Registrar Gastos del día</h1>
-      <h5 className="dashboard-welcome text-muted mt-2 mb-4">Mes actual: {nombreMes.toUpperCase()}</h5>
+      <h5 className="dashboard-welcome text-white mt-2 mb-4">Mes actual: {nombreMes.toUpperCase()}</h5>
 
 
       <div className="proveedor-card col-12 col-sm-12 col-md-12 col-lg-12 col-xl-8 col-xxl-8">
