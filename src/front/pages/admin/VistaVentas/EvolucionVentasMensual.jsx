@@ -58,7 +58,7 @@ const EvolucionVentaMensual = () => {
   if (!datos.length || datos.every(d => d.total_vendido === 0)) return <p>No hay datos para mostrar este año.</p>;
   return (
     <div className="p-3 bg-white rounded shadow-sm" style={{ height: "320px" }}>
-      <h6 className="mb-3 fw-bold">Evolución de ventas mensual (últimos 6 meses)</h6>
+      <h1 className="mb-3 fw-bold">Evolución de ventas mensual (últimos 6 meses)</h1>
       <div style={{ height: "260px" }}>
         <Line data={data} options={options} />
       </div>

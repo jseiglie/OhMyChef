@@ -28,7 +28,7 @@ const TablaTopRestaurantes = () => {
   return (
     <div className="p-3 bg-white rounded shadow-sm mt-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h6 className="fw-bold mb-0">Top restaurantes por ventas</h6>
+        
         <div className="d-flex gap-2">
           <select className="form-select form-select-sm" value={mes} onChange={e => setMes(parseInt(e.target.value))}>
             {mesesNombre.map((nombre, i) => (
