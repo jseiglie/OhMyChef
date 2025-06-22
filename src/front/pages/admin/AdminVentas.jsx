@@ -1,36 +1,54 @@
-import React, { useEffect } from "react";
-import VentasResumen from "../../components/VentasResumen";
-import AdminVentasCalendario from "../../components/AdminVentasCalendario";
+import React from "react";
+import ResumenVentas from "./VistaVentas/ResumenVentas";
+import VentasPorRestauranteChart from "./VistaVentas/VentasPorRestauranteChart";
+import EvolucionVentasMensual from "./VistaVentas/EvolucionVentasMensual";
+import TablaTopRestaurantes from "./VistaVentas/TablaTopRestaurantes";
 
-
-export const AdminVentas = () => {
-  useEffect(() => {
-    const el = document.getElementsByClassName("custom-sidebar")[0];
-    if (el) el.scrollTo(0, 0);
-  }, []);
+const AdminVentas = () => {
   return (
-    <>
-      <div className="dashboard-container">
-
-        <h1 className="dashboard-title align-self-start">Ventas</h1>
-        <p className="dashboard-welcome  align-self-start mb-4">Introduce tus ventas</p>
-        <div className="p-3 ms-0 me-3 col-11  col-sm-11 col-lg-5 border rounded bg-white shadow-sm order-1">
-          <VentasResumen
-            restauranteId="1231"
-            mes="Mayo 2025"
-            ventas={2500}
-            porcentaje={27}
-
-          />
-        </div>
-
-
-
+    <div className="container mt-4">
+      {/* Encabezado */}
+      <div className="mb-4">
+        <h2 className="fw-bold">Resumen de ventas globales</h2>
+        <p className="text-muted">
+          Comparativa mensual por restaurante y evolución de ingresos
+        </p>
       </div>
-
-
-    </>
-
-
+      {/* KPIs principales */}
+      <ResumenVentas />
+      {/* Gráficos: barras y línea */}
+      <div className="row mt-4">
+        <div className="col-md-6 mb-4">
+          <div className="card p-3 h-100">
+            <VentasPorRestauranteChart />
+          </div>
+        </div>
+        <div className="col-md-6 mb-4">
+          <div className="card p-3 h-100">
+            <EvolucionVentasMensual />
+          </div>
+        </div>
+      </div>
+      {/* Tabla Top Restaurantes */}
+      <div className="row">
+        <div className="col-md-12 mb-4">
+          <div className="card p-3 h-100">
+            <h5 className="mb-3">Top restaurantes por ventas</h5>
+            <TablaTopRestaurantes />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
+export default AdminVentas;
+
+
+
+
+
+
+
+
+
+

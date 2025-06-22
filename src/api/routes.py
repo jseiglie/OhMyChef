@@ -1693,3 +1693,131 @@ def get_proveedores_top():
     except Exception as e:
         print("Error en get_proveedores_top:", e)
         return jsonify({"msg": "Error al obtener proveedores", "error": str(e)}), 500
+    
+#Endpoints Vista Ventas
+
+@api.route('/resumen-ventas', methods=['GET'])
+@jwt_required()
+def resumen_ventas_admin():
+    try:
+        from datetime import datetime
+        mes = int(request.args.get("mes", datetime.now().month))
+        ano = int(request.args.get("ano", datetime.now().year))
+        restaurantes = Restaurante.query.all()
+        total_vendido = 0
+        restaurante_ventas = {}
+        for r in restaurantes:
+            ventas = Venta.query.filter(
+                Venta.restaurante_id == r.id,
+                db.extract("month", Venta.fecha) == mes,
+                db.extract("year", Venta.fecha) == ano
+            ).all()
+            monto_total_restaurante = sum([v.monto for v in ventas])
+            total_vendido += monto_total_restaurante
+            restaurante_ventas[r.nombre] = monto_total_restaurante
+        restaurante_top = "No disponible"
+        if restaurante_ventas:
+            restaurante_top = max(restaurante_ventas, key=restaurante_ventas.get)
+        promedio_por_restaurante = (
+            round(total_vendido / len(restaurante_ventas), 2)
+            if restaurante_ventas else 0
+        )
+        resumen = {
+            "total_vendido": round(total_vendido, 2),
+            "restaurantes_con_ventas": len(restaurante_ventas),
+            "restaurante_top": restaurante_top,
+            "promedio_por_restaurante": promedio_por_restaurante
+        }
+        return jsonify(resumen), 200
+    except Exception as e:
+        return jsonify({ "msg": "Error al obtener el resumen de ventas", "error": str(e) }), 500
+
+@api.route('/venta-evolucion-mensual', methods=['GET'])
+@jwt_required()
+def evolucion_venta_mensual():
+    try:
+        from datetime import datetime
+        ano = int(request.args.get("ano", datetime.now().year))
+        restaurantes = Restaurante.query.all()
+        if not restaurantes:
+            return jsonify([]), 200
+        resultado = []
+        for mes in range(1, 13):
+            total_mes = 0
+            for restaurante in restaurantes:
+                ventas = Venta.query.filter(
+                    Venta.restaurante_id == restaurante.id,
+                    db.extract('year', Venta.fecha) == ano,
+                    db.extract('month', Venta.fecha) == mes
+                ).all()
+                total_mes += sum([v.monto for v in ventas])
+            resultado.append({
+                "mes": mes,
+                "total_vendido": round(total_mes, 2)
+            })
+        return jsonify(resultado), 200
+    except Exception as e:
+        return jsonify({"msg": "Error al calcular la evolución mensual de ventas", "error": str(e)}), 500
+
+@api.route("/ventas-por-restaurante", methods=["GET"])
+@jwt_required()
+def ventas_por_restaurante():
+    try:
+        mes_str = request.args.get("mes")
+        ano_str = request.args.get("ano")
+        if not mes_str or not ano_str:
+            return jsonify({"msg": "Faltan parámetros 'mes' y 'ano'"}), 422
+        mes = int(mes_str)
+        ano = int(ano_str)
+        restaurantes = Restaurante.query.all()
+        resultado = []
+        for r in restaurantes:
+            ventas = db.session.query(db.func.sum(Venta.monto)).filter(
+                Venta.restaurante_id == r.id,
+                db.extract("month", Venta.fecha) == mes,
+                db.extract("year", Venta.fecha) == ano
+            ).scalar() or 0
+            resultado.append({
+                "restaurante": r.nombre,
+                "total_vendido": round(ventas, 2)
+            })
+        return jsonify(resultado), 200
+    except Exception as e:
+        return jsonify({
+            "msg": "Error al obtener las ventas por restaurante",
+            "error": str(e)
+        }), 500
+
+@api.route('/restaurantes-top', methods=['GET'])
+@jwt_required()
+def get_restaurantes_top():
+    mes = request.args.get("mes")
+    ano = request.args.get("ano")
+    if not mes or not ano:
+        return jsonify({"msg": "Parámetros mes y año requeridos"}), 400
+    try:
+        resultados = (
+            db.session.query(
+                Restaurante.nombre,
+                func.count(Venta.id).label("ventas_realizadas"),
+                func.sum(Venta.monto).label("total_vendido")
+            )
+            .join(Venta, Venta.restaurante_id == Restaurante.id)
+            .filter(func.extract("month", Venta.fecha) == int(mes))
+            .filter(func.extract("year", Venta.fecha) == int(ano))
+            .group_by(Restaurante.nombre)
+            .order_by(func.sum(Venta.monto).desc())
+            .limit(5)
+            .all()
+        )
+        data = []
+        for nombre, ventas_realizadas, total_vendido in resultados:
+            data.append({
+                "nombre": nombre,
+                "ventas_realizadas": ventas_realizadas,
+                "total_vendido": float(total_vendido) if total_vendido else 0.0
+            })
+        return jsonify(data), 200
+    except Exception as e:
+        print("Error en get_restaurantes_top:", e)
+        return jsonify({"msg": "Error al obtener restaurantes top", "error": str(e)}), 500

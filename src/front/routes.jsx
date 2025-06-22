@@ -10,7 +10,7 @@ import { RutaPrivada } from "./components/RutaPrivada.jsx";
 import { AdminDashboard } from "./pages/admin/AdminDashboard";
 
 import { CrearRestaurante } from "./pages/admin/CrearRestaurante";
-import { AdminVentas } from "./pages/admin/AdminVentas";
+import  AdminVentas  from "./pages/admin/AdminVentas";
 import  AdminGastos  from "./pages/admin/AdminGastos";
 import { UsuariosDashboard } from "./pages/admin/UsuariosDashboard";
 import { CrearUsuario } from "./pages/admin/CrearUsuario";
