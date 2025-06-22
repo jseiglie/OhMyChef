@@ -692,7 +692,9 @@ def get_proveedores():
             "id": p.id,
             "nombre": p.nombre,
             "categoria": p.categoria,
-            "restaurante_id": p.restaurante_id
+            "restaurante_id": p.restaurante_id,
+            "telefono": p.telefono,
+            "direccion": p.direccion
         })
 
     return jsonify(resultados), 200
@@ -709,6 +711,8 @@ def crear_proveedor():
     nombre = data.get("nombre")
     categoria = data.get("categoria")
     restaurante_id = data.get("restaurante_id")
+    telefono = data.get("telefono")
+    direccion = data.get("direccion")
 
     if not nombre or not restaurante_id:
         return jsonify({"msg": "Faltan campos obligatorios"}), 400
@@ -717,7 +721,9 @@ def crear_proveedor():
         nuevo_proveedor = Proveedor(
             nombre=nombre,
             categoria=categoria,
-            restaurante_id=restaurante_id
+            restaurante_id=restaurante_id,
+            telefono=telefono,
+            direccion=direccion,
         )
         db.session.add(nuevo_proveedor)
         db.session.commit()
@@ -739,7 +745,9 @@ def obtener_proveedor(id):
         "id": proveedor.id,
         "nombre": proveedor.nombre,
         "categoria": proveedor.categoria,
-        "restaurante_id": proveedor.restaurante_id
+        "restaurante_id": proveedor.restaurante_id,
+        "telefono": proveedor.telefono,
+        "direccion": proveedor.direccion
     }
 
     return jsonify(resultado), 200
@@ -761,6 +769,8 @@ def editar_proveedor(id):
     proveedor.categoria = data.get("categoria", proveedor.categoria)
     proveedor.restaurante_id = data.get(
         "restaurante_id", proveedor.restaurante_id)
+    proveedor.telefono = data.get("telefono", proveedor.telefono)
+    proveedor.direccion = data.get("direccion", proveedor.direccion)
 
     try:
         db.session.commit()
@@ -1517,7 +1527,8 @@ def gastos_por_dia_admin():
             extract("month", Gasto.fecha) == mes,
             extract("year", Gasto.fecha) == anio
         ).scalar() or 0
-        restaurantes_activos = db.session.query(Restaurante.id).filter(Restaurante.activo == True).count()
+        restaurantes_activos = db.session.query(
+            Restaurante.id).filter(Restaurante.activo == True).count()
         proveedor_mas_usado = db.session.query(
             Proveedor.nombre, func.count(Gasto.id).label("cantidad")
         ).join(Gasto).filter(
@@ -1540,6 +1551,7 @@ def gastos_por_dia_admin():
         }), 200
     except Exception as e:
         return jsonify({"msg": "Error interno", "error": str(e)}), 500
+
 
 # NUEVOS ENDPOINTS gASTOS
 

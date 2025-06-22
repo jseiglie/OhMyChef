@@ -4,7 +4,7 @@ import { ProveedoresCardRestaurante } from '../../components/ProveedoresCardRest
 import '../../styles/ProveedoresDashboard.css';
 
 export const ProveedoresDashboard = () => {
-     useEffect(() => {
+    useEffect(() => {
         const el = document.getElementsByClassName("custom-sidebar")[0];
         if (el) el.scrollTo(0, 0);
     }, []);
@@ -16,6 +16,21 @@ export const ProveedoresDashboard = () => {
         { id: '3', name: 'RESTAURANTE # 3', city: 'Valencia', zone: 'zona 2', percentage: 27, status: 'Activo' },
         { id: '4', name: 'RESTAURANTE # 4', city: 'Valencia', zone: 'zona 3', percentage: 27, status: 'Activo' },
     ];
+
+
+    const cargar = async () => {
+        debugger
+        setLoading(true);
+        try {
+            const list = await proveedorServices.getProveedores(restaurante_id);
+            setProveedores(list);
+        } catch {
+            setMensajeError("Error al cargar proveedores");
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     const handleViewAll = (restauranteId) => {
         navigate(`/admin/proveedores/restaurante/${restauranteId}`);

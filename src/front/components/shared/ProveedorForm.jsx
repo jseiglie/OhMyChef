@@ -20,6 +20,7 @@ export const ProveedorForm = ({ proveedor = null, onSuccess, onCancel }) => {
 
   useEffect(() => {
     if (proveedor) {
+      console.log("🧾 Proveedor recibido:", proveedor);
       setForm({
         nombre: proveedor.nombre || "",
         categoria: proveedor.categoria || "",
@@ -35,7 +36,9 @@ export const ProveedorForm = ({ proveedor = null, onSuccess, onCancel }) => {
   };
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
+
     setLoading(true);
     setError("");
     setSuccessMsg("");
@@ -45,6 +48,7 @@ export const ProveedorForm = ({ proveedor = null, onSuccess, onCancel }) => {
       if (proveedor) {
         await proveedorServices.editarProveedor(proveedor.id, payload);
       } else {
+        debugger
         await proveedorServices.crearProveedor(payload);
       }
 
