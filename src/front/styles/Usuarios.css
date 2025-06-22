@@ -369,5 +369,23 @@ body {
     justify-content: flex-end;
     display: flex;
   }
+  .error-message {
+  color: red;
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
   
+}
+.users-table thead tr {
+  background-color: #2f647a;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Aplica negrita al nombre del restaurante en la tabla */
+.users-table tbody td:first-child {
+  font-weight: 600;
+  color: var(--text-dark);
 }

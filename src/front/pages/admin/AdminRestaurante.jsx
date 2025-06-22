@@ -1,12 +1,171 @@
-import React from "react";
-import AdminRestauranteComponent from "../../components/AdminRestaurantesComponent/AdminRestauranteComponent"
+import React, { useState, useEffect } from "react";
+import restauranteService from "../../services/restauranteServices";
+import RestauranteModal from "../../components/RestauranteModal";
+import PasswordModal from "../../components/usuarios/PasswordModal";
+import { FiEdit2, FiTrash2, FiPlus } from "react-icons/fi";
+import "../../styles/UserModal.css";
+import "../../styles/Usuarios.css";
+
 const AdminRestaurante = () => {
+  const [restaurantes, setRestaurantes] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [currentRestaurante, setCurrentRestaurante] = useState(null);
+  const [message, setMessage] = useState("");
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [restauranteToDelete, setRestauranteToDelete] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
 
-    return (
+  const token = sessionStorage.getItem("token");
 
-        <AdminRestauranteComponent />
+  const loadData = async () => {
+    try {
+      const data = await restauranteService.getRestaurantes(token);
+      setRestaurantes(data);
+    } catch (err) {
+      console.error("Error al cargar restaurantes", err);
+    }
+  };
 
-    );
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const filteredRestaurantes = restaurantes.filter((r) =>
+    r.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleSave = async (data) => {
+    try {
+      if (currentRestaurante) {
+        await restauranteService.updateRestaurante(currentRestaurante.id, data, token);
+        setMessage("✅ Restaurante actualizado correctamente.");
+      } else {
+        await restauranteService.createRestaurante(data, token);
+        setMessage("✅ Restaurante creado correctamente.");
+      }
+      setModalOpen(false);
+      setCurrentRestaurante(null);
+      loadData();
+      setTimeout(() => setMessage(""), 4000);
+    } catch (err) {
+      console.error("Error al guardar restaurante", err);
+    }
+  };
+
+  const handleEdit = (restaurante) => {
+    setCurrentRestaurante(restaurante);
+    setModalOpen(true);
+  };
+
+  const handleRequestDelete = (restaurante) => {
+    setRestauranteToDelete(restaurante);
+    setShowPasswordModal(true);
+    setErrorMessage("");
+  };
+
+  const handleConfirmDelete = async (password) => {
+    try {
+      await restauranteService.eliminarRestaurante(restauranteToDelete.id, password, token);
+      setShowPasswordModal(false);
+      setRestauranteToDelete(null);
+      setMessage("🗑 Restaurante eliminado correctamente.");
+      loadData();
+      setTimeout(() => setMessage(""), 4000);
+    } catch (err) {
+      console.error("Error al eliminar restaurante", err);
+      setErrorMessage(err.message || "❌ No se pudo eliminar el restaurante.");
+    }
+  };
+
+  return (
+    <div className="dashboard-container users-container">
+      <div className="users-header">
+        <div className="header-text">
+          <h1>Restaurantes</h1>
+          <p>Gestiona los restaurantes registrados</p>
+        </div>
+        <button className="btn btn-success" onClick={() => {
+          setModalOpen(true);
+          setCurrentRestaurante(null);
+        }}>
+          <FiPlus className="me-2" /> Añadir Restaurante
+        </button>
+      </div>
+
+      {message && (
+        <div className="alert alert-success text-center" role="alert">
+          {message}
+        </div>
+      )}
+
+      <div className="users-filters">
+        <input
+          type="text"
+          placeholder="Buscar por nombre..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="filter-search-input"
+        />
+      </div>
+
+      <table className="users-table mt-3">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Dirección</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredRestaurantes.length === 0 ? (
+            <tr>
+              <td colSpan="5" className="text-center">No hay restaurantes encontrados.</td>
+            </tr>
+          ) : (
+            filteredRestaurantes.map((r) => (
+              <tr key={r.id}>
+                <td>{r.nombre}</td>
+                <td>{r.direccion || "-"}</td>
+                <td>{r.telefono || "-"}</td>
+                <td>{r.email_contacto || "-"}</td>
+                <td className="actions-cell">
+                  <button className="action-icon-button edit-button" onClick={() => handleEdit(r)} title="Editar">
+                    <FiEdit2 size={18} />
+                  </button>
+                  <button className="action-icon-button delete-button" onClick={() => handleRequestDelete(r)} title="Eliminar">
+                    <FiTrash2 size={18} />
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+
+      {modalOpen && (
+        <RestauranteModal
+          restaurante={currentRestaurante}
+          onSave={handleSave}
+          onClose={() => setModalOpen(false)}
+        />
+      )}
+
+      {showPasswordModal && restauranteToDelete && (
+        <PasswordModal
+          isOpen={showPasswordModal}
+          onClose={() => {
+            setShowPasswordModal(false);
+            setRestauranteToDelete(null);
+          }}
+          onConfirm={handleConfirmDelete}
+          error={errorMessage}
+        />
+      )}
+    </div>
+  );
 };
 
 export default AdminRestaurante;
