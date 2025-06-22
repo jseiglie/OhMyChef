@@ -9,12 +9,10 @@ proveedorServices.getProveedores = async (restaurante_id) => {
   });
   if (!resp.ok) throw new Error("Error al obtener proveedores");
   const data = await resp.json();
-  debugger;
   return data.filter((p) => p.restaurante_id === restaurante_id);
 };
 
 proveedorServices.crearProveedor = async (formData) => {
-  debugger;
   const token = sessionStorage.getItem("token");
   const resp = await fetch(`${backendUrl}/api/proveedores`, {
     method: "POST",
@@ -29,7 +27,6 @@ proveedorServices.crearProveedor = async (formData) => {
 };
 
 proveedorServices.getProveedor = async (id) => {
-  debugger;
   const token = sessionStorage.getItem("token");
   const resp = await fetch(`${backendUrl}/api/proveedores/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
