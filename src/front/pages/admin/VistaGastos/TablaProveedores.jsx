@@ -1,62 +1,55 @@
 import React, { useEffect, useState } from "react";
-import { Card, Table, Form, Button, Spinner } from "react-bootstrap";
-import DataLoaderWrapper from "./DataLoaderWrapper";
-
+import { Card, Table, Spinner } from "react-bootstrap";
+import adminService from "../../../services/adminService";
 const TablaProveedores = () => {
   const [proveedores, setProveedores] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [mes, setMes] = useState("6");
-  const [ano, setAno] = useState("2025");
-  const fetchProveedores = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/admin/proveedores-gastos?mes=${mes}&ano=${ano}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      if (!response.ok) throw new Error("Error al obtener datos de proveedores");
-      const data = await response.json();
-      setProveedores(data);
-    } catch (error) {
-      console.error("Error:", error.message);
-      setProveedores(null);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const mes = 6;
+  const ano = 2025;
   useEffect(() => {
-    const el = document.getElementsByClassName("custom-sidebar")[0];
-    if (el) el.scrollTo(0, 0);
-    fetchProveedores();
+    const fetchData = async () => {
+      try {
+        const data = await adminService.getProveedoresTop(mes, ano);
+        setProveedores(data);
+      } catch (err) {
+        console.error("Error al cargar proveedores", err);
+        setProveedores([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, []);
   return (
-    <DataLoaderWrapper loading={loading} data={proveedores} emptyMsg="No hay datos de proveedores este mes.">
-      <Card className="mb-4 shadow-sm">
-        <Card.Body>
-          <Card.Title className="h6">Tabla de proveedores</Card.Title>
-          <Table striped bordered hover size="sm">
+    <Card className="mb-4 shadow-sm">
+      <Card.Body>
+        <Card.Title className="h6">Top proveedores por gasto</Card.Title>
+        {loading ? (
+          <Spinner animation="border" size="sm" />
+        ) : proveedores.length === 0 ? (
+          <p className="text-muted">No hay datos para mostrar este mes.</p>
+        ) : (
+          <Table responsive hover size="sm">
             <thead>
               <tr>
                 <th>Proveedor</th>
+                <th>Veces usado</th>
                 <th>Total gastado (€)</th>
-                <th>Nº restaurantes</th>
               </tr>
             </thead>
             <tbody>
               {proveedores.map((prov, index) => (
                 <tr key={index}>
                   <td>{prov.nombre}</td>
-                  <td>{prov.total.toLocaleString()}</td>
-                  <td>{prov.restaurantes}</td>
+                  <td>{prov.veces_usado}</td>
+                  <td>{parseFloat(prov.total_gastado).toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>
           </Table>
-        </Card.Body>
-      </Card>
-    </DataLoaderWrapper>
+        )}
+      </Card.Body>
+    </Card>
   );
 };
 export default TablaProveedores;

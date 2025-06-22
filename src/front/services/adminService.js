@@ -19,17 +19,14 @@ const adminService = {
   },
   getResumenAdminGastos: async (mes, ano) => {
     try {
-      const response = await fetch(
-        `${backendUrl}/api/admin/gastos/resumen?mes=${mes}&ano=${ano}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token()}`,
-          },
-        }
-      );
-      if (!response.ok) throw new Error("Error al obtener resumen");
+      const response = await fetch(`${backendUrl}/api/resumen-gastos?mes=${mes}&ano=${ano}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + sessionStorage.getItem("token"),
+        },
+      });
+      if (!response.ok) throw new Error("Error al obtener el resumen admin");
       return await response.json();
     } catch (error) {
       console.error("Error en getResumenAdminGastos:", error);
@@ -56,19 +53,22 @@ const adminService = {
     if (!res.ok) throw new Error("Error al cargar ventas diarias");
     return await res.json();
   },
-  getGastoPorRestaurante: async (mes, ano) => {
-    const res = await fetch(
-      `${backendUrl}/api/admin/gasto-restaurantes?mes=${mes}&ano=${ano}`,
-      {
+  getGastoPorRestauranteChart: async (mes, ano) => {
+    try {
+      const response = await fetch(`${backendUrl}/api/gasto-por-restaurante?mes=${mes}&ano=${ano}`, {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token()}`,
-        },
-      }
-    );
-    if (!res.ok) throw new Error("Error al obtener gasto por restaurante");
-    return await res.json();
+          Authorization: `Bearer ${token()}` }
+      });
+      if (!response.ok) throw new Error("Error al obtener el gasto por restaurante");
+      return await response.json();
+    } catch (error) {
+      console.error("Error en getGastoPorRestauranteChart:", error);
+      return [];
+    }
   },
+
   getGastoDiario: async (restaurante_id, mes, ano) => {
     const res = await fetch(
       `${backendUrl}/api/admin/gastos/resumen-diario?restaurante_id=${restaurante_id}&mes=${mes}&ano=${ano}`,
@@ -117,6 +117,36 @@ const adminService = {
     );
     if (!res.ok) throw new Error("Error al obtener ventas");
     return await res.json();
+  },
+  getEvolucionGastoMensual: async (ano) => {
+    try {
+      const response = await fetch(`${backendUrl}/api/gasto-evolucion-mensual?ano=${ano}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token()}` }
+      });
+      if (!response.ok) throw new Error("Error al obtener evolución gasto mensual");
+      return await response.json();
+    } catch (error) {
+      console.error("Error en getEvolucionGastoMensual:", error);
+      return [];
+    }
+  },
+  getProveedoresTop: async (mes, ano) => {
+    try {
+      const response = await fetch(`${backendUrl}/api/proveedores-top?mes=${mes}&ano=${ano}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token()}` }
+      });
+      if (!response.ok) throw new Error("Error al obtener proveedores top");
+      return await response.json();
+    } catch (error) {
+      console.error("Error en getProveedoresTop:", error);
+      return [];
+    }
   },
 };
 
