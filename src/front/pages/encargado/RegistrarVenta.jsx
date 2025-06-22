@@ -49,7 +49,7 @@ export const RegistrarVenta = () => {
     <div className="dashboard-container ps-2 py-3 pt-4">
       <button onClick={() => navigate('/encargado/ventas')} className="back-button">← Volver a ventas</button>
       <h1 className="dashboard-title">Registrar Venta</h1>
-      <h5 className="dashboard-welcome text-muted mt-2 mb-4">Mes actual: {nombreMes.toUpperCase()}</h5>
+      <h5 className="dashboard-welcome text-white mt-2 mb-4">Mes actual: {nombreMes.toUpperCase()}</h5>
 
       <form onSubmit={handleSubmit} className="proveedor-card col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6 col-xxl-6 ">
         {/* Fecha */}
