@@ -29,7 +29,7 @@ const VentasPorRestauranteChart = () => {
   if (loading) return <p>Cargando gráfico...</p>;
   if (error || !dataChart) return <p>No hay datos para mostrar este mes.</p>;
   const backgroundColors = dataChart.map((_, i) =>
-    i === 0 ? "rgba(32, 201, 151, 0.8)" : "rgba(200, 200, 200, 0.8)"
+    i === 0 ? "#ff5d1d" : "rgba(200, 200, 200, 0.8)"
   );
   const chartData = {
     labels: dataChart.map((item) => item.restaurante),

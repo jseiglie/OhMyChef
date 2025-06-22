@@ -75,6 +75,7 @@ const AdminRestaurantDetail = () => {
 
         {/* Ventas */}
         <div className="card shadow-sm border rounded p-4 mb-4">
+          <h5 className="mb-3 fw-bold">VENTAS</h5>
           <div className="row align-items-center">
             <div className="col-md-3 d-flex flex-column gap-4 align-items-center">
               <ResumenCard icon="💰" color="warning" label="Ventas actuales" value={totalVentas} simbolo={simbolo} />
@@ -124,7 +125,7 @@ const AdminRestaurantDetail = () => {
         </div>
 
         {/* Acciones rápidas */}
-        <div className="mt-5 text-center">
+        <div className="card mt-4 shadow-sm border rounded p-4">
           <h5 className="mb-4">⚡ Acciones Rápidas</h5>
           <div className="d-flex flex-wrap justify-content-center gap-4">
             {[
