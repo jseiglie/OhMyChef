@@ -28,7 +28,7 @@ const ListaRestaurantes = ({ restaurantes }) => {
 
   // funcion editar
   const handlerditar = (restauranteSeleccionado) => {
-    debugger
+
     navigate(`/${store.user.rol}/restaurantes/restaurant`, {
       state: { restaurante: restauranteSeleccionado, editar: "ediccion" }
     });

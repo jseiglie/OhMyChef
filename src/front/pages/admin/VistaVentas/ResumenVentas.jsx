@@ -36,7 +36,7 @@ const ResumenVentas = () => {
   return (
     <Row className="mb-4">
       {resumen.map((item, i) => (
-        <Col key={i} xs={12} sm={6} md={3} className="mb-3">
+        <Col key={i} xs={12} sm={6} md={3} className="mb-3 col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 col-12">
           <Card className="h-100 shadow-sm">
             <Card.Body>
               <Card.Title className="fs-6 text-muted">{item.titulo}</Card.Title>

@@ -68,7 +68,7 @@ const AdminRestaurantDetail = () => {
   return (
     <>
 
-      <div className="dashboard-container ps-2 py-3 pt-4">
+      <div className="dashboard-container ">
         <button onClick={() => navigate('/admin/dashboard')} className="back-button">← Volver a dashboard</button>
         <h1 className="dashboard-title"> {restaurante?.nombre ? ` ${restaurante.nombre}` : `Restaurante #${id}`}</h1>
         <p className="dashboard-welcome mb-4">Detalle del negocio</p>

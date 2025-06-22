@@ -6,24 +6,22 @@ import TablaProveedores from "./VistaGastos/TablaProveedores";
 import FiltrosGasto from "./VistaGastos/FiltrosGasto";
 const AdminGastos = () => {
   return (
-    <div className="container mt-4">
+    <div className="dashboard-container">
       {/* Encabezado */}
-      <div className="mb-4">
-        <h2 className="fw-bold">Resumen de gastos globales</h2>
-        <p className="text-muted">
-          Comparativa mensual por restaurante y proveedor
-        </p>
-      </div>
+      <h2 className="fw-bold">Resumen de gastos globales</h2>
+      <p className="text-muted">
+        Comparativa mensual por restaurante y proveedor
+      </p>
       {/* KPIs principales */}
       <ResumenGastos />
       {/* Gráficos: barras y línea */}
       <div className="row mt-4">
-        <div className="col-md-6 mb-4">
+        <div className="col-12 col-sm-12 col-md-12 col-md-12 col-lg-6 mb-md-4">
           <div className="card p-3 h-100">
             <GastoPorRestauranteChart />
           </div>
         </div>
-        <div className="col-md-6 mb-4">
+        <div className="col-12 col-sm-12 col-md-12 col-md-12 col-lg-6 mb-md-4">
           <div className="card p-3 h-100">
             <EvolucionGastoMensual />
           </div>

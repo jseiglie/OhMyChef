@@ -30,12 +30,12 @@ export const EncargadoVentas = () => {
     "diciembre"
   ];
 
-  debugger
+
   const fechaactual = new Date();
   const mesactual = fechaactual.getMonth() + 1;
 
   const getFecha = (thefecha) => {
-    debugger
+
     const fecha = new Date(thefecha);
     const mes = fecha.getMonth() + 1; // +1 porque getMonth() da 0 para enero
     return mes
@@ -44,7 +44,7 @@ export const EncargadoVentas = () => {
 
   const cargarVentas = async () => {
     try {
-      debugger
+
       const data = await ventaServices.getVentas();
 
       const ventasRestaurante = data.filter(
@@ -107,7 +107,7 @@ export const EncargadoVentas = () => {
   };
 
   return (
-    <div className="dashboard-container ps-2 py-3 pt-4">
+    <div className="dashboard-container">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h1 className="dashboard-title">Ventas del restaurante</h1>
         <Link to="/encargado/registrar-venta" className="btn btn-success">

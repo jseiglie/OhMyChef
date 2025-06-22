@@ -92,7 +92,7 @@ export const AdminVentasDetalle = () => {
   };
 
   return (
-    <div className="dashboard-container ps-2 py-3 pt-4">
+    <div className="dashboard-container ">
       <div className="mb-2">
         <button className="btn btn-outline-secondary btn-sm" onClick={() => navigate("/admin/dashboard")}>
           ← Volver
@@ -133,7 +133,7 @@ export const AdminVentasDetalle = () => {
               <div className="fs-5 text-info">Total: €{total.toFixed(2)}</div>
             </div>
           </div>
-          
+
 
           <div className="table-responsive">
             <table className="table table-striped users-table mt-3 ps-0">

@@ -21,7 +21,7 @@ export const ResumenGastoCard = () => {
   }, []);
 
   return (
-    <div className="dashboard-container ps-2 py-3 pt-4">
+    <div className="dashboard-container ">
       <h4>Resumen actual del restaurante</h4>
       <div className="row mt-3 w-90 justify-content-start d-flex">
         <div className="p-3 ms-1 me-3 col-11 col-sm-11 col-lg-5 border rounded bg-white shadow-sm order-1">

@@ -46,7 +46,7 @@ export const RegistrarVenta = () => {
   };
 
   return (
-    <div className="dashboard-container ps-2 py-3 pt-4">
+    <div className="dashboard-container ">
       <button onClick={() => navigate('/encargado/ventas')} className="back-button">← Volver a ventas</button>
       <h1 className="dashboard-title">Registrar Venta</h1>
       <h5 className="dashboard-welcome text-white mt-2 mb-4">Mes actual: {nombreMes.toUpperCase()}</h5>
