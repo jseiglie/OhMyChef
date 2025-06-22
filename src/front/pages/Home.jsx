@@ -17,7 +17,7 @@ export const Home = () => {
             <p className="fw-semibold text-dark">Inicia sesión para llevar un control de tu inversión culinaria.</p>
           </div>
 
-          <div className="d-flex justify-content-center col-lg-5 col-md-8 col-11 mx-auto login-overlay">
+          <div className="d-flex justify-content-center col-12 col-sm-12 col-md-9 col-lg-6 col-xl-5 col-xxl-4 mx-auto login-overlay ">
             <Login />
           </div>
         </div>

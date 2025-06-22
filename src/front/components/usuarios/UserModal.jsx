@@ -50,7 +50,7 @@ const UserModal = ({ user, onSave, onClose, restaurants }) => {
     <div className="modaal-backdrop">
       <div className="modaal">
         <h2 className="titulo">{user ? "Editar Usuario" : "Crear Usuario"}</h2>
-        <form onSubmit={handleSubmit} className="modaal-form">
+        <form onSubmit={handleSubmit} className="modaal-form px-0">
           <input
             type="text"
             name="nombre"

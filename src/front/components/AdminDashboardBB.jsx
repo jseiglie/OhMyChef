@@ -66,7 +66,7 @@ const AdminDashboardBB = () => {
             const gastoDia = gastoDiario[r.restaurante_id] || [];
 
             return (
-              <div key={r.restaurante_id} className={`restaurant-card me-4 mb-4 ${isTop1(index) ? 'top-one-card' : ''}`} >
+              <div key={r.restaurante_id} className={`restaurant-card flex-grow-1 col-12 col-sm-6 col-md-6 col-lg-6 col-xl-2 mb-4 me-2 ${isTop1(index) ? 'top-one-card' : ''}`} >
                 <h4 className="mb-2 text-center fw-bold">{isTop1(index) ? '🌟 ' : ''}{r.nombre}</h4>
 
                 <div className="d-flex justify-content-between gap-2 mb-3">
@@ -76,7 +76,7 @@ const AdminDashboardBB = () => {
                         💰
                       </div>
                       <p className="fw-bold text-warning mb-0 small">Ventas</p>
-                      <p className="fw-bold text-dark mb-0" style={{ fontSize: '0.75rem' }}>{r.venta_total.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' ' + simbolo}</p>
+                      <p className="fw-bold text-dark mb-0 fs-6" style={{ fontSize: '0.75rem' }}>{r.venta_total.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' ' + simbolo}</p>
                     </div>
                   </div>
 
@@ -85,8 +85,8 @@ const AdminDashboardBB = () => {
                       <div className="icono-circular bg-white rounded-circle mb-1 d-inline-flex align-items-center justify-content-center" style={{ width: '24px', height: '24px' }}>
                         {icono}
                       </div>
-                      <p className={`fw-bold ${textClass} mb-0 small`}>% Gasto</p>
-                      <p className={`fw-bold ${textClass} mb-0`} style={{ fontSize: '0.75rem' }}>{r.venta_total > 0 ? r.porcentaje_gasto + '%' : '0%'}</p>
+                      <p className={`fw-bold fs-6 ${textClass} mb-0 small`}>% Gasto</p>
+                      <p className={`fw-bold fs-6 ${textClass} mb-0`} style={{ fontSize: '0.75rem' }}>{r.venta_total > 0 ? r.porcentaje_gasto + '%' : '0%'}</p>
                     </div>
                   </div>
                 </div>
