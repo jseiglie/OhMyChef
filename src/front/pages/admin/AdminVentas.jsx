@@ -33,7 +33,7 @@ const AdminVentas = () => {
       <div className="row">
         <div className="col-md-12 mb-4">
           <div className="card p-3 h-100">
-            <h5 className="mb-3">Top restaurantes por ventas</h5>
+            <h1 className="mb-3">Top restaurantes por ventas</h1>
             <TablaTopRestaurantes />
           </div>
         </div>

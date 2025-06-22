@@ -69,7 +69,7 @@ const VentasPorRestauranteChart = () => {
   };
   return (
     <div className="mt-4 p-3 bg-white rounded shadow-sm" style={{ height: "350px" }}>
-      <h6 className="fw-bold mb-3">Ventas por restaurante (junio {ano})</h6>
+      <h1 className="fw-bold mb-3">Ventas por restaurante (junio {ano})</h1>
       <div style={{ height: "260px" }}>
         <Bar data={chartData} options={options} />
       </div>
