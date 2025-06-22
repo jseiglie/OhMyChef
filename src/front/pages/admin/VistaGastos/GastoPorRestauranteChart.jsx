@@ -34,17 +34,24 @@ const GastoPorRestauranteChart = () => {
   }, []);
   if (loading) return <p>Cargando gráfico...</p>;
   if (error || !dataChart) return <p>No hay datos para mostrar este mes.</p>;
+  // Colores: destacamos solo el primero, resto gris
+  const backgroundColors = dataChart.map((_, i) =>
+    i === 0 ? "rgba(255, 99, 32, 0.8)" : "rgba(200, 200, 200, 0.8)"
+  );
   const chartData = {
     labels: dataChart.map((item) => item.restaurante),
     datasets: [
       {
         label: "Gasto (€)",
         data: dataChart.map((item) => item.total_gastado),
-        backgroundColor: "rgba(54, 162, 235, 0.6)",
+        backgroundColor: backgroundColors,
+        borderRadius: 6,
+        barThickness: 24,
       },
     ],
   };
   const options = {
+    indexAxis: "y", // Horizontal
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -52,15 +59,27 @@ const GastoPorRestauranteChart = () => {
       tooltip: { enabled: true },
     },
     scales: {
-      y: {
+      x: {
         beginAtZero: true,
-        ticks: { stepSize: 100 },
+        ticks: {
+          callback: (value) => `€${value}`,
+        },
+      },
+      y: {
+        ticks: {
+          font: {
+            weight: "bold",
+          },
+        },
       },
     },
   };
   return (
-    <div style={{ height: "300px", width: "100%" }}>
-      <Bar data={chartData} options={options} />
+    <div className="mt-4 p-3 bg-white rounded shadow-sm" style={{ height: "350px" }}>
+      <h6 className="fw-bold mb-3">Gasto por restaurante (junio {ano})</h6>
+      <div style={{ height: "260px" }}>
+        <Bar data={chartData} options={options} />
+      </div>
     </div>
   );
 };
