@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 import proveedorServices from "../../services/proveedorServices";
+import "../../styles/ProveedorForm.css";
 
 export const ProveedorForm = ({ proveedor = null, onSuccess, onCancel }) => {
   const { store } = useGlobalReducer();
