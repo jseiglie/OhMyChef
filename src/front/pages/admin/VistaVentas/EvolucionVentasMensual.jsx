@@ -1,27 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  LineElement,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend} from "chart.js";
 import adminService from "../../../services/adminService";
+
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend);
-const EvolucionGastoMensual = () => {
+const EvolucionVentaMensual = () => {
   const [datos, setDatos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [anoActual] = useState(new Date().getFullYear());
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const resultado = await adminService.getEvolucionGastoMensual(anoActual);
+        const resultado = await adminService.getEvolucionVentaMensual(anoActual);
         setDatos(resultado);
       } catch (error) {
-        console.error("Error al obtener evolución mensual:", error);
+        console.error("Error al obtener evolución mensual de ventas:", error);
       } finally {
         setLoading(false);
       }
@@ -33,13 +26,13 @@ const EvolucionGastoMensual = () => {
     labels: datos.map(d => meses[d.mes - 1]),
     datasets: [
       {
-        label: "Gasto total (€)",
-        data: datos.map(d => d.total_gastado),
-        borderColor: "#FF6600",
-        backgroundColor: "rgba(255, 102, 0, 0.2)",
+        label: "Ventas totales (€)",
+        data: datos.map(d => d.total_vendido),
+        borderColor: "#007bff",
+        backgroundColor: "rgba(0, 123, 255, 0.2)",
         tension: 0.3,
         fill: true,
-        pointBackgroundColor: "#FF6600",
+        pointBackgroundColor: "#007bff",
         pointRadius: 4,
       },
     ],
@@ -61,31 +54,15 @@ const EvolucionGastoMensual = () => {
       },
     },
   };
-  if (loading) return <p>Cargando evolución mensual...</p>;
-  if (!datos.length || datos.every(d => d.total_gastado === 0)) return <p>No hay datos para mostrar este año.</p>;
+  if (loading) return <p>Cargando evolución mensual de ventas...</p>;
+  if (!datos.length || datos.every(d => d.total_vendido === 0)) return <p>No hay datos para mostrar este año.</p>;
   return (
     <div className="p-3 bg-white rounded shadow-sm" style={{ height: "320px" }}>
-      <h6 className="mb-3 fw-bold">Evolución de gasto mensual (últimos 6 meses)</h6>
+      <h6 className="mb-3 fw-bold">Evolución de ventas mensual (últimos 6 meses)</h6>
       <div style={{ height: "260px" }}>
         <Line data={data} options={options} />
       </div>
     </div>
   );
 };
-export default EvolucionGastoMensual;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export default EvolucionVentaMensual;

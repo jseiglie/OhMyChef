@@ -148,6 +148,67 @@ const adminService = {
       return [];
     }
   },
+  getResumenAdminVentas: async (mes, ano) => {
+    try {
+      const response = await fetch(`${backendUrl}/api/resumen-ventas?mes=${mes}&ano=${ano}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+         Authorization: `Bearer ${token()}` }
+      });
+      if (!response.ok) throw new Error("Error al obtener el resumen de ventas");
+      return await response.json();
+    } catch (error) {
+      console.error("Error en getResumenAdminVentas:", error);
+      return null;
+    }
+  },
+  getEvolucionVentaMensual: async (ano) => {
+    try {
+      const response = await fetch(`${backendUrl}/api/venta-evolucion-mensual?ano=${ano}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token()}` }
+      });
+      if (!response.ok) throw new Error("Error al obtener evolución venta mensual");
+      return await response.json();
+    } catch (error) {
+      console.error("Error en getEvolucionVentaMensual:", error);
+      return [];
+    }
+  },
+  getVentasPorRestauranteChart: async (mes, ano) => {
+    try {
+      const response = await fetch(`${backendUrl}/api/ventas-por-restaurante?mes=${mes}&ano=${ano}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token()}` }
+      });
+      if (!response.ok) throw new Error("Error al obtener ventas por restaurante");
+      return await response.json();
+    } catch (error) {
+      console.error("Error en getVentasPorRestauranteChart:", error);
+      return [];
+    }
+  },
+  getRestaurantesTop: async (mes, ano) => {
+    try {
+      const response = await fetch(`${backendUrl}/api/restaurantes-top?mes=${mes}&ano=${ano}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token()}` }
+      });
+      if (!response.ok) throw new Error("Error al obtener restaurantes top");
+      return await response.json();
+    } catch (error) {
+      console.error("Error en getRestaurantesTop:", error);
+      return [];
+    }
+  },
+  
 };
 
 export default adminService;

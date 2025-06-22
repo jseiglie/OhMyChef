@@ -10,8 +10,8 @@ import { RutaPrivada } from "./components/RutaPrivada.jsx";
 import { AdminDashboard } from "./pages/admin/AdminDashboard";
 
 import { CrearRestaurante } from "./pages/admin/CrearRestaurante";
-import { AdminVentas } from "./pages/admin/AdminVentas";
-import { AdminGastos } from "./pages/admin/AdminGastos";
+import  AdminVentas  from "./pages/admin/AdminVentas";
+import  AdminGastos  from "./pages/admin/AdminGastos";
 import { UsuariosDashboard } from "./pages/admin/UsuariosDashboard";
 import { CrearUsuario } from "./pages/admin/CrearUsuario";
 import { ConfigAdmin } from "./pages/configuracion/ConfigAdmin.jsx";
@@ -20,6 +20,7 @@ import { ProveedorRestauranteDetail } from "./pages/admin/ProveedorRestauranteDe
 import AdminRestaurantDetail from "./pages/admin/AdminRestaurantDetail";
 import {AdminVentasDetalle} from "./pages/admin/AdminVentasDetalle";
 import AdminGastosDetalle from "./pages/admin/AdminGastosDetalle";
+
 
 import { EncargadoDashboard } from "./pages/encargado/EncargadoDashboard";
 import { RegistrarVenta } from "./pages/encargado/RegistrarVenta";

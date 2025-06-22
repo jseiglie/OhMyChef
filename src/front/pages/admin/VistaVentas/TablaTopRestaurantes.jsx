@@ -1,33 +1,34 @@
 import React, { useEffect, useState } from "react";
 import adminService from "../../../services/adminService";
-const TablaProveedores = () => {
+
+const TablaTopRestaurantes = () => {
   const fechaActual = new Date();
   const [mes, setMes] = useState(fechaActual.getMonth() + 1);
   const [ano, setAno] = useState(fechaActual.getFullYear());
-  const [proveedores, setProveedores] = useState([]);
+  const [restaurantes, setRestaurantes] = useState([]);
   const [loading, setLoading] = useState(true);
   const mesesNombre = [
     "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
     "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
   ];
-  const fetchProveedores = async () => {
+  const fetchRestaurantes = async () => {
     setLoading(true);
     try {
-      const data = await adminService.getProveedoresTop(mes, ano);
-      setProveedores(data);
+      const data = await adminService.getRestaurantesTop(mes, ano);
+      setRestaurantes(data);
     } catch (error) {
-      console.error("Error al obtener proveedores:", error);
+      console.error("Error al obtener restaurantes:", error);
     } finally {
       setLoading(false);
     }
   };
   useEffect(() => {
-    fetchProveedores();
+    fetchRestaurantes();
   }, [mes, ano]);
   return (
     <div className="p-3 bg-white rounded shadow-sm mt-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h6 className="fw-bold mb-0">Top proveedores por gasto total</h6>
+        <h6 className="fw-bold mb-0">Top restaurantes por ventas</h6>
         <div className="d-flex gap-2">
           <select className="form-select form-select-sm" value={mes} onChange={e => setMes(parseInt(e.target.value))}>
             {mesesNombre.map((nombre, i) => (
@@ -42,25 +43,25 @@ const TablaProveedores = () => {
         </div>
       </div>
       {loading ? (
-        <p>Cargando proveedores...</p>
-      ) : proveedores.length === 0 ? (
+        <p>Cargando restaurantes...</p>
+      ) : restaurantes.length === 0 ? (
         <p>No hay datos disponibles para este periodo.</p>
       ) : (
         <div className="table-responsive">
           <table className="table table-sm table-hover align-middle mb-0">
             <thead className="table-light">
               <tr>
-                <th>Nombre proveedor</th>
-                <th>Total gastado</th>
-                <th>Nº restaurantes</th>
+                <th>Nombre restaurante</th>
+                <th>Total vendido</th>
+                <th>Nº de ventas</th>
               </tr>
             </thead>
             <tbody>
-              {proveedores.map((p, i) => (
+              {restaurantes.map((r, i) => (
                 <tr key={i}>
-                  <td>{p.nombre}</td>
-                  <td>€{p.total_gastado.toLocaleString()}</td>
-                  <td>{p.num_restaurantes}</td>
+                  <td>{r.nombre}</td>
+                  <td>€{r.total_vendido.toLocaleString()}</td>
+                  <td>{r.num_ventas}</td>
                 </tr>
               ))}
             </tbody>
@@ -70,20 +71,4 @@ const TablaProveedores = () => {
     </div>
   );
 };
-export default TablaProveedores;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export default TablaTopRestaurantes;
