@@ -1821,3 +1821,15 @@ def get_restaurantes_top():
     except Exception as e:
         print("Error en get_restaurantes_top:", e)
         return jsonify({"msg": "Error al obtener restaurantes top", "error": str(e)}), 500
+    
+#aLERT BORRAR rESTAURANTE
+
+@api.route('/restaurantes/<int:id>/tiene-ventas', methods=['GET'])
+@jwt_required()
+def restaurante_tiene_ventas(id):
+    try:
+        ventas = Venta.query.filter_by(restaurante_id=id).first()
+        tiene_ventas = ventas is not None
+        return jsonify({"tieneVentas": tiene_ventas}), 200
+    except Exception as e:
+        return jsonify({"msg": "Error al verificar ventas del restaurante", "error": str(e)}), 500

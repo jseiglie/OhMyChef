@@ -86,6 +86,22 @@ const restauranteService = {
 
   return response.status !== 204 ? await response.json() : null;
 },
+verificarVentas: async (id, token) => {
+  try {
+    const response = await fetch(`${backendUrl}/api/restaurantes/${id}/tiene-ventas`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+         Authorization: `Bearer ${token}`,
+    },
+    });
+    if (!response.ok) throw new Error("Error al verificar ventas");
+    return await response.json();
+  } catch (error) {
+    console.error("Error en verificarVentas:", error);
+    throw error;
+  }
+},
 };
 
 export default restauranteService;
