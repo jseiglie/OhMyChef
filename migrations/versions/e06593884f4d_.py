@@ -1,14 +1,8 @@
 """empty message
 
-<<<<<<<< HEAD:migrations/versions/37229ab0445e_.py
-Revision ID: 37229ab0445e
+Revision ID: e06593884f4d
 Revises: 
-Create Date: 2025-06-21 13:10:33.695746
-========
-Revision ID: 431bc6838f84
-Revises: 
-Create Date: 2025-06-20 21:38:21.060174
->>>>>>>> origin/develop:migrations/versions/431bc6838f84_.py
+Create Date: 2025-06-21 16:03:30.801742
 
 """
 from alembic import op
@@ -16,11 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-<<<<<<<< HEAD:migrations/versions/37229ab0445e_.py
-revision = '37229ab0445e'
-========
-revision = '431bc6838f84'
->>>>>>>> origin/develop:migrations/versions/431bc6838f84_.py
+revision = 'e06593884f4d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -64,6 +54,7 @@ def upgrade():
     sa.Column('password', sa.String(length=250), nullable=False),
     sa.Column('rol', sa.Enum('admin', 'encargado', 'chef', name='roles'), nullable=False),
     sa.Column('restaurante_id', sa.Integer(), nullable=True),
+    sa.Column('status', sa.String(length=20), nullable=True),
     sa.Column('moneda', sa.String(length=10), nullable=True),
     sa.ForeignKeyConstraint(['restaurante_id'], ['restaurantes.id'], ),
     sa.PrimaryKeyConstraint('id'),

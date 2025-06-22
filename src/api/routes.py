@@ -996,44 +996,42 @@ def editar_restaurante(id):
 @api.route('/restaurantes/<int:id>', methods=['DELETE'])
 @jwt_required()
 def eliminar_restaurante(id):
-    restaurante = Restaurante.query.get(id)
-
-    if restaurante is None:
-        return jsonify({"msg": "Restaurante no encontrado"}), 404
-
     try:
+        current_user_id = get_jwt_identity()
+        current_user = db.session.get(Usuario, current_user_id)
+
+        if not current_user or current_user.rol != "admin":
+            return jsonify({"error": "Solo el admin puede eliminar restaurantes"}), 403
+
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "Datos no recibidos"}), 400
+
+        admin_password = data.get("adminPassword")
+        if not admin_password or not check_password_hash(current_user.password, admin_password):
+            return jsonify({"error": "Contraseña del administrador incorrecta"}), 401
+
+        restaurante = Restaurante.query.get(id)
+        if restaurante is None:
+            return jsonify({"error": "Restaurante no encontrado"}), 404
+
         db.session.delete(restaurante)
         db.session.commit()
         return jsonify({"msg": "Restaurante eliminado correctamente"}), 200
+
+    except IntegrityError as e:
+        db.session.rollback()
+        return jsonify({
+            "error": "Este restaurante no puede ser eliminado porque tiene datos asociados (usuarios, ventas, gastos, etc.)"
+        }), 409
+
     except Exception as e:
         db.session.rollback()
-        return jsonify({"msg": "Error al eliminar restaurante", "error": str(e)}), 500
+        return jsonify({
+            "error": "Error inesperado al eliminar el restaurante",
+            "detalle": str(e)
+        }), 500
 
-
-@api.route("/private", methods=["GET"])
-@jwt_required()
-def get_user_info():
-    try:
-        # 🔁 aquí parseamos el JSON
-        user_identity = json.loads(get_jwt_identity())
-        user_id = user_identity["id"]
-
-        usuario = db.session.get(Usuario, user_id)
-
-        if not usuario:
-            return jsonify({"error": "Usuario no encontrado"}), 404
-
-        data = usuario.serialize()
-
-        if usuario.restaurante_id:
-            restaurante = db.session.get(Restaurante, usuario.restaurante_id)
-            if restaurante:
-                data["restaurante_nombre"] = restaurante.nombre
-
-        return jsonify({"user": data}), 200
-
-    except Exception as e:
-        return jsonify({"error": "Algo salió mal"}), 500
 
 
 @api.route("/gastos/resumen-mensual", methods=["GET"])
