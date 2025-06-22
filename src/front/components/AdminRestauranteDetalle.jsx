@@ -29,7 +29,7 @@ const AdminRestauranteDetalle = () => {
   }, [id]);
 
   return (
-    <div className="dashboard-container ps-2 py-3 pt-4">
+    <div className="dashboard-container ">
       <h1 className="dashboard-title mb-4">Detalle Restaurante #{id}</h1>
 
       {resumen && (

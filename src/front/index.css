@@ -119,7 +119,6 @@ table thead tr th {
 
 .custom-sidebar > div {
   direction: ltr;
-  width: 99.8%;
 }
 .wrapper-content {
   height: 90vh !important;
@@ -139,7 +138,12 @@ span.w-auto {
 span.w-60 {
   width: auto !important;
 }
-
+.usuario {
+  padding: 5px 10px;
+  background: #f0f0f0;
+  border-radius: 10px;
+  border: 1px solid #ff5d1d;
+}
 @media (max-width: 2100px) {
   input.form-control.custom-gastos-fecha {
     width: 40%;

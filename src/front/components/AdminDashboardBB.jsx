@@ -58,7 +58,7 @@ const AdminDashboardBB = () => {
     <div className="dashboard-container">
       <h1 className="dashboard-welcome mb-4">Tu resumen actual.</h1>
 
-      <div className="card shadow-sm border rounded p-4 mb-4 d-flex flex-row justify-content-start">
+      <div className="card shadow-sm border rounded p-4 flex-wrap mb-4 d-flex flex-row justify-content-start">
         {[...resumenes]
           .sort((a, b) => b.venta_total - a.venta_total)
           .map((r, index) => {
@@ -66,7 +66,7 @@ const AdminDashboardBB = () => {
             const gastoDia = gastoDiario[r.restaurante_id] || [];
 
             return (
-              <div key={r.restaurante_id} className={`restaurant-card me-4 ${isTop1(index) ? 'top-one-card' : ''}`} >
+              <div key={r.restaurante_id} className={`restaurant-card me-4 mb-4 ${isTop1(index) ? 'top-one-card' : ''}`} >
                 <h4 className="mb-2 text-center fw-bold">{isTop1(index) ? '🌟 ' : ''}{r.nombre}</h4>
 
                 <div className="d-flex justify-content-between gap-2 mb-3">
