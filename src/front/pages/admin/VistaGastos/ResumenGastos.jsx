@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Card, Row, Col } from "react-bootstrap";
+import { Card, Row, Col, Spinner } from "react-bootstrap";
 import adminService from "../../../services/adminService";
-import DataLoaderWrapper from "./DataLoaderWrapper";
-
 const ResumenGastos = () => {
   const [resumen, setResumen] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -32,27 +30,32 @@ const ResumenGastos = () => {
     };
     fetchResumen();
   }, []);
-  
+  if (loading) return <Spinner animation="border" size="sm" />;
+  if (!resumen || resumen.length === 0) return <p className="text-muted">No hay datos disponibles.</p>;
   return (
-    <DataLoaderWrapper loading={loading} data={resumen}>
-      <Row className="mb-4">
-        {resumen?.map((item, i) => (
-          <Col key={i} xs={12} sm={6} md={3} className="mb-3">
-            <Card className="text-center shadow-sm h-100">
-              <Card.Body>
-                <Card.Title className="text-muted" style={{ fontSize: "0.9rem" }}>
-                  {item.titulo}
-                </Card.Title>
-                <Card.Text className="fw-bold fs-5">{item.valor}</Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
-      </Row>
-    </DataLoaderWrapper>
+    <Row className="mb-4">
+      {resumen.map((item, i) => (
+        <Col key={i} xs={12} sm={6} md={3} className="mb-3">
+          <Card className="h-100 shadow-sm">
+            <Card.Body>
+              <Card.Title className="fs-6 text-muted">{item.titulo}</Card.Title>
+              <Card.Text className="fs-4 fw-bold">{item.valor}</Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+      ))}
+    </Row>
   );
 };
 export default ResumenGastos;
+
+
+
+
+
+
+
+
 
 
 
