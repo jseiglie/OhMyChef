@@ -70,11 +70,11 @@ export const Sidebar = () => {
                     <i className="bi bi-cash-coin me-2"></i>Gastos
                   </Link>
                 </li>
-                <li className={`nav-item ${(location.pathname === "/admin/proveedores" || location.pathname.includes("admin/proveedores/restaurante")) ? "color-orange-bold" : ""}`}>
+                {/* <li className={`nav-item ${(location.pathname === "/admin/proveedores" || location.pathname.includes("admin/proveedores/restaurante")) ? "color-orange-bold" : ""}`}>
                   <Link className="nav-link" to="/admin/proveedores">
                     <i className="bi bi-shop me-2"></i>Proveedores
                   </Link>
-                </li>
+                </li> */}
                 <li className={`nav-item ${location.pathname === "/admin/usuarios" ? "color-orange-bold" : ""}`}>
                   <Link className="nav-link" to="/admin/usuarios">
                     <i className="bi bi-people me-2"></i>Usuarios

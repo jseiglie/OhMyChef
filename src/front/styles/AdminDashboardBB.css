@@ -1,104 +1,105 @@
 .dashboard-container {
+  align-content: flex-start;
   padding: 30px;
   font-family: "Segoe UI", sans-serif;
   background-color: #f5f7fa;
 }
 
 .dashboard-title {
-  font-size: 20px;
+  font-size: 28px;
   font-weight: 700;
 }
 
 .dashboard-welcome {
-  margin-bottom: 20px;
+  margin-bottom: 40px;
   color: #555;
-  font-size: 14px;
 }
 
 .restaurant-cards {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  justify-content: center;
+  gap: 20px;
 }
 
 .restaurant-card {
-  height: 230px;
   background: #fff;
-  padding: 12px;
-  width: 230px;
+  padding: 20px;
+  width: 300px;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.restaurant-card h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.card-metrics {
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
- 
 }
 
-.restaurant-card h4 {
-  font-size: 1rem !important;
-  color: #000000 !important;
-  text-align: center;
-  margin-bottom: 8px;
-   align-items: center;
-  justify-content: center;
-  
-
-  
+.metric {
+  text-align: left;
 }
 
-.card {
-  padding: 10px;
+.metric .label {
+  font-size: 14px;
+  color: #777;
 }
 
-.dashboard-welcome{
-   font-size: 1.3rem !important;
-
-}
-.card p {
-  font-size: 0.75rem;
-  margin: 0;
+.metric .value {
+  font-size: 20px;
+  font-weight: bold;
+  color: #222;
 }
 
-.icono-circular {
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  font-size: 0.95rem;
+.metric .change.down {
+  color: red;
+  font-size: 12px;
+}
+
+.metric .status {
+  font-size: 12px;
+  color: green;
 }
 
 .view-link {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 0.75rem;
+  margin-top: 10px;
+  display: inline-block;
+  font-size: 14px;
   color: #c4002f;
   text-decoration: none;
-  padding-top: 6px;
-  align-self: flex-start;
 }
 
 .quick-actions-section {
-  margin-top: 30px;
+  margin-top: 40px;
 }
 
 .actions-grid {
   display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 10px;
+  display: flex;
+  align-content: space-around;
   justify-content: space-between;
 }
 
 .action-card {
   background: #fff;
-  padding: 12px;
-  width: 140px;
-  border-radius: 10px;
+  padding: 20px;
+  width: 200px;
+  border-radius: 12px;
   text-align: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.action-btn {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 12px;
+  width: 100%;
+  font-size: 16px;
   cursor: pointer;
   border-radius: 10px;
   margin-bottom: 10px;
