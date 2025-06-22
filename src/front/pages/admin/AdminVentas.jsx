@@ -6,7 +6,7 @@ import TablaTopRestaurantes from "./VistaVentas/TablaTopRestaurantes";
 
 const AdminVentas = () => {
   return (
-    <div className="container mt-4">
+    <div className="dashboard-container">
       {/* Encabezado */}
       <div className="mb-4">
         <h2 className="fw-bold">Resumen de ventas globales</h2>

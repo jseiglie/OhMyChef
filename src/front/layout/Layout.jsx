@@ -28,7 +28,7 @@ export const Layout = () => {
       <Navbar />
       <div className="d-flex wrapper-content flex-grow-1">
         <Sidebar role={role} />
-        <main className="flex-grow-1 custom-sidebar px-2 py-3 bg-light">
+        <main className="flex-grow-1 custom-sidebar">
           <Outlet />
         </main>
       </div>

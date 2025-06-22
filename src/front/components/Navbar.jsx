@@ -22,8 +22,10 @@ export const Navbar = () => {
         <ul className="navbar-nav ms-auto d-flex align-items-center ps-md-4 gap-3">
           <li className="nav-item d-flex align-items-center gap-2">
             <div className="text-end">
-              <p className="mb-0 name">{user.nombre}</p>
-              <p className="mb-0 role text-muted small text-capitalize">{user.rol}</p>
+              <div class="ueref">
+                <p className="mb-0 name color-orange">{user.nombre}</p>
+                <p className="mb-0 fs-5 small text-capitalize fw-bold">{user.rol}</p>
+              </div>
               {user.rol !== "admin" && (
                 <p className="mb-0 restaurant text-secondary small">
                   {user.restaurante_nombre || "Sin restaurante asignado"}

@@ -25,7 +25,7 @@ const AdminGastosDetalle = () => {
     gastoServices
       .getProveedores(restauranteId)
       .then((list) => setProveedoresList(list))
-      .catch(() => {});
+      .catch(() => { });
   }, [restauranteId]);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const AdminGastosDetalle = () => {
     .filter((g) => !filterCategoria || g.categoria === filterCategoria);
 
   return (
-    <div className="dashboard-container ps-2 py-3 pt-4">
+    <div className="dashboard-container ">
       <div className="mb-2">
         <button className="btn btn-outline-secondary btn-sm" onClick={() => navigate("/admin/dashboard")}>
           ← Volver

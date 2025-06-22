@@ -10,7 +10,7 @@ export const ConfigAdmin = () => {
     if (el) el.scrollTo(0, 0);
   }, []);
   return (
-    <div className="dashboard-container ps-2 py-3 pt-4">
+    <div className="dashboard-container ">
       <h1 className="dashboard-title">Configuración del Administrador</h1>
       <p className="dashboard-welcome mb-4">Configura tu usuario</p>
       <div className="d-flex flex-wrap">

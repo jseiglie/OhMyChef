@@ -62,7 +62,7 @@ export const EncargadoDashboard = () => {
   }
 
   return (
-    <div className="dashboard-container ps-2 py-3 pt-4">
+    <div className="dashboard-container ">
       <h1 className="dashboard-title">Resumen De Tu Restaurante</h1>
       <p class="dashboard-welcome mb-4">Configura tus Restaurante</p>
       <div className="card shadow-sm border rounded p-4 mb-4">
