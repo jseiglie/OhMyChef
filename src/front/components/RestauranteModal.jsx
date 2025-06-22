@@ -43,7 +43,7 @@ const RestauranteModal = ({ restaurante, onSave, onClose }) => {
                 <h2 className="titulo">
                     {restaurante ? "Editar Restaurante" : "Crear Restaurante"}
                 </h2>
-                <form onSubmit={handleSubmit} className="modaal-form">
+                <form onSubmit={handleSubmit} className="modaal-form px-0">
                     <input
                         type="text"
                         name="nombre"
