@@ -62,12 +62,12 @@ export const EncargadoDashboard = () => {
   }
 
   return (
-    <div className="dashboard-container ps-2 py-3 pt-4">
+    <div className="dashboard-container">
       <h1 className="dashboard-title">Resumen De Tu Restaurante</h1>
       <p class="dashboard-welcome mb-4">Configura tus Restaurante</p>
-      <div className="card shadow-sm border rounded p-4 mb-4">
-        <h5 className="mb-3 fw-bold">VENTAS</h5>
-        <div className="row align-items-center">
+      <div className="card shadow-sm border rounded p-4 pt-0 px-0 mb-4">
+        <h5 className="mb-3 fw-bold barralarga">VENTAS</h5>
+        <div className="row align-items-center ms-3">
           <div className="col-md-3 d-flex flex-column gap-4 align-items-center">
             <div className="rounded shadow-sm p-3 text-center bg-warning-subtle w-100">
               <div className="icono-circular rounded-circle bg-white text-warning d-inline-flex align-items-center justify-content-center mb-2">
@@ -109,9 +109,9 @@ export const EncargadoDashboard = () => {
         </div>
       </div>
 
-      <div className="card shadow-sm border rounded p-4 mb-4">
-        <h5 className="mb-3 fw-bold">GASTOS</h5>
-        <div className="row align-items-center">
+      <div className="card shadow-sm border rounded p-4 pt-0 px-0 mb-4">
+        <h5 className="mb-3 fw-bold barralarga">GASTOS</h5>
+        <div className="row align-items-center ms-3">
           <div className="col-md-3 d-flex flex-column gap-4 align-items-center">
             <div className="rounded shadow-sm p-3 text-center bg-info-subtle w-100">
               <div className="icono-circular rounded-circle bg-white text-info d-inline-flex align-items-center justify-content-center mb-2">
@@ -150,7 +150,7 @@ export const EncargadoDashboard = () => {
         </div>
       </div>
 
-      <div className="card mt-4 shadow-sm border rounded p-4">
+      <div className="card mt-4 shadow-sm border rounded p-4 px-0 pt-0">
         <QuickActionsEncargado />
       </div>
     </div>

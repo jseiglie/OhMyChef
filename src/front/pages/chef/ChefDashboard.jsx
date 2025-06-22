@@ -57,7 +57,7 @@ export const ChefDashboard = () => {
       <div className="row justify-content-start">
         <div className="col-lg-11">
           <div className="card shadow-sm border rounded p-4">
-            <div className="row align-items-center">
+            <div className="row align-items-center ms-3">
               <div className="col-md-3 d-flex flex-column gap-4 w- align-items-center">
 
 
@@ -102,11 +102,11 @@ export const ChefDashboard = () => {
             </div>
           </div>
 
-          <div className="card mt-4 shadow-sm border rounded p-4">
+          <div className="card mt-4 shadow-sm border rounded p-4 px-0 pt-0">
             <TortaCategorias />
           </div>
 
-          <div className="card mt-4 shadow-sm border rounded p-4">
+          <div className="card mt-4 shadow-sm border rounded p-4 px-0 pt-0">
             <QuickActionsChef />
           </div>
         </div>

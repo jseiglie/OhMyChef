@@ -74,8 +74,8 @@ const AdminRestaurantDetail = () => {
         <p className="dashboard-welcome mb-4">Detalle del negocio</p>
 
         {/* Ventas */}
-        <div className="card shadow-sm border rounded p-4 mb-4">
-          <div className="row align-items-center">
+        <div className="card shadow-sm border rounded p-4 pt-0 px-0 mb-4">
+          <div className="row align-items-center ms-3">
             <div className="col-md-3 d-flex flex-column gap-4 align-items-center">
               <ResumenCard icon="💰" color="warning" label="Ventas actuales" value={totalVentas} simbolo={simbolo} />
               <ResumenCard icon="📈" color="info" label="Promedio diario" value={promedioDiario} simbolo={simbolo} />
@@ -95,8 +95,8 @@ const AdminRestaurantDetail = () => {
         </div>
 
         {/* Gastos */}
-        <div className="card shadow-sm border rounded p-4 mb-4">
-          <h5 className="mb-3 fw-bold">GASTOS</h5>
+        <div className="card shadow-sm border rounded p-4 pt-0 px-0 mb-4">
+          <h5 className="mb-3 fw-bold barralarga">GASTOS</h5>
           <div className="row align-items-center">
             <div className="col-md-3 d-flex flex-column gap-4 align-items-center">
               <ResumenCard icon="💸" color="info" label="Gastos actuales" value={gasto} simbolo={simbolo} />
