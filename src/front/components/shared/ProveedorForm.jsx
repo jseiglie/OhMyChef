@@ -118,7 +118,7 @@ export const ProveedorForm = ({ proveedor = null, onSuccess, onCancel }) => {
       </div>
       <div className="d-flex justify-content-end">
         {onCancel && (
-          <button type="button" className="btn btn-secondary me-2" onClick={onCancel}>
+          <button type="button" className="btn btn-secondary" onClick={onCancel}>
             Cancelar
           </button>
         )}

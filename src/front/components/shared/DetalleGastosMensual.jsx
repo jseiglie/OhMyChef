@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import gastoServices from "../../services/GastoServices";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 import { MonedaSimbolo } from "../../services/MonedaSimbolo";
+import "../../styles/Encargado.css";
 
 export const DetalleGastosMensual = () => {
   const simbolo = MonedaSimbolo();
@@ -69,7 +70,7 @@ export const DetalleGastosMensual = () => {
     <div className="dashboard-container ">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h1 className="dashboard-title">Detalle de Gastos</h1>
-        <button className="btn btn-success" onClick={() => navigate(`/${user.rol}/gastos/registrar`)}>
+        <button className="btn" onClick={() => navigate(`/${user.rol}/gastos/registrar`)}>
           + Registrar gasto
         </button>
       </div>
