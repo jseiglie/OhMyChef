@@ -145,3 +145,9 @@
   border-radius: 10px;
   margin-bottom: 10px;
 }
+
+.list-group-item.bold-white {
+  font-weight: bold;
+  text-shadow: 0 0 2px white;
+}
+

@@ -70,13 +70,16 @@ const AdminDashboardBB = () => {
                 <h4 className="mb-2 text-center fw-bold">{isTop1(index) ? '🌟 ' : ''}{r.nombre}</h4>
 
                 <div className="d-flex justify-content-between gap-2 mb-3">
-                  <div className="card shadow-sm border rounded p-2 bg-warning-subtle" style={{ width: '48%' }}>
+                  {/* CAMBIO: tarjeta azul con texto azul */}
+                  <div className="card shadow-sm border rounded p-2 bg-info-subtle" style={{ width: '48%' }}>
                     <div className="text-center">
                       <div className="icono-circular bg-white rounded-circle mb-1 d-inline-flex align-items-center justify-content-center" style={{ width: '24px', height: '24px' }}>
                         💰
                       </div>
-                      <p className="fw-bold text-warning mb-0 small">Ventas</p>
-                      <p className="fw-bold text-dark mb-0 fs-6" style={{ fontSize: '0.75rem' }}>{r.venta_total.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' ' + simbolo}</p>
+                      <p className="fw-bold text-info mb-0 small">Ventas</p>
+                      <p className="fw-bold text-dark mb-0 fs-6" style={{ fontSize: '0.75rem' }}>
+                        {r.venta_total.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' ' + simbolo}
+                      </p>
                     </div>
                   </div>
 
@@ -86,7 +89,9 @@ const AdminDashboardBB = () => {
                         {icono}
                       </div>
                       <p className={`fw-bold fs-6 ${textClass} mb-0 small`}>% Gasto</p>
-                      <p className={`fw-bold fs-6 ${textClass} mb-0`} style={{ fontSize: '0.75rem' }}>{r.venta_total > 0 ? r.porcentaje_gasto + '%' : '0%'}</p>
+                      <p className={`fw-bold fs-6 ${textClass} mb-0`} style={{ fontSize: '0.75rem' }}>
+                        {r.venta_total > 0 ? r.porcentaje_gasto + '%' : '0%'}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -110,7 +115,6 @@ const AdminDashboardBB = () => {
   );
 };
 
-// 🏆 Añadir estrella al top 1 visualmente
 const isTop1 = (index) => index === 0;
 
 export default AdminDashboardBB;

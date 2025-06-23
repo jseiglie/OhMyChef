@@ -1,11 +1,10 @@
-
 import { useEffect, useState } from "react";
 import GastosChef from "../../components/GastosChef";
 import { QuickActionsEncargado } from "../../components/QuickActionsEncargado";
 import "../../styles/EncargadoDashboard.css";
 import encargadoServices from "../../services/encargadoServices";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-import { MonedaSimbolo } from "../../services/MonedaSimbolo"; // ajusta la ruta si es necesario
+import { MonedaSimbolo } from "../../services/MonedaSimbolo";
 
 export const EncargadoDashboard = () => {
   const simbolo = MonedaSimbolo();
@@ -42,10 +41,9 @@ export const EncargadoDashboard = () => {
 
   const porcentaje = resumenMensual?.porcentaje || 0;
   const gasto = resumenMensual?.gastos || 0;
-
   const totalVentas = ventas.reduce((acc, item) => acc + item.monto, 0);
-  const promedioDiario = ventas.length > 0 ? (totalVentas / ventas.length).toFixed(2) : 0;
-  const proyeccionMensual = (promedioDiario * 30).toFixed(2);
+  const promedioDiario = ventas.length > 0 ? (totalVentas / ventas.length) : 0;
+  const proyeccionMensual = promedioDiario * 30;
 
   let bgClass = "bg-success-subtle";
   let textClass = "text-success";
@@ -64,7 +62,8 @@ export const EncargadoDashboard = () => {
   return (
     <div className="dashboard-container">
       <h1 className="dashboard-title">Resumen De Tu Restaurante</h1>
-      <p class="dashboard-welcome mb-4">Configura tus Restaurante</p>
+      <p className="dashboard-welcome mb-4">Configura tu Restaurante</p>
+
       <div className="card shadow-sm border rounded p-4 pt-0 px-0 mb-4">
         <h5 className="mb-3 fw-bold barralarga">VENTAS</h5>
         <div className="row align-items-center ms-3">
@@ -74,8 +73,8 @@ export const EncargadoDashboard = () => {
                 💰
               </div>
               <h6 className="fw-bold text-warning">Ventas actuales</h6>
-              <div className="fs-4 fw-bold text-dark">
-                {totalVentas}{simbolo}
+              <div className="fs-4 fw-bold text-warning" style={{ textShadow: '0 0 1px white' }}>
+                {parseFloat(totalVentas).toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}{simbolo}
               </div>
             </div>
 
@@ -84,15 +83,19 @@ export const EncargadoDashboard = () => {
                 📈
               </div>
               <h6 className="fw-bold text-info">Promedio diario</h6>
-              <div className="fs-5 text-info">{promedioDiario}{simbolo}</div>
+              <div className="fs-5 fw-bold text-info" style={{ textShadow: '0 0 1px white' }}>
+                {parseFloat(promedioDiario).toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}{simbolo}
+              </div>
             </div>
 
             <div className="rounded shadow-sm p-3 text-center bg-success-subtle w-100">
-              <div className="icono-circular rounded-circle bg-white text-warning d-inline-flex align-items-center justify-content-center mb-2">
+              <div className="icono-circular rounded-circle bg-white text-success d-inline-flex align-items-center justify-content-center mb-2">
                 📊
               </div>
               <h6 className="fw-bold text-success">Proyección mensual</h6>
-              <div className="fs-5 text-success">{proyeccionMensual}{simbolo}</div>
+              <div className="fs-5 fw-bold text-success" style={{ textShadow: '0 0 1px white' }}>
+                {parseFloat(proyeccionMensual).toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}{simbolo}
+              </div>
             </div>
           </div>
 
@@ -117,9 +120,9 @@ export const EncargadoDashboard = () => {
               <div className="icono-circular rounded-circle bg-white text-info d-inline-flex align-items-center justify-content-center mb-2">
                 💸
               </div>
-              <h6 className="fw-bold text-info strong">Gastos Actuales</h6>
-              <div className="fs-4 fw-bold text-dark">
-                {gasto}{simbolo}
+              <h6 className="fw-bold text-info">Gastos Actuales</h6>
+              <div className="fs-4 fw-bold text-info" style={{ textShadow: '0 0 1px white' }}>
+                {parseFloat(gasto).toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}{simbolo}
               </div>
             </div>
 
@@ -128,7 +131,7 @@ export const EncargadoDashboard = () => {
                 {icono}
               </div>
               <h6 className={`fw-bold ${textClass}`}>% Gastos</h6>
-              <div className={`fs-4 fw-bold ${textClass}`}>
+              <div className={`fs-4 fw-bold ${textClass}`} style={{ textShadow: '0 0 1px white' }}>
                 {porcentaje} %
               </div>
             </div>
