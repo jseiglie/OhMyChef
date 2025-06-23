@@ -831,6 +831,7 @@ def get_proveedores():
     if restaurante_id:
         proveedores = Proveedor.query.filter_by(restaurante_id=restaurante_id).all()
     else:
+        
         proveedores = Proveedor.query.all()
     resultados = [
         {
