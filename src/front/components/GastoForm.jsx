@@ -10,6 +10,7 @@ export const GastoForm = () => {
   const [gastos, setGastos] = useState([
     { proveedor_id: "", categoria: "", monto: "", nota: "" },
   ]);
+  const [activo, setActivo] = useState(false)
   const [proveedores, setProveedores] = useState([]);
   const [mensaje, setMensaje] = useState("");
   const nombreMes = new Date(fecha).toLocaleString("es", {
@@ -31,6 +32,7 @@ export const GastoForm = () => {
   };
   const agregarGasto = () => {
     setGastos([...gastos, { proveedor_id: "", categoria: "", monto: "", nota: "" }]);
+    setActivo(true);
   };
   const eliminarGasto = (index) => {
     const nuevosGastos = [...gastos];
@@ -59,11 +61,12 @@ export const GastoForm = () => {
         ← Volver a gastos
       </button>
       <h3 className="mb-2">Registrar Gastos del día</h3>
-      <div className="bg-orange text-white py-2 px-3 mb-4 rounded">
+      <div className="bg-orange d-inline-block text-white py-2 px-3 mb-4 rounded">
         Mes actual: {nombreMes.toUpperCase()}
       </div>
-      <div className="bg-white p-4 shadow rounded w-100">
-        <div className="mb-4">
+
+      <div className="bg-white col-12 col-sm-12 col-md-12 col-lg-10 col-xx-9 p-4 shadow rounded">
+        <div className="mb-4 col-12 col-sm-12 col-md-6 col-lg-3">
           <label className="form-label fw-semibold">Fecha</label>
           <input
             type="date"
@@ -135,10 +138,10 @@ export const GastoForm = () => {
           </div>
         ))}
         <div className="d-flex gap-3 mt-4">
-          <button className="btn btn-outline-primary" onClick={agregarGasto}>
+          <button className={`btn btn-outline-orange  ${activo ? 'active' : 'nobg'}`} onClick={agregarGasto}>
             + Añadir otro gasto
           </button>
-          <button className="btn btn-primary" onClick={registrarGastos}>
+          <button className={`btn btn-outline-orange  ${!activo ? 'active' : 'nobg'}`} onClick={registrarGastos}>
             Registrar Gastos
           </button>
         </div>

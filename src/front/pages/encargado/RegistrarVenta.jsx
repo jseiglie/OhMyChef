@@ -55,9 +55,9 @@ export const RegistrarVenta = () => {
     <div className="dashboard-container">
       <button onClick={() => navigate('/encargado/ventas')} className="back-button">← Volver a ventas</button>
       <h1 className="dashboard-title">Registrar Venta</h1>
-      <h5 className="dashboard-welcome text-white mt-2 mb-4">Mes actual: {nombreMes.toUpperCase()}</h5>
+      <h5 className="dashboard-welcome text-white mt-2 mb-4 d-inline-block rounded">Mes actual: {nombreMes.toUpperCase()}</h5>
 
-      <form onSubmit={handleSubmit} className="proveedor-card col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6 col-xxl-6">
+      <form onSubmit={handleSubmit} className="proveedor-card m-0 bg-white col-12 col-sm-12 col-md-12 col-lg-10 col-xx-9 p-4 shadow rounded">
         {/* Fecha */}
         <div className="row align-items-end mb-3">
           <div className="col-12 col-sm-12 col-md-12 col-lg-6 mt-2">

@@ -76,10 +76,10 @@ export const DetalleGastosMensual = () => {
       </div>
 
       <div className="btn-group col-12 col-sm-12 col-lg-6 col-xl-5 mb-3">
-        <button className={`btn btn-outline-orange ${view === 'mensual' ? 'active' : ''}`} onClick={() => setView('mensual')}>
+        <button className={`btn btn-outline-orange  ${view === 'mensual' ? 'active' : 'nobg'}`} onClick={() => setView('mensual')}>
           Resumen Mensual
         </button>
-        <button className={`btn btn-outline-orange ${view === 'diario' ? 'active' : ''}`} onClick={() => setView('diario')}>
+        <button className={`btn btn-outline-orange  ${view === 'diario' ? 'active' : 'nobg'}`} onClick={() => setView('diario')}>
           Detalle Diario
         </button>
       </div>
@@ -182,7 +182,7 @@ export const DetalleGastosMensual = () => {
                           title="Edit User"><svg xmlns="http://www.w3.org/2000/svg"
                             width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round"
+                            stroke-linecap="round" strokeLinejoin="round"
                             class="feather feather-edit-2">
                             <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z">
                             </path>

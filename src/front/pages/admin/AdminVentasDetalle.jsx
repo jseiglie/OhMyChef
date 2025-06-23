@@ -117,8 +117,8 @@ export const AdminVentasDetalle = () => {
           <div className="rounded shadow-sm p-2 col-sm-12 col-md-7 col-lg-6 col-xl-4 col-xxl-3 text-center bg-info-subtle d-flex flex-direction-row">
             <div className="icono-circular ms-2 me-4 rounded-circle bg-white text-info mt-1">📈</div>
             <div className="d-flex flex-column text-start">
-              <h6 className="fw-bold text-info">Promedio diario: €{promedio.toFixed(2)}</h6>
-              <div className="fs-5 text-info">Total: €{total.toFixed(2)}</div>
+              <h6 className="fw-bold text-info strong">Promedio diario:<span className="fw-bold">€{promedio.toFixed(2)}</span></h6>
+              <div className="fs-5 text-info strong">Total: <span className="fw-bold">€{total.toFixed(2)}</span></div>
             </div>
           </div>
           <div className="d-flex align-items-center mb-0 mt-4 flex-wrap gap-2">
@@ -134,7 +134,7 @@ export const AdminVentasDetalle = () => {
             </button>
           </div>
           <div className="table-responsive">
-            <table className="table table-striped users-table mt-3 ps-0">
+            <table className="table table-responsive users-table mt-3 ps-0">
               <thead>
                 <tr>
                   <th>Fecha</th>
