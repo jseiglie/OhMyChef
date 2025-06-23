@@ -10,6 +10,7 @@ export const GastoForm = () => {
   const [gastos, setGastos] = useState([
     { proveedor_id: "", categoria: "", monto: "", nota: "" },
   ]);
+  const [activo, setActivo] = useState(false)
   const [proveedores, setProveedores] = useState([]);
   const [mensaje, setMensaje] = useState("");
   const nombreMes = new Date(fecha).toLocaleString("es", {
