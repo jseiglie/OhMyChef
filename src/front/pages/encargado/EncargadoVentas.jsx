@@ -24,6 +24,8 @@ export const EncargadoVentas = () => {
     "noviembre",
     "diciembre"
   ];
+
+  const [mostrarModal, setMostrarModal] = useState(false);
   const [ventas, setVentas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [ventaSeleccionada, setVentaSeleccionada] = useState(null);
