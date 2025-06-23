@@ -21,19 +21,15 @@ ventaServices.registrarVenta = async (formData) => {
   return data;
 };
 
-ventaServices.getVentas = async () => {
+ventaServices.getVentas = async (mes, ano) => {
   const token = sessionStorage.getItem("token");
-  const resp = await fetch(`${backendUrl}/api/ventas`, {
+  const resp = await fetch(`${backendUrl}/api/ventas?mes=${mes}&ano=${ano}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
-
-  if (!resp.ok) {
-    throw new Error("Error al obtener ventas");
-  }
-
+  if (!resp.ok) throw new Error("Error al obtener ventas");
   return await resp.json();
 };
 
@@ -57,6 +53,18 @@ ventaServices.editarVenta = async (id, data) => {
     body: JSON.stringify(data),
   });
   if (!resp.ok) throw new Error("Error al actualizar venta");
+};
+
+ventaServices.getVentasEncargado = async (mes, ano) => {
+  const token = sessionStorage.getItem("token");
+  const resp = await fetch(`${backendUrl}/api/ventas/encargado?mes=${mes}&ano=${ano}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!resp.ok) throw new Error("Error al obtener ventas");
+  return await resp.json();
 };
 
 export default ventaServices;
