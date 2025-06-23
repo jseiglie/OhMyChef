@@ -38,7 +38,7 @@ export const CambiarContrasena = () => {
   };
 
   return (
-    <div className="card col-sm-12 col-md-12 col-lg-10 me-4 col-xl-5 p-4 mb-4">
+    <div className="card col-sm-12 col-md-12 col-lg-10 me-4 col-xl-4 p-4 mb-4">
       <h4>Cambiar contraseña</h4>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">

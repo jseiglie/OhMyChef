@@ -11,25 +11,22 @@ export const DetalleGastosMensual = () => {
   const navigate = useNavigate();
 
   const [view, setView] = useState('mensual');
-
   const hoy = new Date();
   const [mes, setMes] = useState(hoy.getMonth() + 1);
   const [ano, setAno] = useState(hoy.getFullYear());
   const [monthlyData, setMonthlyData] = useState({ datos: {}, proveedores: [], dias: [], totales: {} });
-
   const [selectedDate, setSelectedDate] = useState(hoy.toISOString().split('T')[0]);
   const [dailyData, setDailyData] = useState([]);
   const [filterProveedor, setFilterProveedor] = useState('');
   const [filterCategoria, setFilterCategoria] = useState('');
   const [proveedoresList, setProveedoresList] = useState([]);
-
   const [mensaje, setMensaje] = useState("");
 
   useEffect(() => {
     if (!user?.restaurante_id) return;
     gastoServices.getProveedores(user.restaurante_id)
       .then(list => setProveedoresList(list))
-      .catch(() => { });
+      .catch(() => {});
   }, [user]);
 
   useEffect(() => {
@@ -54,7 +51,6 @@ export const DetalleGastosMensual = () => {
     if (el) el.scrollTo(0, 0);
   }, []);
 
-
   const handleMesChange = (e) => {
     const [year, month] = e.target.value.split("-");
     setAno(parseInt(year, 10));
@@ -63,7 +59,6 @@ export const DetalleGastosMensual = () => {
 
   const handleDateChange = (e) => setSelectedDate(e.target.value);
   const handleHoy = () => setSelectedDate(new Date().toISOString().split('T')[0]);
-
   const nombreMes = new Date(ano, mes - 1).toLocaleString("es", { month: "long", year: "numeric" });
 
   const displayedDaily = dailyData
@@ -79,7 +74,7 @@ export const DetalleGastosMensual = () => {
         </button>
       </div>
 
-      <div className="btn-group col-12 col-sm-12 col-lg-6 col-xl-5  mb-3">
+      <div className="btn-group col-12 col-sm-12 col-lg-6 col-xl-5 mb-3">
         <button className={`btn btn-outline-orange ${view === 'mensual' ? 'active' : ''}`} onClick={() => setView('mensual')}>
           Resumen Mensual
         </button>
@@ -94,7 +89,7 @@ export const DetalleGastosMensual = () => {
         <>
           <div className="mb-3 justify-content-start">
             <div className="d-flex justify-content-start flex-wrap align-items-center mb-3 mt-2">
-              <h5 className="text-white me-4">Mes seleccionado: {nombreMes.toUpperCase()}</h5>
+              <h5 className="me-4">Mes seleccionado: {nombreMes.toUpperCase()}</h5>
               <input
                 type="month"
                 className="form-control w-auto"
@@ -106,16 +101,18 @@ export const DetalleGastosMensual = () => {
               Días del mes incluidos: {monthlyData.dias.join(", ")}
             </p>
           </div>
-          <div className="table-responsive ">
+          <div className="table-responsive">
             <table className="table table-striped users-table">
               <thead>
                 <tr>
                   <th rowSpan="2">Proveedor</th>
-                  <th colSpan={monthlyData.dias.length}>Día del mes</th>
+                  <th colSpan={monthlyData.dias.length} className="text-center">Día del mes</th>
                   <th rowSpan="2">Total</th>
                 </tr>
                 <tr>
-                  {monthlyData.dias.map(d => (<th key={d} title={`Día ${d}`}>{d}</th>))}
+                  {monthlyData.dias.map(d => (
+                    <th key={d} title={`Día ${d}`} className="text-center">{d}</th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
