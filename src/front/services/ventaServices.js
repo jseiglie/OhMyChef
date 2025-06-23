@@ -12,14 +12,14 @@ ventaServices.registrarVenta = async (formData) => {
     body: JSON.stringify(formData),
   });
 
+  const data = await resp.json();
+
   if (!resp.ok) {
-    throw new Error("Error al registrar venta");
+    throw new Error(data.msg || "Error al registrar venta");
   }
 
-  return await resp.json();
+  return data;
 };
-
-export default ventaServices;
 
 ventaServices.getVentas = async () => {
   const token = sessionStorage.getItem("token");
@@ -59,3 +59,4 @@ ventaServices.editarVenta = async (id, data) => {
   if (!resp.ok) throw new Error("Error al actualizar venta");
 };
 
+export default ventaServices;
