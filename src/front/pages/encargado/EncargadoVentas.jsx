@@ -4,6 +4,7 @@ import ventaServices from "../../services/ventaServices";
 import { Link } from "react-router-dom";
 import { MonedaSimbolo } from "../../services/MonedaSimbolo";
 import VentaModal from "./VentaModal";
+import "../../styles/Encargado.css";
 
 export const EncargadoVentas = () => {
 
@@ -128,7 +129,7 @@ export const EncargadoVentas = () => {
     <div className="dashboard-container">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h1 className="dashboard-title">Ventas del restaurante</h1>
-       <button className="btn btn-success" onClick={() => setMostrarModal(true)}>
+       <button className="btn" onClick={() => setMostrarModal(true)}>
           <i className="bi bi-plus-circle me-2"></i> Registrar nueva venta
         </button>
       </div>

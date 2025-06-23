@@ -40,7 +40,7 @@ export const MonedaPrincipal = () => {
           <option value="USD">$ Dólar</option>
           <option value="GBP">£ Libra</option>
         </select>
-        <button type="submit" className="btn btn-success mt-3 text-white">Guardar cambio</button>
+        <button type="submit" className="btn mt-3 text-white">Guardar cambio</button>
       </form>
     </div>
   );
