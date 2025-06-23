@@ -3,6 +3,7 @@ import useGlobalReducer from "../../hooks/useGlobalReducer";
 import ventaServices from "../../services/ventaServices";
 import { Link } from "react-router-dom";
 import { MonedaSimbolo } from "../../services/MonedaSimbolo";
+import VentaModal from "./VentaModal";
 
 export const EncargadoVentas = () => {
 
@@ -105,14 +106,29 @@ export const EncargadoVentas = () => {
       setTimeout(() => setMensaje(""), 2000);
     }
   };
+  const guardarVenta = async (form) => {
+    try {
+      await ventaServices.registrarVenta({
+        ...form,
+        restaurante_id: user.restaurante_id,
+      });
+      setMensaje("Venta registrada con éxito");
+      setTimeout(() => setMensaje(""), 2000);
+      setMostrarModal(false);
+      cargarVentas();
+    } catch (error) {
+      setMensaje("Error al registrar la venta");
+      setTimeout(() => setMensaje(""), 2000);
+    }
+  };
 
   return (
     <div className="dashboard-container">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h1 className="dashboard-title">Ventas del restaurante</h1>
-        <Link to="/encargado/registrar-venta" className="btn btn-success">
+       <button className="btn btn-success" onClick={() => setMostrarModal(true)}>
           <i className="bi bi-plus-circle me-2"></i> Registrar nueva venta
-        </Link>
+        </button>
       </div>
 
       {/* Mensaje tipo GastoForm */}
@@ -237,6 +253,12 @@ export const EncargadoVentas = () => {
           </div>
         </div>
       </div>
+      {mostrarModal && (
+        <VentaModal
+          onSave={guardarVenta}
+          onClose={() => setMostrarModal(false)}
+        />
+      )}
     </div>
   );
 };
