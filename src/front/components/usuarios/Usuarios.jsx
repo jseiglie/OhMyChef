@@ -243,9 +243,8 @@ const Users = () => {
                 </td>
                 <td>
                   <button
-                    className={`badge border-0 text-white px-2 py-1 rounded-pill ${
-                      user.status === 'active' ? 'bg-success' : 'bg-secondary'
-                    }`}
+                    className={`badge border-0 text-white px-2 py-1 rounded-pill ${user.status === 'active' ? 'bg-success' : 'bg-secondary'
+                      }`}
                     onClick={() => handleToggleClick(user)}
                     style={{ cursor: "pointer" }}
                     title="Cambiar estado del usuario"
@@ -258,7 +257,7 @@ const Users = () => {
                 </td>
                 <td className="actions-cell">
                   <button className="action-icon-button edit-button" onClick={() => handleEditUser(user)} title="Editar">
-                    <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="18" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                    <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" strokeLinejoin="round" height="18" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
                   </button>
                   <button className="action-icon-button delete-button" onClick={() => handleDeleteUser(user.id)} title="Eliminar">
                     <FiTrash2 size={18} />

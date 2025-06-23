@@ -1,16 +1,44 @@
 import { useEffect, useState } from "react";
+
 import GastosChef from "../../components/GastosChef";
 import { QuickActionsEncargado } from "../../components/QuickActionsEncargado";
 import "../../styles/EncargadoDashboard.css";
 import encargadoServices from "../../services/encargadoServices";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { MonedaSimbolo } from "../../services/MonedaSimbolo";
+import useGlobalReducer from "../../hooks/useGlobalReducer";
+import VentaModal from "./VentaModal";
+import ventaServices from "../../services/ventaServices";
+import { useNavigate } from "react-router-dom";
 
 export const EncargadoDashboard = () => {
+  const { store } = useGlobalReducer();
+  const navigate = useNavigate();
+
   const simbolo = MonedaSimbolo();
   const [gastoDatos, setGastoDatos] = useState([]);
   const [resumenMensual, setResumenMensual] = useState(null);
   const [ventas, setVentas] = useState([]);
+  const user = store.user;
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [mensaje, setMensaje] = useState("");
+
+
+  const guardarVenta = async (form) => {
+    try {
+      await ventaServices.registrarVenta({
+        ...form,
+        restaurante_id: user.restaurante_id,
+      });
+      setMensaje("Venta registrada con éxito");
+      setTimeout(() => setMensaje(""), 2000);
+      setMostrarModal(false);
+      navigate(`/encargado/ventas`)
+    } catch (error) {
+      setMensaje("Error al registrar la venta");
+      setTimeout(() => setMensaje(""), 2000);
+    }
+  };
 
   useEffect(() => {
     const fecha = new Date();
@@ -153,9 +181,28 @@ export const EncargadoDashboard = () => {
         </div>
       </div>
 
+
+
       <div className="card mt-4 shadow-sm border rounded p-4 px-0 pt-0">
-        <QuickActionsEncargado />
+        {/* === CAMBIO: PASAR FUNCION PARA ABRIR MODAL EN QuickActionsEncargado === */}
+        <QuickActionsEncargado onNuevaVenta={() => setMostrarModal(true)} />
       </div>
+
+      {/* Mensaje de confirmación */}
+      {mensaje && (
+        <div className={`alert mt-3 ${mensaje.includes("éxito") ? "alert-success" : "alert-danger"}`}>
+          {mensaje}
+        </div>
+      )}
+
+      {/* === RENDERIZAR MODAL SOLO SI mostrarModal ES TRUE === */}
+      {mostrarModal && (
+        <VentaModal
+          onSave={guardarVenta} // FUNCION QUE GUARDA Y CIERRA MODAL
+          onClose={() => setMostrarModal(false)} // CERRAR MODAL
+        />
+      )}
     </div>
+
   );
 };

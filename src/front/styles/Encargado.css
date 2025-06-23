@@ -15,6 +15,6 @@
 }
 
 button.btn:hover {
-    background: #e24508 !important;
+  background: #e24508 !important;
+  color: #fff !important;
 }
-
