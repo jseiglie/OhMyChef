@@ -2010,3 +2010,24 @@ def obtener_ventas_encargado():
         return jsonify(resultados), 200
     except Exception as e:
         return jsonify({"msg": "Error al obtener ventas", "error": str(e)}), 500
+
+@api.route("/ventas-detalle", methods=["GET"])
+@jwt_required()
+def ventas_detalle_por_restaurante():
+    try:
+        mes = request.args.get("mes")
+        ano = request.args.get("ano")
+        restaurante_id = request.args.get("restaurante_id")
+        if not mes or not ano or not restaurante_id:
+            return jsonify({"msg": "Faltan parámetros"}), 422
+        ventas = Venta.query.filter(
+            Venta.restaurante_id == int(restaurante_id),
+            db.extract("month", Venta.fecha) == int(mes),
+            db.extract("year", Venta.fecha) == int(ano)
+        ).all()
+        return jsonify([v.serialize() for v in ventas]), 200
+    except Exception as e:
+        return jsonify({
+            "msg": "Error al obtener ventas detalladas",
+            "error": str(e)
+        }), 500
