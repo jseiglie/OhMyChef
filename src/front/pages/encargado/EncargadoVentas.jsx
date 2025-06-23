@@ -3,18 +3,13 @@ import useGlobalReducer from "../../hooks/useGlobalReducer";
 import ventaServices from "../../services/ventaServices";
 import { Link } from "react-router-dom";
 import { MonedaSimbolo } from "../../services/MonedaSimbolo";
+import VentaModal from "./VentaModal";
 
 export const EncargadoVentas = () => {
 
   const simbolo = MonedaSimbolo();
   const { store } = useGlobalReducer();
   const user = store.user;
-
-  const [ventas, setVentas] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [ventaSeleccionada, setVentaSeleccionada] = useState(null);
-  const [nuevoMonto, setNuevoMonto] = useState("");
-  const [mensaje, setMensaje] = useState("");
   const meses = [
     "enero",
     "febrero",
@@ -30,28 +25,34 @@ export const EncargadoVentas = () => {
     "diciembre"
   ];
 
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [ventas, setVentas] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [ventaSeleccionada, setVentaSeleccionada] = useState(null);
+  const [nuevoMonto, setNuevoMonto] = useState("");
+  const [mensaje, setMensaje] = useState("");
+  const query = new URLSearchParams(window.location.search);
+  const restaurante_id = query.get("restaurante_id") || user?.restaurante_id;
 
-  const fechaactual = new Date();
-  const mesactual = fechaactual.getMonth() + 1;
-
-  const getFecha = (thefecha) => {
-
-    const fecha = new Date(thefecha);
-    const mes = fecha.getMonth() + 1; // +1 porque getMonth() da 0 para enero
-    return mes
-
-  }
+  const [selectedDate, setSelectedDate] = useState("");
+  const fechaActual = new Date();
+  const mes = fechaActual.getMonth() + 1;
+  const ano = fechaActual.getFullYear();
 
   const cargarVentas = async () => {
     try {
+      const data = await ventaServices.getVentas(mes, ano);
 
-      const data = await ventaServices.getVentas();
-
-      const ventasRestaurante = data.filter(
-        (venta) => (venta.restaurante_id === user.restaurante_id && getFecha(venta.fecha) === mesactual)
+      let filtradas = data.filter(
+        (v) => Number(v.restaurante_id) === Number(restaurante_id)
       );
 
-      setVentas(ventasRestaurante);
+      if (selectedDate) {
+        filtradas = filtradas.filter((v) => v.fecha === selectedDate);
+      }
+
+      filtradas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+      setVentas(filtradas);
     } catch (error) {
       setMensaje("Error al cargar ventas");
     } finally {
@@ -59,11 +60,13 @@ export const EncargadoVentas = () => {
     }
   };
 
+
+
   useEffect(() => {
     cargarVentas();
     const el = document.getElementsByClassName("custom-sidebar")[0];
     if (el) el.scrollTo(0, 0);
-  }, []);
+  }, [selectedDate]);
 
   const total = ventas.reduce((acc, v) => acc + parseFloat(v.monto), 0);
   const diasUnicos = [...new Set(ventas.map((v) => v.fecha))];
@@ -105,14 +108,29 @@ export const EncargadoVentas = () => {
       setTimeout(() => setMensaje(""), 2000);
     }
   };
+  const guardarVenta = async (form) => {
+    try {
+      await ventaServices.registrarVenta({
+        ...form,
+        restaurante_id: user.restaurante_id,
+      });
+      setMensaje("Venta registrada con éxito");
+      setTimeout(() => setMensaje(""), 2000);
+      setMostrarModal(false);
+      cargarVentas();
+    } catch (error) {
+      setMensaje("Error al registrar la venta");
+      setTimeout(() => setMensaje(""), 2000);
+    }
+  };
 
   return (
     <div className="dashboard-container">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h1 className="dashboard-title">Ventas del restaurante</h1>
-        <Link to="/encargado/registrar-venta" className="btn btn-success">
+       <button className="btn btn-success" onClick={() => setMostrarModal(true)}>
           <i className="bi bi-plus-circle me-2"></i> Registrar nueva venta
-        </Link>
+        </button>
       </div>
 
       {/* Mensaje tipo GastoForm */}
@@ -134,12 +152,6 @@ export const EncargadoVentas = () => {
         <p>No hay ventas registradas.</p>
       ) : (
         <>
-          {/* <p className="mt-3">
-            <strong>Total:</strong> €{total.toFixed(2)}<br />
-            <strong>Promedio diario:</strong> €{promedio.toFixed(2)}
-          </p>
- */}
-
 
           <div className="rounded shadow-sm p-2 col-sm-12 col-md-7 col-lg-6 col-xl-4 col-xxl-3 text-center bg-info-subtle  d-flex flex-direction-row  ">
             <div className="icono-circular ms-2 me-4 rounded-circle bg-white text-info mt-1">
@@ -147,9 +159,23 @@ export const EncargadoVentas = () => {
             <div className="d-flex flex-column text-start">
               <h6 className="fw-bold text-info strong">Promedio diario: <span className="fw-bold">€{promedio.toFixed(2)}</span> </h6>
               <div className="fs-5 text-info strong">Total: <span className="fw-bold">€{total.toFixed(2)}</span></div>
-              <p className="fs-5 text-info strong mb-0"> mes: <span className="color-orange">{meses[mesactual - 1].toUpperCase()}</span></p>
+              {/* <p className="fs-5 text-info strong mb-0"> mes: <span className="color-orange">{meses[mes - 1]}</span></p> */}
             </div>
           </div>
+
+          <div className="d-flex align-items-center mb-0 mt-4 flex-wrap gap-2">
+            <label className="me-2">Filtrar por fecha:</label>
+            <input
+              type="date"
+              className="form-control w-auto me-2"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+            />
+            <button className="btn btn-success" onClick={() => setSelectedDate("")}>
+              Ver todo el mes
+            </button>
+          </div>
+
           <div className="table-responsive">
             <table className="table table-striped users-table mt-3 ps-0">
               <thead>
@@ -229,6 +255,12 @@ export const EncargadoVentas = () => {
           </div>
         </div>
       </div>
+      {mostrarModal && (
+        <VentaModal
+          onSave={guardarVenta}
+          onClose={() => setMostrarModal(false)}
+        />
+      )}
     </div>
   );
 };

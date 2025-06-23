@@ -101,18 +101,7 @@ export const AdminVentasDetalle = () => {
 
       <h1 className="dashboard-title mb-3">Ventas del restaurante</h1>
 
-      <div className="d-flex align-items-center mb-3 flex-wrap gap-2">
-        <label className="me-2">Filtrar por fecha:</label>
-        <input
-          type="date"
-          className="form-control w-auto me-2"
-          value={selectedDate}
-          onChange={(e) => setSelectedDate(e.target.value)}
-        />
-        <button className="btn btn-success" onClick={() => setSelectedDate("")}>
-          Ver todo el mes
-        </button>
-      </div>
+
 
       {mensaje && (
         <div className={`alert mt-2 ${mensaje.includes("éxito") || mensaje.includes("eliminada") ? "alert-success" : "alert-danger"}`}>
@@ -132,6 +121,19 @@ export const AdminVentasDetalle = () => {
               <h6 className="fw-bold text-info">Promedio diario: €{promedio.toFixed(2)}</h6>
               <div className="fs-5 text-info">Total: €{total.toFixed(2)}</div>
             </div>
+          </div>
+
+          <div className="d-flex align-items-center mb-0 mt-4 flex-wrap gap-2">
+            <label className="me-2">Filtrar por fecha:</label>
+            <input
+              type="date"
+              className="form-control w-auto me-2"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+            />
+            <button className="btn btn-success" onClick={() => setSelectedDate("")}>
+              Ver todo el mes
+            </button>
           </div>
 
 

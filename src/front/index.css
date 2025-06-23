@@ -18,12 +18,12 @@ html,
   cursor: pointer;
   background: #bb3e0c;
 }
-.barralarga{
-      padding: 10px;
-    background: #ff5d1d;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    color: #fff;
+.barralarga {
+  padding: 10px;
+  background: #ff5d1d;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  color: #fff;
 }
 .bg-orange {
   background-color: #ff7741 !important;
@@ -101,6 +101,7 @@ table thead tr th {
 .w-60 {
   width: 60px !important;
 }
+
 /* .custom-sidebar {
   overflow-x: hidden !important;
 } */
@@ -154,6 +155,18 @@ span.w-60 {
 @media (max-width: 2100px) {
   input.form-control.custom-gastos-fecha {
     width: 40%;
+  }
+  .restauranteDash {
+    max-width: 24% !important;
+  }
+}
+
+@media (max-width: 1500px) {
+  input.form-control.custom-gastos-fecha {
+    width: 40%;
+  }
+  .restauranteDash {
+    max-width: initial !important;
   }
 }
 
