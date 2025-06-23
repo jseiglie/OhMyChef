@@ -113,9 +113,7 @@ export const EncargadoVentas = () => {
       ) : (
         <>
           <div className="rounded shadow-sm p-2 col-sm-12 col-md-7 col-lg-6 col-xl-4 col-xxl-3 text-center bg-info-subtle d-flex flex-direction-row">
-            <div className="icono-circular ms-2 me-4 rounded-circle bg-white text-info mt-1 d-flex align-items-center justify-content-center" style={{ width: "40px", height: "40px" }}>
-              <i className="bi bi-graph-up-arrow fs-4"></i>
-            </div>
+            <div className="icono-circular ms-2 me-4 rounded-circle bg-white text-info mt-1">📈</div>
             <div className="d-flex flex-column text-start">
               <h6 className="fw-bold text-info strong">Promedio diario: <span className="fw-bold">€{promedio.toFixed(2)}</span></h6>
               <div className="fs-5 text-info strong">Total: <span className="fw-bold">€{total.toFixed(2)}</span></div>

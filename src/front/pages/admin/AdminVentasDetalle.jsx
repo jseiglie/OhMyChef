@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 import ventaServices from "../../services/ventaServices";
+import restauranteService from "../../services/restauranteServices";
 import { MonedaSimbolo } from "../../services/MonedaSimbolo";
-
 export const AdminVentasDetalle = () => {
   const simbolo = MonedaSimbolo();
   const navigate = useNavigate();
@@ -11,30 +11,29 @@ export const AdminVentasDetalle = () => {
   const user = store.user;
   const query = new URLSearchParams(window.location.search);
   const restaurante_id = query.get("restaurante_id") || user?.restaurante_id;
-
   const [selectedDate, setSelectedDate] = useState("");
   const [ventas, setVentas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [ventaSeleccionada, setVentaSeleccionada] = useState(null);
   const [nuevoMonto, setNuevoMonto] = useState("");
   const [mensaje, setMensaje] = useState("");
-
+  const [nombreRestaurante, setNombreRestaurante] = useState("");
   const fechaActual = new Date();
   const mes = fechaActual.getMonth() + 1;
   const ano = fechaActual.getFullYear();
-
   const cargarVentas = async () => {
     try {
-      const data = await ventaServices.getVentas(mes, ano);
-
-      let filtradas = data.filter(
-        (v) => Number(v.restaurante_id) === Number(restaurante_id)
-      );
-
-      if (selectedDate) {
-        filtradas = filtradas.filter((v) => v.fecha === selectedDate);
-      }
-
+      const data = await ventaServices.getVentasDetalle(mes, ano, restaurante_id);
+      let filtradas = selectedDate
+        ? data.filter((v) => {
+            const fechaObj = new Date(v.fecha);
+            const yyyy = fechaObj.getFullYear();
+            const mm = String(fechaObj.getMonth() + 1).padStart(2, "0");
+            const dd = String(fechaObj.getDate()).padStart(2, "0");
+            const fechaFormateada = `${yyyy}-${mm}-${dd}`;
+            return fechaFormateada === selectedDate;
+          })
+        : data;
       filtradas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
       setVentas(filtradas);
     } catch (error) {
@@ -43,24 +42,29 @@ export const AdminVentasDetalle = () => {
       setLoading(false);
     }
   };
-
+  const cargarNombreRestaurante = async () => {
+    try {
+      const data = await restauranteService.getRestaurante(restaurante_id);
+      setNombreRestaurante(data.nombre || "");
+    } catch (error) {
+      console.log("Error al obtener restaurante:", error);
+    }
+  };
   useEffect(() => {
     cargarVentas();
+    cargarNombreRestaurante();
     const el = document.getElementsByClassName("custom-sidebar")[0];
     if (el) el.scrollTo(0, 0);
   }, [selectedDate]);
-
   const total = ventas.reduce((acc, v) => acc + parseFloat(v.monto), 0);
   const diasUnicos = [...new Set(ventas.map((v) => v.fecha))];
   const promedio = diasUnicos.length > 0 ? total / diasUnicos.length : 0;
-
   const abrirModalEdicion = (venta) => {
     setVentaSeleccionada(venta);
     setNuevoMonto(venta.monto);
     const modal = new bootstrap.Modal(document.getElementById("editarModal"));
     modal.show();
   };
-
   const guardarEdicion = async () => {
     try {
       await ventaServices.editarVenta(ventaSeleccionada.id, {
@@ -77,7 +81,6 @@ export const AdminVentasDetalle = () => {
       setTimeout(() => setMensaje(""), 2000);
     }
   };
-
   const eliminarVenta = async (id) => {
     if (!window.confirm("¿Estás seguro de eliminar esta venta?")) return;
     try {
@@ -90,7 +93,6 @@ export const AdminVentasDetalle = () => {
       setTimeout(() => setMensaje(""), 2000);
     }
   };
-
   return (
     <div className="dashboard-container ">
       <div className="mb-2">
@@ -98,17 +100,14 @@ export const AdminVentasDetalle = () => {
           ← Volver
         </button>
       </div>
-
-      <h1 className="dashboard-title mb-3">Ventas del restaurante</h1>
-
-
-
+      <h1 className="dashboard-title mb-3">
+        Ventas del restaurante {nombreRestaurante ? `${nombreRestaurante}` : ""}
+      </h1>
       {mensaje && (
         <div className={`alert mt-2 ${mensaje.includes("éxito") || mensaje.includes("eliminada") ? "alert-success" : "alert-danger"}`}>
           {mensaje}
         </div>
       )}
-
       {loading ? (
         <p>Cargando...</p>
       ) : ventas.length === 0 ? (
@@ -122,7 +121,6 @@ export const AdminVentasDetalle = () => {
               <div className="fs-5 text-info strong">Total: <span className="fw-bold">€{total.toFixed(2)}</span></div>
             </div>
           </div>
-
           <div className="d-flex align-items-center mb-0 mt-4 flex-wrap gap-2">
             <label className="me-2">Filtrar por fecha:</label>
             <input
@@ -135,8 +133,6 @@ export const AdminVentasDetalle = () => {
               Ver todo el mes
             </button>
           </div>
-
-
           <div className="table-responsive">
             <table className="table table-responsive users-table mt-3 ps-0">
               <thead>
@@ -150,15 +146,42 @@ export const AdminVentasDetalle = () => {
               <tbody>
                 {ventas.map((v) => (
                   <tr key={v.id}>
-                    <td>{v.fecha}</td>
+                    <td>
+                      {(() => {
+                        const f = new Date(v.fecha);
+                        const dd = String(f.getDate()).padStart(2, "0");
+                        const mm = String(f.getMonth() + 1).padStart(2, "0");
+                        const yyyy = f.getFullYear();
+                        return `${dd}-${mm}-${yyyy}`;
+                      })()}
+                    </td>
                     <td>{v.monto}</td>
                     <td>{v.turno || "-"}</td>
                     <td>
-                      <button className="action-icon-button edit-button" onClick={() => abrirModalEdicion(v)} title="Editar">
-                        <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" strokeLinejoin="round" height="18" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                      <button
+                        className="action-icon-button edit-button"
+                        onClick={() => abrirModalEdicion(v)}
+                        title="Editar"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                          className="feather feather-edit-2">
+                          <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+                        </svg>
                       </button>
-                      <button className="action-icon-button delete-button" onClick={() => eliminarVenta(v.id)} title="Eliminar">
-                        <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" strokeLinejoin="round" height="18" width="18" xmlns="http://www.w3.org/2000/svg"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                      <button
+                        className="action-icon-button delete-button"
+                        onClick={() => eliminarVenta(v.id)}
+                        title="Eliminar"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                          className="feather feather-trash-2">
+                          <polyline points="3 6 5 6 21 6" />
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                          <line x1="10" y1="11" x2="10" y2="17" />
+                          <line x1="14" y1="11" x2="14" y2="17" />
+                        </svg>
                       </button>
                     </td>
                   </tr>
@@ -168,7 +191,6 @@ export const AdminVentasDetalle = () => {
           </div>
         </>
       )}
-
       {/* Modal de edición */}
       <div className="modal fade" id="editarModal" tabIndex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
