@@ -89,7 +89,7 @@ const AdminRestaurante = () => {
           <h1>Restaurantes</h1>
           <p>Gestiona los restaurantes registrados</p>
         </div>
-        <button className="btn btn-success" onClick={() => {
+        <button className="add-user-button" onClick={() => {
           setModalOpen(true);
           setCurrentRestaurante(null);
         }}>

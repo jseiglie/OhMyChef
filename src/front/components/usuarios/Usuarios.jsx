@@ -170,7 +170,7 @@ const Users = () => {
           <h1>Usuarios</h1>
           <p>Maneja todos tus usuarios</p>
         </div>
-        <button className="btn btn-success" onClick={handleAddUser}>
+        <button className="add-user-button" onClick={handleAddUser}>
           <FiPlus className="me-2" /> Añadir Usuario
         </button>
       </div>
