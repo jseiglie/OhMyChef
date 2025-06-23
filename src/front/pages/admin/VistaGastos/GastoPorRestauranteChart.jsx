@@ -14,6 +14,7 @@ const GastoPorRestauranteChart = () => {
   const [dataChart, setDataChart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(null); // nuevo estado para selección
   const fecha = new Date();
   const mes = fecha.getMonth() + 1;
   const ano = fecha.getFullYear();
@@ -34,9 +35,11 @@ const GastoPorRestauranteChart = () => {
   }, []);
   if (loading) return <p>Cargando gráfico...</p>;
   if (error || !dataChart) return <p>No hay datos para mostrar este mes.</p>;
-  // Colores: destacamos solo el primero, resto gris
+  // Colores dinámicos según la selección
   const backgroundColors = dataChart.map((_, i) =>
-    i === 0 ? "rgba(255, 99, 32, 0.8)" : "rgba(200, 200, 200, 0.8)"
+    i === selectedIndex
+      ? "rgba(255, 99, 32, 0.8)" // barra seleccionada
+      : "rgba(200, 200, 200, 0.8)" // barras normales
   );
   const chartData = {
     labels: dataChart.map((item) => item.restaurante),
@@ -51,7 +54,7 @@ const GastoPorRestauranteChart = () => {
     ],
   };
   const options = {
-    indexAxis: "y", // Horizontal
+    indexAxis: "y",
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -72,6 +75,12 @@ const GastoPorRestauranteChart = () => {
           },
         },
       },
+    },
+    onClick: (evt, elements) => {
+      if (elements.length > 0) {
+        const index = elements[0].index;
+        setSelectedIndex(index);
+      }
     },
   };
   return (
