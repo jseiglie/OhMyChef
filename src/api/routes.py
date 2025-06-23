@@ -827,19 +827,22 @@ def eliminar_factura(id):
 @api.route('/proveedores', methods=['GET'])
 @jwt_required()
 def get_proveedores():
-    proveedores = Proveedor.query.all()
-
-    resultados = []
-    for p in proveedores:
-        resultados.append({
+    restaurante_id = request.args.get("restaurante_id", type=int)
+    if restaurante_id:
+        proveedores = Proveedor.query.filter_by(restaurante_id=restaurante_id).all()
+    else:
+        proveedores = Proveedor.query.all()
+    resultados = [
+        {
             "id": p.id,
             "nombre": p.nombre,
             "categoria": p.categoria,
             "restaurante_id": p.restaurante_id,
             "telefono": p.telefono,
             "direccion": p.direccion
-        })
-
+        }
+        for p in proveedores
+    ]
     return jsonify(resultados), 200
 
 
