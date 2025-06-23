@@ -178,7 +178,7 @@ export const EncargadoVentas = () => {
           </div>
 
           <div className="table-responsive">
-            <table className="table table-striped users-table mt-3 ps-0">
+            <table className="table table-responsive users-table mt-3 ps-0">
               <thead>
                 <tr>
                   <th>Fecha</th>

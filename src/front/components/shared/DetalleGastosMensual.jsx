@@ -27,7 +27,7 @@ export const DetalleGastosMensual = () => {
     if (!user?.restaurante_id) return;
     gastoServices.getProveedores(user.restaurante_id)
       .then(list => setProveedoresList(list))
-      .catch(() => {});
+      .catch(() => { });
   }, [user]);
 
   useEffect(() => {
@@ -76,10 +76,10 @@ export const DetalleGastosMensual = () => {
       </div>
 
       <div className="btn-group col-12 col-sm-12 col-lg-6 col-xl-5 mb-3">
-        <button className={`btn btn-outline-orange ${view === 'mensual' ? 'active' : ''}`} onClick={() => setView('mensual')}>
+        <button className={`btn btn-outline-orange  ${view === 'mensual' ? 'active' : 'nobg'}`} onClick={() => setView('mensual')}>
           Resumen Mensual
         </button>
-        <button className={`btn btn-outline-orange ${view === 'diario' ? 'active' : ''}`} onClick={() => setView('diario')}>
+        <button className={`btn btn-outline-orange  ${view === 'diario' ? 'active' : 'nobg'}`} onClick={() => setView('diario')}>
           Detalle Diario
         </button>
       </div>
