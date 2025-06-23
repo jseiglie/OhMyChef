@@ -101,7 +101,7 @@ export const AdminVentasDetalle = () => {
         </button>
       </div>
       <h1 className="dashboard-title mb-3">
-        Ventas del restaurante {nombreRestaurante ? `${nombreRestaurante}` : ""}
+        Ventas {nombreRestaurante ? `${nombreRestaurante}` : ""}
       </h1>
       {mensaje && (
         <div className={`alert mt-2 ${mensaje.includes("éxito") || mensaje.includes("eliminada") ? "alert-success" : "alert-danger"}`}>
