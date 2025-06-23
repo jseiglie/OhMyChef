@@ -118,8 +118,8 @@ export const AdminVentasDetalle = () => {
           <div className="rounded shadow-sm p-2 col-sm-12 col-md-7 col-lg-6 col-xl-4 col-xxl-3 text-center bg-info-subtle d-flex flex-direction-row">
             <div className="icono-circular ms-2 me-4 rounded-circle bg-white text-info mt-1">📈</div>
             <div className="d-flex flex-column text-start">
-              <h6 className="fw-bold text-info">Promedio diario: €{promedio.toFixed(2)}</h6>
-              <div className="fs-5 text-info">Total: €{total.toFixed(2)}</div>
+              <h6 className="fw-bold text-info strong">Promedio diario:<span className="fw-bold">€{promedio.toFixed(2)}</span></h6>
+              <div className="fs-5 text-info strong">Total: <span className="fw-bold">€{total.toFixed(2)}</span></div>
             </div>
           </div>
 
@@ -138,7 +138,7 @@ export const AdminVentasDetalle = () => {
 
 
           <div className="table-responsive">
-            <table className="table table-striped users-table mt-3 ps-0">
+            <table className="table table-responsive users-table mt-3 ps-0">
               <thead>
                 <tr>
                   <th>Fecha</th>
@@ -155,10 +155,10 @@ export const AdminVentasDetalle = () => {
                     <td>{v.turno || "-"}</td>
                     <td>
                       <button className="action-icon-button edit-button" onClick={() => abrirModalEdicion(v)} title="Editar">
-                        ✏️
+                        <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" strokeLinejoin="round" height="18" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
                       </button>
                       <button className="action-icon-button delete-button" onClick={() => eliminarVenta(v.id)} title="Eliminar">
-                        🗑️
+                        <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" strokeLinejoin="round" height="18" width="18" xmlns="http://www.w3.org/2000/svg"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                       </button>
                     </td>
                   </tr>
