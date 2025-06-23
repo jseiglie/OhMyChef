@@ -1980,3 +1980,33 @@ def restaurante_tiene_ventas(id):
         return jsonify({"tieneVentas": tiene_ventas}), 200
     except Exception as e:
         return jsonify({"msg": "Error al verificar ventas del restaurante", "error": str(e)}), 500
+    
+#Nuevo endpoint Ventas
+
+@api.route('/ventas/encargado', methods=['GET'])
+@jwt_required()
+def obtener_ventas_encargado():
+    mes = request.args.get("mes", type=int)
+    ano = request.args.get("ano", type=int)
+    user_id = get_jwt_identity()
+    user = Usuario.query.get(user_id)
+    if not user or not user.restaurante_id:
+        return jsonify({"msg": "Usuario no válido o sin restaurante asignado"}), 400
+    try:
+        ventas = Venta.query.filter(
+            Venta.restaurante_id == user.restaurante_id,
+            db.extract("month", Venta.fecha) == mes,
+            db.extract("year", Venta.fecha) == ano
+        ).all()
+        resultados = []
+        for v in ventas:
+            resultados.append({
+                "id": v.id,
+                "fecha": v.fecha.isoformat(),
+                "monto": v.monto,
+                "turno": v.turno,
+                "restaurante_id": v.restaurante_id
+            })
+        return jsonify(resultados), 200
+    except Exception as e:
+        return jsonify({"msg": "Error al obtener ventas", "error": str(e)}), 500
