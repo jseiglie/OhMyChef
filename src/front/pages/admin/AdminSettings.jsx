@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { AdminSettingsComponent } from "../../components/AdminSettingsComponent";
 
 export const AdminSettings = () => {
+  useEffect(() => {
+    const el = document.getElementsByClassName("custom-sidebar")[0];
+    if (el) el.scrollTo(0, 0);
+  }, []);
   return (
-    <div className="container py-4">
-      <h1 className="mb-3"> vista Admin Settings</h1>
-      
-    </div>
+
+    <AdminSettingsComponent />
+
   );
 };

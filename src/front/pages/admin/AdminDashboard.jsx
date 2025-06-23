@@ -1,16 +1,11 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import InfoCard from "../../components/InforCard"; 
-import React from 'react';
-import { FaUser, FaPlus, FaUtensils, FaCog } from 'react-icons/fa';
+import React, { useEffect } from 'react';
 import AdminDashboardBB from "../../components/AdminDashboardBB";
-import RestaurantDetail from '../../components/RestaurantDetail';
-import QuickActionCard from '../../components/QuickActionCard';
-
 
 export const AdminDashboard = () => {
-  return (
+  useEffect(() => {
+    const el = document.getElementsByClassName("custom-sidebar")[0];
+    if (el) el.scrollTo(0, 0);
+  }, []);
 
-    <AdminDashboardBB />
-  );
+  return <AdminDashboardBB />;
 };
-
