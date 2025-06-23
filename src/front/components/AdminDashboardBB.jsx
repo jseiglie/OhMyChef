@@ -66,14 +66,14 @@ const AdminDashboardBB = () => {
             const gastoDia = gastoDiario[r.restaurante_id] || [];
 
             return (
-              <div key={r.restaurante_id} className={`restaurant-card flex-grow-1 col-12 col-sm-6 col-md-6 col-lg-6 col-xl-2 mb-4 me-2 ${isTop1(index) ? 'top-one-card' : ''}`} >
+              <div key={r.restaurante_id} className={`restaurant-card restauranteDash flex-grow-1 col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 col-xxl-3 mb-4 ps-4 me-2 ${isTop1(index) ? 'top-one-card' : ''}`} >
                 <h4 className="mb-2 text-center fw-bold">{isTop1(index) ? '🌟 ' : ''}{r.nombre}</h4>
 
                 <div className="d-flex justify-content-between gap-2 mb-3">
                   {/* CAMBIO: tarjeta azul con texto azul */}
                   <div className="card shadow-sm border rounded p-2 bg-info-subtle" style={{ width: '48%' }}>
                     <div className="text-center">
-                      <div className="icono-circular bg-white rounded-circle mb-1 d-inline-flex align-items-center justify-content-center" style={{ width: '24px', height: '24px' }}>
+                      <div className="icono-circular bg-white rounded-circle mb-1 d-inline-flex align-items-center justify-content-center" >
                         💰
                       </div>
                       <p className="fw-bold text-info mb-0 small">Ventas</p>

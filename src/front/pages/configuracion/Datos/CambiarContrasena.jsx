@@ -71,7 +71,7 @@ export const CambiarContrasena = () => {
             placeholder="Repite nueva contraseña"
           />
         </div>
-        <button type="submit" className="btn btn-success text-white">Actualizar contraseña</button>
+        <button type="submit" className="btn text-white">Actualizar contraseña</button>
       </form>
     </div>
   );

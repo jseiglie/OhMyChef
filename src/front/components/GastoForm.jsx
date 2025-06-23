@@ -4,14 +4,13 @@ import useGlobalReducer from "../hooks/useGlobalReducer";
 import gastoServices from "../services/GastoServices";
 
 export const GastoForm = () => {
-
   const { store } = useGlobalReducer();
   const user = store.user;
   const navigate = useNavigate();
 
   const [fecha, setFecha] = useState(new Date().toISOString().split("T")[0]);
   const [gastos, setGastos] = useState([
-    { proveedor_id: "", categoria: "", monto: "", nota: "" }
+    { proveedor_id: "", categoria: "", monto: "", nota: "" },
   ]);
   const [proveedores, setProveedores] = useState([]);
   const [mensaje, setMensaje] = useState("");
@@ -23,190 +22,144 @@ export const GastoForm = () => {
 
   useEffect(() => {
     if (user?.restaurante_id) {
-
       gastoServices
         .getProveedores(user.restaurante_id)
         .then(setProveedores)
         .catch(() => setMensaje("Error al cargar proveedores"));
     }
-  }, [user]);
-
-  useEffect(() => {
-    const el = document.getElementsByClassName("custom-sidebar")[0];
-    if (el) el.scrollTo(0, 0);
   }, []);
 
-  const handleChange = (index, e) => {
-    const updatedGastos = [...gastos];
-    updatedGastos[index][e.target.name] = e.target.value;
-    setGastos(updatedGastos);
+  const handleInputChange = (index, field, value) => {
+    const nuevosGastos = [...gastos];
+    nuevosGastos[index][field] = value;
+    setGastos(nuevosGastos);
   };
 
-  const handleAddRow = () => {
-
+  const agregarGasto = () => {
     setGastos([...gastos, { proveedor_id: "", categoria: "", monto: "", nota: "" }]);
   };
 
-  const handleRemoveRow = (index) => {
-
-    const updated = [...gastos];
-    updated.splice(index, 1);
-    setGastos(updated);
+  const eliminarGasto = (index) => {
+    const nuevosGastos = [...gastos];
+    nuevosGastos.splice(index, 1);
+    setGastos(nuevosGastos);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setMensaje("");
-
-    const incompletos = gastos.some(
-      (g) => !g.proveedor_id || !g.categoria || !g.monto
-    );
-    if (incompletos) {
-      setMensaje("Por favor completa todos los campos obligatorios");
-      return;
-    }
-
-    const payload = gastos.map((g) => ({
-      ...g,
+  const registrarGastos = async () => {
+    const datos = {
       fecha,
-      usuario_id: user.id,
+      gastos,
       restaurante_id: user.restaurante_id,
-    }));
-
-    if (!window.confirm("¿Confirmas los datos introducidos?")) return;
+    };
 
     try {
-      await gastoServices.registrarGasto(payload);
-      setMensaje("Gastos registrados con éxito");
+      await gastoServices.crearGasto(datos);
+      setMensaje("Gastos registrados correctamente");
       setGastos([{ proveedor_id: "", categoria: "", monto: "", nota: "" }]);
-
-      setTimeout(() => {
-        navigate(`/${user.rol}/gastos`);
-      }, 1500);
-    } catch {
-      setMensaje("Error al registrar gastos");
+    } catch (error) {
+      setMensaje("Error al registrar los gastos");
     }
   };
 
   return (
-    <div className="dashboard-container ps-0  py-3 pt-4">
-      <button onClick={() => navigate(`/${user.rol}/gastos`)} className="back-button">← Volver a gastos</button>
-      <h1 className="dashboard-title">Registrar Gastos del día</h1>
-      <h5 className="dashboard-welcome text-white mt-2 mb-4">Mes actual: {nombreMes.toUpperCase()}</h5>
+    <div className="container-fluid px-4 py-4">
+      <button onClick={() => navigate("/encargado/gastos")} className="btn btn-outline-secondary mb-3">
+        ← Volver a gastos
+      </button>
 
+      <h3 className="mb-2">Registrar Gastos del día</h3>
+      <div className="bg-orange text-white py-2 px-3 mb-4 rounded">
+        Mes actual: {nombreMes.toUpperCase()}
+      </div>
 
-      <div className="proveedor-card col-12 col-sm-12 col-md-12 col-lg-12 col-xl-8 col-xxl-8">
-        <div className="mb-3">
-          <label className="form-label">Fecha</label>
+      <div className="bg-white p-4 shadow rounded w-100">
+        <div className="mb-4">
+          <label className="form-label fw-semibold">Fecha</label>
           <input
             type="date"
+            className="form-control"
             value={fecha}
             onChange={(e) => setFecha(e.target.value)}
-            className="form-control custom-gastos-fecha"
           />
         </div>
 
-        <form onSubmit={handleSubmit}>
-          {gastos.map((gasto, index) => (
-            <div className="row align-items-end mb-3" key={index}>
-              <div className="col-md-3 mt-2">
-                <label className="form-label">Proveedor</label>
-                <select
-                  className="form-select"
-                  name="proveedor_id"
-                  value={gasto.proveedor_id}
-                  onChange={(e) => handleChange(index, e)}
-                  required
-                >
-                  <option value="">Seleccione</option>
-                  {proveedores.map((p) => (
-                    <option key={p.id} value={p.id}>
-                      {p.nombre}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="col-md-2">
-                <label className="form-label">Categoría</label>
-                <select
-                  className="form-select"
-                  name="categoria"
-                  value={gasto.categoria}
-                  onChange={(e) => handleChange(index, e)}
-                  required
-                >
-                  <option value="">Seleccione</option>
-                  <option value="alimentos">Alimentos</option>
-                  <option value="bebidas">Bebidas</option>
-                  <option value="limpieza">Limpieza</option>
-                  <option value="otros">Otros</option>
-                </select>
-              </div>
-
-              <div className="col-md-2">
-                <label className="form-label">Monto (€)</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  name="monto"
-                  value={gasto.monto}
-                  onChange={(e) => handleChange(index, e)}
-                  min="0"
-                  step="0.01"
-                  required
-                />
-              </div>
-
-              <div className="col-md-3">
-                <label className="form-label">Nota</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="nota"
-                  value={gasto.nota}
-                  onChange={(e) => handleChange(index, e)}
-                />
-              </div>
-
-              <div className="col-md-2 text-end">
-                {index > 0 && (
-                  <button
-                    type="button"
-                    className="btn btn-outline-danger mt-2"
-                    onClick={() => handleRemoveRow(index)}
-                  >
-                    Eliminar
-                  </button>
-                )}
-              </div>
+        {gastos.map((gasto, index) => (
+          <div key={index} className="row align-items-end g-3 mb-3">
+            <div className="col-md-3">
+              <label className="form-label">Proveedor</label>
+              <select
+                className="form-select"
+                value={gasto.proveedor_id}
+                onChange={(e) => handleInputChange(index, "proveedor_id", e.target.value)}
+              >
+                <option value="">Selecciona</option>
+                {proveedores.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.nombre}
+                  </option>
+                ))}
+              </select>
             </div>
-          ))}
 
-          <div className="mb-3 mt-4">
-            <button
-              type="button"
-              className="btn btn-outline-secondary me-2"
-              onClick={handleAddRow}
-            >
-              + Añadir otro gasto
-            </button>
-            <button type="submit" className="btn btn-primary">
-              Registrar Gastos
-            </button>
+            <div className="col-md-2">
+              <label className="form-label">Categoría</label>
+              <select
+                className="form-select"
+                value={gasto.categoria}
+                onChange={(e) => handleInputChange(index, "categoria", e.target.value)}
+              >
+                <option value="">$</option>
+                <option value="Alimentos">Alimentos</option>
+                <option value="Bebidas">Bebidas</option>
+                <option value="Limpieza">Limpieza</option>
+                <option value="Otros">Otros</option>
+              </select>
+            </div>
+
+            <div className="col-md-2">
+              <label className="form-label">Monto (€)</label>
+              <input
+                type="number"
+                className="form-control text-start"
+                value={gasto.monto}
+                onChange={(e) => handleInputChange(index, "monto", e.target.value)}
+              />
+            </div>
+
+            <div className="col-md-3">
+              <label className="form-label">Nota</label>
+              <input
+                type="text"
+                className="form-control"
+                value={gasto.nota}
+                onChange={(e) => handleInputChange(index, "nota", e.target.value)}
+              />
+            </div>
+
+            <div className="col-md-2 d-flex justify-content-end">
+              {gastos.length > 1 && (
+                <button
+                  type="button"
+                  className="btn btn-outline-danger"
+                  onClick={() => eliminarGasto(index)}
+                >
+                  Eliminar
+                </button>
+              )}
+            </div>
           </div>
+        ))}
 
-          {mensaje && (
-            <div
-              className={`alert mt-3 ${mensaje.toLowerCase().includes("éxito")
-                ? "alert-success"
-                : "alert-danger"
-                }`}
-            >
-              {mensaje}
-            </div>
-          )}
-        </form>
+        <div className="d-flex gap-3 mt-4">
+          <button className="btn btn-outline-primary" onClick={agregarGasto}>
+            + Añadir otro gasto
+          </button>
+          <button className="btn btn-primary" onClick={registrarGastos}>
+            Registrar Gastos
+          </button>
+        </div>
+
+        {mensaje && <div className="alert alert-info mt-3">{mensaje}</div>}
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 import proveedorServices from "../../services/proveedorServices";
 import { ProveedorForm } from "../../components/shared/ProveedorForm";
+import "../../styles/Encargado.css";
 
 export const Proveedores = () => {
   const { store } = useGlobalReducer();
@@ -78,7 +79,7 @@ export const Proveedores = () => {
     <div className="dashboard-container ">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h1 className="dashboard-title">Proveedores</h1>
-        <button className="btn btn-success" onClick={abrirModalCrear}>
+        <button className="btn" onClick={abrirModalCrear}>
           + Nuevo Proveedor
         </button>
       </div>
