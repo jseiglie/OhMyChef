@@ -4,6 +4,7 @@ import useGlobalReducer from "../hooks/useGlobalReducer";
 import logo from "../assets/img/logo.svg";
 import { useNavigate, Link } from "react-router-dom";
 
+
 export const Login = () => {
 
   const { dispatch } = useGlobalReducer();
@@ -50,7 +51,7 @@ export const Login = () => {
       {errorMessage && (
         <div className="alert alert-danger">{errorMessage}</div>
       )}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} style={{ backgroundColor: 'transparent' }}>
         <div className="mb-3 text-start">
           <label htmlFor="username" className="form-label">Correo electrónico</label>
           <input
