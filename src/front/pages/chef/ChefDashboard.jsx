@@ -57,7 +57,7 @@ export const ChefDashboard = () => {
       <div className="card shadow-sm border rounded p-4 pt-0 px-0 mb-4">
         <h5 className="mb-3 fw-bold barralarga">GASTOS</h5>
         <div className="row align-items-center ms-3">
-          <div className="col-md-3 d-flex flex-column gap-4 align-items-center">
+          <div className="col-11 col-sm-11 col-md-3 d-flex flex-column gap-4 align-items-center">
             <div className="rounded shadow-sm p-3 text-center bg-info-subtle w-100">
               <div className="rounded-circle bg-white text-info d-inline-flex align-items-center justify-content-center mb-2" style={{ width: "50px", height: "50px", fontSize: "1.5rem" }}>
                 💸
