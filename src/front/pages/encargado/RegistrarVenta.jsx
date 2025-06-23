@@ -9,15 +9,17 @@ export const RegistrarVenta = () => {
     const el = document.getElementsByClassName("custom-sidebar")[0];
     if (el) el.scrollTo(0, 0);
   }, []);
-  const simbolo = MonedaSimbolo();
 
+  const simbolo = MonedaSimbolo();
   const { store } = useGlobalReducer();
   const navigate = useNavigate();
+
   const [form, setForm] = useState({
     fecha: new Date().toISOString().split("T")[0],
     monto: "",
     turno: "mañana",
   });
+
   const [estado, setEstado] = useState({ loading: false, mensaje: "", error: false });
 
   const nombreMes = new Date(form.fecha).toLocaleString("es", { month: "long", year: "numeric" });
@@ -41,32 +43,36 @@ export const RegistrarVenta = () => {
         navigate("/encargado/ventas");
       }, 1500);
     } catch (error) {
-      setEstado({ loading: false, mensaje: "Error al registrar la venta", error: true });
+      setEstado({
+        loading: false,
+        mensaje: error.message || "Error al registrar la venta",
+        error: true,
+      });
     }
   };
 
   return (
-    <div className="dashboard-container ">
+    <div className="dashboard-container">
       <button onClick={() => navigate('/encargado/ventas')} className="back-button">← Volver a ventas</button>
       <h1 className="dashboard-title">Registrar Venta</h1>
       <h5 className="dashboard-welcome text-white mt-2 mb-4">Mes actual: {nombreMes.toUpperCase()}</h5>
 
-      <form onSubmit={handleSubmit} className="proveedor-card col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6 col-xxl-6 ">
+      <form onSubmit={handleSubmit} className="proveedor-card col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6 col-xxl-6">
         {/* Fecha */}
-
         <div className="row align-items-end mb-3">
           <div className="col-12 col-sm-12 col-md-12 col-lg-6 mt-2">
             <label className="form-label">Fecha</label>
             <input
               type="date"
               name="fecha"
-              className="form-control col-12 col-sm-12 col-md-12 col-lg-6 "
+              className="form-control"
               value={form.fecha}
               onChange={handleChange}
               required
             />
           </div>
         </div>
+
         {/* Monto */}
         <div className="row align-items-end mb-3">
           <div className="col-12 col-sm-12 col-md-12 col-lg-6 mt-2">
@@ -93,6 +99,7 @@ export const RegistrarVenta = () => {
             </select>
           </div>
         </div>
+
         <div>
           <button type="submit" className="btn btn-success mt-3" disabled={estado.loading}>
             {estado.loading ? "Guardando..." : "Registrar Venta"}

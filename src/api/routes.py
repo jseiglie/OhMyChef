@@ -13,8 +13,72 @@ import json
 import traceback
 from api.email_utils import send_email
 from datetime import datetime
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 api = Blueprint('api', __name__)
+
+def send_email(to_email, subject, html_content):
+    """
+    Envía un correo utilizando SendGrid.
+    - Usa EMAIL_SENDER como remitente desde .env
+    - Usa SENDGRID_API_KEY para autenticación
+    """
+
+    try:
+        message = Mail(
+            from_email=os.getenv("EMAIL_SENDER", "OhMyChef <ohmychefapp@gmail.com>"),
+            to_emails=to_email,
+            subject=subject,
+            html_content=html_content
+        )
+
+        sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
+        response = sg.send(message)
+
+        print(f"✅ Correo enviado a {to_email}")
+        return True
+
+    except Exception as e:
+        print("❌ Error al enviar correo:", str(e))
+        return False
+
+def notificar_admin_sobre_evento(tipo, datos):
+    subject = ""
+    html_content = ""
+
+    if tipo == "venta":
+        subject = f"Nueva venta registrada en {datos['restaurante']}"
+        html_content = f"""
+        <h4>📥 Venta registrada:</h4>
+        <ul>
+            <li><strong>Restaurante:</strong> {datos['restaurante']}</li>
+            <li><strong>Monto:</strong> {datos['monto']}€</li>
+            <li><strong>Turno:</strong> {datos['turno']}</li>
+            <li><strong>Fecha:</strong> {datos['fecha']}</li>
+            <li><strong>Usuario:</strong> {datos['usuario']}</li>
+        </ul>
+        """
+
+    elif tipo == "gasto":
+        subject = f"Nuevo gasto registrado en {datos['restaurante']}"
+        html_content = f"""
+        <h4>📤 Gasto registrado:</h4>
+        <ul>
+            <li><strong>Restaurante:</strong> {datos['restaurante']}</li>
+            <li><strong>Proveedor:</strong> {datos['proveedor']}</li>
+            <li><strong>Categoría:</strong> {datos.get('categoria', 'Sin categoría')}</li>
+            <li><strong>Monto:</strong> {datos['monto']}€</li>
+            <li><strong>Fecha:</strong> {datos['fecha']}</li>
+            <li><strong>Usuario:</strong> {datos['usuario']}</li>
+        </ul>
+        """
+
+    admin_email = os.getenv("EMAIL_ADMIN", "admin@ohmychef.com")
+    send_email(admin_email, subject, html_content)
+
+
 
 
 @api.route('/forgot-password', methods=['POST'])
@@ -95,10 +159,9 @@ def register():
         if not data.get("email") or not data.get("password") or not data.get("rol") or not data.get("nombre"):
             return jsonify({"error": "Faltan datos obligatorios"}), 400
 
-        total_users = db.session.scalar(
-            select(func.count()).select_from(Usuario))
-
+        total_users = db.session.scalar(select(func.count()).select_from(Usuario))
         current_user_id = get_jwt_identity()
+
         if total_users > 0:
             if not current_user_id:
                 return jsonify({"error": "No autorizado"}), 403
@@ -114,8 +177,10 @@ def register():
         if existing_user:
             return jsonify({"error": "Email ya registrado"}), 409
 
-        hashed_password = generate_password_hash(data["password"])
-        status = data.get("status", "active")  # ✅ Default: active
+        # Guardamos la contraseña en texto plano para el correo
+        raw_password = data["password"]
+        hashed_password = generate_password_hash(raw_password)
+        status = data.get("status", "active")
 
         new_user = Usuario(
             nombre=data["nombre"],
@@ -128,21 +193,32 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
-        # ✅ Email opcional
+        # 📬 Enviar correo con SendGrid
         from api.email_utils import send_email
+
         subject = "Bienvenido a OhMyChef!"
         html_content = f"""
         <h3>Hola {data['nombre']},</h3>
-        <p>Tu cuenta en <strong>OhMyChef!</strong> ha sido creada exitosamente.</p>
+
+        <p>Tu cuenta en <strong>OhMyChef!</strong> ha sido creada exitosamente. Aquí tienes tus datos de acceso:</p>
+
         <ul>
           <li><strong>Rol:</strong> {data['rol']}</li>
           <li><strong>Email:</strong> {data['email']}</li>
+          <li><strong>Contraseña:</strong> {raw_password}</li>
         </ul>
-        <p>Ingresa al sistema con tu email y la contraseña asignada.</p>
-        <p><em>Este mensaje ha sido generado automáticamente.</em></p>
+
+       
+        <p>🛡️ Por seguridad, te recomendamos cambiar esta contraseña tras el primer ingreso.</p>
+
+        <p>📩 Si tienes alguna pregunta, contáctanos en 
+        <a href="mailto:soporte@ohmychef.com">soporte@ohmychef.com</a></p>
+
+        <p><strong>Equipo OhMyChef</strong></p>
+        <p style="font-size:0.8em;color:gray;"><em>Este mensaje ha sido generado automáticamente. No respondas a este correo.</em></p>
         """
-        send_email(to_email=data["email"],
-                   subject=subject, html_content=html_content)
+
+        send_email(to_email=data["email"], subject=subject, html_content=html_content)
 
         return jsonify({"msg": "Usuario creado correctamente"}), 201
 
@@ -321,7 +397,7 @@ def crear_venta():
         return jsonify({"msg": "Faltan campos obligatorios"}), 400
 
     try:
-        # ❗ Validación: no permitir duplicados por fecha, turno y restaurante
+        # Validar duplicados por fecha, turno y restaurante
         venta_existente = db.session.query(Venta).filter_by(
             fecha=fecha,
             turno=turno,
@@ -339,11 +415,33 @@ def crear_venta():
         )
         db.session.add(nueva_venta)
         db.session.commit()
+
+        # 📨 Notificación protegida
+        try:
+            restaurante = Restaurante.query.get(restaurante_id)
+            usuario = Usuario.query.get(get_jwt_identity())
+
+            print("✅ Venta registrada correctamente:")
+            print("  Restaurante:", restaurante.nombre if restaurante else "Desconocido")
+            print("  Usuario:", usuario.nombre if usuario else "Sistema")
+
+            notificar_admin_sobre_evento("venta", {
+                "restaurante": restaurante.nombre if restaurante else "Desconocido",
+                "monto": monto,
+                "turno": turno,
+                "fecha": fecha,
+                "usuario": usuario.nombre if usuario else "Sistema"
+            })
+        except Exception as e:
+            print("⚠️ Error al notificar al admin:", str(e))
+
         return jsonify({"msg": "Venta creada correctamente"}), 201
 
     except Exception as e:
         db.session.rollback()
+        print("❌ ERROR en /ventas:", str(e))
         return jsonify({"msg": "Error al crear la venta", "error": str(e)}), 500
+
 
 
 @api.route('/ventas/<int:id>', methods=['GET'])
@@ -455,11 +553,31 @@ def crear_gasto():
                 )
                 db.session.add(nuevo_gasto)
 
+                # 📨 Notificación individual
+                try:
+                    restaurante = Restaurante.query.get(g["restaurante_id"])
+                    usuario = Usuario.query.get(g["usuario_id"])
+                    proveedor = Proveedor.query.get(g["proveedor_id"])
+
+                    print("📤 Gasto lote:", g["monto"], "→", restaurante.nombre)
+
+                    notificar_admin_sobre_evento("gasto", {
+                        "restaurante": restaurante.nombre if restaurante else "Desconocido",
+                        "proveedor": proveedor.nombre if proveedor else "Sin proveedor",
+                        "categoria": g.get("categoria"),
+                        "monto": g["monto"],
+                        "fecha": g["fecha"],
+                        "usuario": usuario.nombre if usuario else "Sistema"
+                    })
+                except Exception as error_envio:
+                    print("❌ Error al enviar notificación del gasto (lote):", str(error_envio))
+
             db.session.commit()
             return jsonify({"msg": "Gastos registrados correctamente"}), 201
 
         except Exception as e:
             db.session.rollback()
+            print("❌ ERROR en gastos (lote):", str(e))
             return jsonify({"msg": "Error al registrar gastos", "error": str(e)}), 500
 
     else:
@@ -488,10 +606,35 @@ def crear_gasto():
             )
             db.session.add(nuevo_gasto)
             db.session.commit()
+
+            # 📨 Notificación individual
+            try:
+                restaurante = Restaurante.query.get(restaurante_id)
+                usuario = Usuario.query.get(usuario_id)
+                proveedor = Proveedor.query.get(proveedor_id)
+
+                print("📤 Gasto individual:", monto, "→", restaurante.nombre)
+                print("✅ Gasto registrado como:", usuario.nombre if usuario else "Sistema")
+
+                notificar_admin_sobre_evento("gasto", {
+                    "restaurante": restaurante.nombre if restaurante else "Desconocido",
+                    "proveedor": proveedor.nombre if proveedor else "Sin proveedor",
+                    "categoria": categoria,
+                    "monto": monto,
+                    "fecha": fecha,
+                    "usuario": usuario.nombre if usuario else "Sistema"
+                })
+            except Exception as error_envio:
+                print("❌ Error al enviar notificación del gasto:", str(error_envio))
+
             return jsonify({"msg": "Gasto registrado correctamente"}), 201
+
         except Exception as e:
             db.session.rollback()
+            print("❌ ERROR en gasto individual:", str(e))
             return jsonify({"msg": "Error al registrar el gasto", "error": str(e)}), 500
+
+
 
 
 @api.route('/gastos/<int:id>', methods=['GET'])
