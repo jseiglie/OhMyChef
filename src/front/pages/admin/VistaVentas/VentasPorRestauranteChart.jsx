@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend} from "chart.js";
+import {
+  Chart as ChartJS,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+} from "chart.js";
 import adminService from "../../../services/adminService";
-
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 const VentasPorRestauranteChart = () => {
   const [dataChart, setDataChart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(null); // ← estado de selección
   const fecha = new Date();
   const mes = fecha.getMonth() + 1;
   const ano = fecha.getFullYear();
@@ -29,7 +36,9 @@ const VentasPorRestauranteChart = () => {
   if (loading) return <p>Cargando gráfico...</p>;
   if (error || !dataChart) return <p>No hay datos para mostrar este mes.</p>;
   const backgroundColors = dataChart.map((_, i) =>
-    i === 0 ? "#ff5d1d" : "rgba(200, 200, 200, 0.8)"
+    i === selectedIndex
+      ? "rgba(255, 93, 29, 0.8)" // barra seleccionada
+      : "rgba(200, 200, 200, 0.8)" // barra no seleccionada
   );
   const chartData = {
     labels: dataChart.map((item) => item.restaurante),
@@ -66,10 +75,16 @@ const VentasPorRestauranteChart = () => {
         },
       },
     },
+    onClick: (evt, elements) => {
+      if (elements.length > 0) {
+        const index = elements[0].index;
+        setSelectedIndex(index);
+      }
+    },
   };
   return (
     <div className="mt-4 p-3 bg-white rounded shadow-sm" style={{ height: "350px" }}>
-      <h1 className="fw-bold mb-3">Ventas por restaurante (junio {ano})</h1>
+      <h6 className="fw-bold mb-3">Ventas por restaurante (junio {ano})</h6>
       <div style={{ height: "260px" }}>
         <Bar data={chartData} options={options} />
       </div>
