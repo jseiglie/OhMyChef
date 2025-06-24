@@ -9,6 +9,13 @@ export const EncargadoVentas = () => {
   const simbolo = MonedaSimbolo();
   const { store } = useGlobalReducer();
   const user = store.user;
+
+  const fechaActual = new Date();
+  const mesActual = fechaActual.getMonth() + 1;
+  const anoActual = fechaActual.getFullYear();
+
+  const [mesSeleccionado, setMesSeleccionado] = useState(mesActual);
+  const [anoSeleccionado, setAnoSeleccionado] = useState(anoActual);
   const [mostrarModal, setMostrarModal] = useState(false);
   const [ventas, setVentas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,12 +23,10 @@ export const EncargadoVentas = () => {
   const [nuevoMonto, setNuevoMonto] = useState("");
   const [mensaje, setMensaje] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
-  const fechaActual = new Date();
-  const mes = fechaActual.getMonth() + 1;
-  const ano = fechaActual.getFullYear();
+
   const cargarVentas = async () => {
     try {
-      const data = await ventaServices.getVentasEncargado(mes, ano);
+      const data = await ventaServices.getVentasEncargado(mesSeleccionado, anoSeleccionado);
       let filtradas = data.filter(
         (v) => Number(v.restaurante_id) === Number(user?.restaurante_id)
       );
@@ -36,20 +41,24 @@ export const EncargadoVentas = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     cargarVentas();
     const el = document.getElementsByClassName("custom-sidebar")[0];
     if (el) el.scrollTo(0, 0);
-  }, [selectedDate]);
+  }, [selectedDate, mesSeleccionado, anoSeleccionado]);
+
   const total = ventas.reduce((acc, v) => acc + parseFloat(v.monto), 0);
   const diasUnicos = [...new Set(ventas.map((v) => v.fecha))];
   const promedio = diasUnicos.length > 0 ? total / diasUnicos.length : 0;
+
   const abrirModalEdicion = (venta) => {
     setVentaSeleccionada(venta);
     setNuevoMonto(venta.monto);
     const modal = new bootstrap.Modal(document.getElementById("editarModal"));
     modal.show();
   };
+
   const guardarEdicion = async () => {
     try {
       await ventaServices.editarVenta(ventaSeleccionada.id, {
@@ -66,6 +75,7 @@ export const EncargadoVentas = () => {
       setTimeout(() => setMensaje(""), 2000);
     }
   };
+
   const eliminarVenta = async (id) => {
     if (!window.confirm("¿Estás seguro de eliminar esta venta?")) return;
     try {
@@ -78,6 +88,8 @@ export const EncargadoVentas = () => {
       setTimeout(() => setMensaje(""), 2000);
     }
   };
+
+  // 🔧 Ahora lanza el error para que VentaModal lo capture
   const guardarVenta = async (form) => {
     try {
       await ventaServices.registrarVenta({
@@ -89,10 +101,10 @@ export const EncargadoVentas = () => {
       setMostrarModal(false);
       cargarVentas();
     } catch (error) {
-      setMensaje("Error al registrar la venta");
-      setTimeout(() => setMensaje(""), 2000);
+      throw error; // ⚠️ NECESARIO para que el modal maneje errores como 409
     }
   };
+
   return (
     <div className="dashboard-container">
       <div className="d-flex justify-content-between align-items-center mb-3">
@@ -101,11 +113,42 @@ export const EncargadoVentas = () => {
           <i className="bi bi-plus-circle me-2"></i> Registrar nueva venta
         </button>
       </div>
+
       {mensaje && (
         <div className={`alert mt-2 ${mensaje.toLowerCase().includes("éxito") || mensaje.toLowerCase().includes("eliminada") ? "alert-success" : "alert-danger"}`}>
           {mensaje}
         </div>
       )}
+
+      <div className="d-flex align-items-center mb-3 gap-3 flex-wrap">
+        <div className="d-flex align-items-center gap-2">
+          <label>Mes:</label>
+          <input
+            type="month"
+            className="form-control w-auto"
+            value={`${anoSeleccionado}-${String(mesSeleccionado).padStart(2, "0")}`}
+            onChange={(e) => {
+              const [a, m] = e.target.value.split("-");
+              setAnoSeleccionado(parseInt(a));
+              setMesSeleccionado(parseInt(m));
+            }}
+          />
+        </div>
+
+        <div className="d-flex align-items-center gap-2">
+          <label>Filtrar por fecha:</label>
+          <input
+            type="date"
+            className="form-control w-auto"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+          />
+          <button className="btn btn-success" onClick={() => setSelectedDate("")}>
+            Ver todo el mes
+          </button>
+        </div>
+      </div>
+
       {loading ? (
         <p>Cargando...</p>
       ) : ventas.length === 0 ? (
@@ -119,18 +162,7 @@ export const EncargadoVentas = () => {
               <div className="fs-5 text-info strong">Total: <span className="fw-bold">€{total.toFixed(2)}</span></div>
             </div>
           </div>
-          <div className="d-flex align-items-center mb-0 mt-4 flex-wrap gap-2">
-            <label className="me-2">Filtrar por fecha:</label>
-            <input
-              type="date"
-              className="form-control w-auto me-2"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-            />
-            <button className="btn btn-success" onClick={() => setSelectedDate("")}>
-              Ver todo el mes
-            </button>
-          </div>
+
           <div className="table-responsive">
             <table className="table table-responsive users-table mt-3 ps-0">
               <thead>
@@ -151,28 +183,14 @@ export const EncargadoVentas = () => {
                       <button
                         className="action-icon-button edit-button"
                         onClick={() => abrirModalEdicion(v)}
-                        title="Edit User"><svg
-                          xmlns="http://www.w3.org/2000/svg" width="20"
-                          height="20" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                          strokeLinejoin="round" class="feather feather-edit-2">
-                          <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z">
-                          </path>
-                        </svg>
+                        title="Editar venta">
+                        ✏️
                       </button>
                       <button
                         className="action-icon-button delete-button"
                         onClick={() => eliminarVenta(v.id)}
-                        title="Delete User"><svg xmlns="http://www.w3.org/2000/svg"
-                          width="20" height="20" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                          strokeLinejoin="round" class="feather feather-trash-2">
-                          <polyline points="3 6 5 6 21 6"></polyline>
-                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                          </path>
-                          <line x1="10" y1="11" x2="10" y2="17">
-                          </line><line x1="14" y1="11" x2="14" y2="17"></line>
-                        </svg>
+                        title="Eliminar venta">
+                        🗑️
                       </button>
                     </td>
                   </tr>
@@ -182,6 +200,7 @@ export const EncargadoVentas = () => {
           </div>
         </>
       )}
+
       {/* Modal edición */}
       <div className="modal fade" id="editarModal" tabIndex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
@@ -206,6 +225,7 @@ export const EncargadoVentas = () => {
           </div>
         </div>
       </div>
+
       {/* Modal registrar nueva venta */}
       {mostrarModal && (
         <VentaModal

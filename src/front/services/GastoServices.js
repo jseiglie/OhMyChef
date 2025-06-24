@@ -61,4 +61,19 @@ gastoServices.getGastos = async (restaurante_id, fecha) => {
   return await resp.json(); 
 };
 
+gastoServices.editarGasto = async (id, gastoData) => {
+  const token = sessionStorage.getItem("token");
+  const response = await fetch(`${backendUrl}/api/gastos/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(gastoData),
+  });
+
+  if (!response.ok) throw new Error("Error al editar gasto");
+  return await response.json();
+};
+
 export default gastoServices;
