@@ -672,6 +672,8 @@ def editar_gasto(id):
     if not data:
         return jsonify({"msg": "Datos no recibidos"}), 400
 
+    print("🛠️ Recibiendo para editar gasto:", data)
+
     gasto.fecha = data.get("fecha", gasto.fecha)
     gasto.monto = data.get("monto", gasto.monto)
     gasto.categoria = data.get("categoria", gasto.categoria)
@@ -683,9 +685,11 @@ def editar_gasto(id):
 
     try:
         db.session.commit()
+        print("✅ Gasto actualizado correctamente.")
         return jsonify({"msg": "Gasto actualizado"}), 200
     except Exception as e:
         db.session.rollback()
+        print("❌ Error al actualizar gasto:", str(e))
         return jsonify({"msg": "Error al actualizar el gasto", "error": str(e)}), 500
 
 
