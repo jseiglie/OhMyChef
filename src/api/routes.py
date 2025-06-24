@@ -672,6 +672,8 @@ def editar_gasto(id):
     if not data:
         return jsonify({"msg": "Datos no recibidos"}), 400
 
+    print("🛠️ Recibiendo para editar gasto:", data)
+
     gasto.fecha = data.get("fecha", gasto.fecha)
     gasto.monto = data.get("monto", gasto.monto)
     gasto.categoria = data.get("categoria", gasto.categoria)
@@ -683,9 +685,11 @@ def editar_gasto(id):
 
     try:
         db.session.commit()
+        print("✅ Gasto actualizado correctamente.")
         return jsonify({"msg": "Gasto actualizado"}), 200
     except Exception as e:
         db.session.rollback()
+        print("❌ Error al actualizar gasto:", str(e))
         return jsonify({"msg": "Error al actualizar el gasto", "error": str(e)}), 500
 
 
@@ -827,19 +831,23 @@ def eliminar_factura(id):
 @api.route('/proveedores', methods=['GET'])
 @jwt_required()
 def get_proveedores():
-    proveedores = Proveedor.query.all()
-
-    resultados = []
-    for p in proveedores:
-        resultados.append({
+    restaurante_id = request.args.get("restaurante_id", type=int)
+    if restaurante_id:
+        proveedores = Proveedor.query.filter_by(restaurante_id=restaurante_id).all()
+    else:
+        
+        proveedores = Proveedor.query.all()
+    resultados = [
+        {
             "id": p.id,
             "nombre": p.nombre,
             "categoria": p.categoria,
             "restaurante_id": p.restaurante_id,
             "telefono": p.telefono,
             "direccion": p.direccion
-        })
-
+        }
+        for p in proveedores
+    ]
     return jsonify(resultados), 200
 
 
@@ -1976,3 +1984,54 @@ def restaurante_tiene_ventas(id):
         return jsonify({"tieneVentas": tiene_ventas}), 200
     except Exception as e:
         return jsonify({"msg": "Error al verificar ventas del restaurante", "error": str(e)}), 500
+    
+#Nuevo endpoint Ventas
+
+@api.route('/ventas/encargado', methods=['GET'])
+@jwt_required()
+def obtener_ventas_encargado():
+    mes = request.args.get("mes", type=int)
+    ano = request.args.get("ano", type=int)
+    user_id = get_jwt_identity()
+    user = Usuario.query.get(user_id)
+    if not user or not user.restaurante_id:
+        return jsonify({"msg": "Usuario no válido o sin restaurante asignado"}), 400
+    try:
+        ventas = Venta.query.filter(
+            Venta.restaurante_id == user.restaurante_id,
+            db.extract("month", Venta.fecha) == mes,
+            db.extract("year", Venta.fecha) == ano
+        ).all()
+        resultados = []
+        for v in ventas:
+            resultados.append({
+                "id": v.id,
+                "fecha": v.fecha.isoformat(),
+                "monto": v.monto,
+                "turno": v.turno,
+                "restaurante_id": v.restaurante_id
+            })
+        return jsonify(resultados), 200
+    except Exception as e:
+        return jsonify({"msg": "Error al obtener ventas", "error": str(e)}), 500
+
+@api.route("/ventas-detalle", methods=["GET"])
+@jwt_required()
+def ventas_detalle_por_restaurante():
+    try:
+        mes = request.args.get("mes")
+        ano = request.args.get("ano")
+        restaurante_id = request.args.get("restaurante_id")
+        if not mes or not ano or not restaurante_id:
+            return jsonify({"msg": "Faltan parámetros"}), 422
+        ventas = Venta.query.filter(
+            Venta.restaurante_id == int(restaurante_id),
+            db.extract("month", Venta.fecha) == int(mes),
+            db.extract("year", Venta.fecha) == int(ano)
+        ).all()
+        return jsonify([v.serialize() for v in ventas]), 200
+    except Exception as e:
+        return jsonify({
+            "msg": "Error al obtener ventas detalladas",
+            "error": str(e)
+        }), 500

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 import ventaServices from "../../services/ventaServices";
+import restauranteService from "../../services/restauranteServices";
 import { MonedaSimbolo } from "../../services/MonedaSimbolo";
 
 export const AdminVentasDetalle = () => {
@@ -9,8 +10,13 @@ export const AdminVentasDetalle = () => {
   const navigate = useNavigate();
   const { store } = useGlobalReducer();
   const user = store.user;
+
   const query = new URLSearchParams(window.location.search);
   const restaurante_id = query.get("restaurante_id") || user?.restaurante_id;
+
+  const fechaActual = new Date();
+  const [mesSeleccionado, setMesSeleccionado] = useState(fechaActual.getMonth() + 1);
+  const [anoSeleccionado, setAnoSeleccionado] = useState(fechaActual.getFullYear());
 
   const [selectedDate, setSelectedDate] = useState("");
   const [ventas, setVentas] = useState([]);
@@ -18,23 +24,21 @@ export const AdminVentasDetalle = () => {
   const [ventaSeleccionada, setVentaSeleccionada] = useState(null);
   const [nuevoMonto, setNuevoMonto] = useState("");
   const [mensaje, setMensaje] = useState("");
-
-  const fechaActual = new Date();
-  const mes = fechaActual.getMonth() + 1;
-  const ano = fechaActual.getFullYear();
+  const [nombreRestaurante, setNombreRestaurante] = useState("");
 
   const cargarVentas = async () => {
     try {
-      const data = await ventaServices.getVentas(mes, ano);
-
-      let filtradas = data.filter(
-        (v) => Number(v.restaurante_id) === Number(restaurante_id)
-      );
-
-      if (selectedDate) {
-        filtradas = filtradas.filter((v) => v.fecha === selectedDate);
-      }
-
+      const data = await ventaServices.getVentasDetalle(mesSeleccionado, anoSeleccionado, restaurante_id);
+      let filtradas = selectedDate
+        ? data.filter((v) => {
+            const fechaObj = new Date(v.fecha);
+            const yyyy = fechaObj.getFullYear();
+            const mm = String(fechaObj.getMonth() + 1).padStart(2, "0");
+            const dd = String(fechaObj.getDate()).padStart(2, "0");
+            const fechaFormateada = `${yyyy}-${mm}-${dd}`;
+            return fechaFormateada === selectedDate;
+          })
+        : data;
       filtradas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
       setVentas(filtradas);
     } catch (error) {
@@ -44,11 +48,21 @@ export const AdminVentasDetalle = () => {
     }
   };
 
+  const cargarNombreRestaurante = async () => {
+    try {
+      const data = await restauranteService.getRestaurante(restaurante_id);
+      setNombreRestaurante(data.nombre || "");
+    } catch (error) {
+      console.log("Error al obtener restaurante:", error);
+    }
+  };
+
   useEffect(() => {
     cargarVentas();
+    cargarNombreRestaurante();
     const el = document.getElementsByClassName("custom-sidebar")[0];
     if (el) el.scrollTo(0, 0);
-  }, [selectedDate]);
+  }, [selectedDate, mesSeleccionado, anoSeleccionado]);
 
   const total = ventas.reduce((acc, v) => acc + parseFloat(v.monto), 0);
   const diasUnicos = [...new Set(ventas.map((v) => v.fecha))];
@@ -92,22 +106,51 @@ export const AdminVentasDetalle = () => {
   };
 
   return (
-    <div className="dashboard-container ">
+    <div className="dashboard-container">
       <div className="mb-2">
         <button className="btn btn-outline-secondary btn-sm" onClick={() => navigate("/admin/dashboard")}>
           ← Volver
         </button>
       </div>
 
-      <h1 className="dashboard-title mb-3">Ventas del restaurante</h1>
-
-
+      <h1 className="dashboard-title mb-3">
+        Ventas {nombreRestaurante ? `${nombreRestaurante}` : ""}
+      </h1>
 
       {mensaje && (
         <div className={`alert mt-2 ${mensaje.includes("éxito") || mensaje.includes("eliminada") ? "alert-success" : "alert-danger"}`}>
           {mensaje}
         </div>
       )}
+
+      <div className="d-flex align-items-center gap-3 mb-3 flex-wrap">
+        <div className="d-flex align-items-center gap-2">
+          <label>Seleccionar mes:</label>
+          <input
+            type="month"
+            className="form-control w-auto"
+            value={`${anoSeleccionado}-${String(mesSeleccionado).padStart(2, "0")}`}
+            onChange={(e) => {
+              const [yy, mm] = e.target.value.split("-");
+              setAnoSeleccionado(parseInt(yy));
+              setMesSeleccionado(parseInt(mm));
+            }}
+          />
+        </div>
+
+        <div className="d-flex align-items-center gap-2">
+          <label>Filtrar por fecha:</label>
+          <input
+            type="date"
+            className="form-control w-auto"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+          />
+          <button className="btn btn-success" onClick={() => setSelectedDate("")}>
+            Ver todo el mes
+          </button>
+        </div>
+      </div>
 
       {loading ? (
         <p>Cargando...</p>
@@ -118,27 +161,13 @@ export const AdminVentasDetalle = () => {
           <div className="rounded shadow-sm p-2 col-sm-12 col-md-7 col-lg-6 col-xl-4 col-xxl-3 text-center bg-info-subtle d-flex flex-direction-row">
             <div className="icono-circular ms-2 me-4 rounded-circle bg-white text-info mt-1">📈</div>
             <div className="d-flex flex-column text-start">
-              <h6 className="fw-bold text-info">Promedio diario: €{promedio.toFixed(2)}</h6>
-              <div className="fs-5 text-info">Total: €{total.toFixed(2)}</div>
+              <h6 className="fw-bold text-info">Promedio diario: <span className="fw-bold">€{promedio.toFixed(2)}</span></h6>
+              <div className="fs-5 text-info">Total: <span className="fw-bold">€{total.toFixed(2)}</span></div>
             </div>
           </div>
 
-          <div className="d-flex align-items-center mb-0 mt-4 flex-wrap gap-2">
-            <label className="me-2">Filtrar por fecha:</label>
-            <input
-              type="date"
-              className="form-control w-auto me-2"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-            />
-            <button className="btn btn-success" onClick={() => setSelectedDate("")}>
-              Ver todo el mes
-            </button>
-          </div>
-
-
-          <div className="table-responsive">
-            <table className="table table-striped users-table mt-3 ps-0">
+          <div className="table-responsive mt-4">
+            <table className="table table-striped users-table">
               <thead>
                 <tr>
                   <th>Fecha</th>
@@ -150,7 +179,15 @@ export const AdminVentasDetalle = () => {
               <tbody>
                 {ventas.map((v) => (
                   <tr key={v.id}>
-                    <td>{v.fecha}</td>
+                    <td>
+                      {(() => {
+                        const f = new Date(v.fecha);
+                        const dd = String(f.getDate()).padStart(2, "0");
+                        const mm = String(f.getMonth() + 1).padStart(2, "0");
+                        const yyyy = f.getFullYear();
+                        return `${dd}-${mm}-${yyyy}`;
+                      })()}
+                    </td>
                     <td>{v.monto}</td>
                     <td>{v.turno || "-"}</td>
                     <td>
@@ -169,7 +206,7 @@ export const AdminVentasDetalle = () => {
         </>
       )}
 
-      {/* Modal de edición */}
+      {/* Modal edición */}
       <div className="modal fade" id="editarModal" tabIndex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
@@ -187,12 +224,8 @@ export const AdminVentasDetalle = () => {
               />
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-                Cancelar
-              </button>
-              <button type="button" className="btn btn-primary" onClick={guardarEdicion}>
-                Guardar cambios
-              </button>
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="button" className="btn btn-primary" onClick={guardarEdicion}>Guardar cambios</button>
             </div>
           </div>
         </div>
@@ -200,4 +233,3 @@ export const AdminVentasDetalle = () => {
     </div>
   );
 };
-

@@ -2,13 +2,15 @@ import random
 import os
 import sys
 import unicodedata
+from calendar import monthrange
+from datetime import date, timedelta
+
 sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
 
 from api.models import Proveedor, Gasto, Usuario, Restaurante, Venta
 from app import app, db
 from werkzeug.security import generate_password_hash
 from dotenv import load_dotenv
-from datetime import date, timedelta
 
 load_dotenv()
 
@@ -59,9 +61,17 @@ with app.app_context():
 
     for i, restaurante in enumerate(restaurantes):
         clean_name = limpiar_email(restaurante.nombre)
+
+        if restaurante.nombre == "La Marea":
+            email_encargado = "heiderfandino@gmail.com"
+            email_chef = "heideralfonsoo@gmail.com"
+        else:
+            email_encargado = f"encargado.{clean_name}@ohmychef.com"
+            email_chef = f"chef.{clean_name}@ohmychef.com"
+
         encargado = Usuario(
             nombre=f"{nombres_encargado[i]} {random.choice(apellidos)}",
-            email=f"encargado.{clean_name}@ohmychef.com",
+            email=email_encargado,
             rol="encargado",
             status="active",
             restaurante_id=restaurante.id,
@@ -69,7 +79,7 @@ with app.app_context():
         )
         chef = Usuario(
             nombre=f"{nombres_chef[i]} {random.choice(apellidos)}",
-            email=f"chef.{clean_name}@ohmychef.com",
+            email=email_chef,
             rol="chef",
             status="active",
             restaurante_id=restaurante.id,
@@ -80,7 +90,7 @@ with app.app_context():
 
     admin = Usuario(
         nombre="Admin Principal",
-        email="admin@ohmychef.com",
+        email="ohmychefapp@gmail.com",
         rol="admin",
         status="active",
         restaurante_id=None,
@@ -91,31 +101,53 @@ with app.app_context():
 
     print("👤 Admin y usuarios creados.")
 
-    categorias = ["alimentos", "bebidas", "limpieza", "otros"]
-
     print("➕ Creando proveedores...")
+
+    proveedores_reales = [
+        {"nombre": "Gas y Energía", "categoria": "otros"},
+        {"nombre": "Distribuidora Coca-Cola", "categoria": "bebidas"},
+        {"nombre": "Bebidas Alianza", "categoria": "bebidas"},
+        {"nombre": "Limpieza Total", "categoria": "limpieza"},
+        {"nombre": "Soluciones Higiénicas", "categoria": "limpieza"},
+        {"nombre": "Embalajes Ruiz", "categoria": "otros"},
+        {"nombre": "Lácteos del Sur", "categoria": "alimentos"},
+        {"nombre": "Aguas Claras", "categoria": "bebidas"},
+        {"nombre": "Verduras Frescas", "categoria": "alimentos"},
+        {"nombre": "Higiene Express", "categoria": "limpieza"},
+    ]
+
+    proveedores_por_restaurante = {}
+
     for restaurante in restaurantes:
-        clean_name = limpiar_email(restaurante.nombre)
-        for i in range(10):
+        lista = []
+        for p in proveedores_reales:
+            clean_rest = limpiar_email(restaurante.nombre)
+            email = f"{p['nombre'].lower().replace(' ', '').replace('&','')}@{clean_rest}.com"
             prov = Proveedor(
-                nombre=f"Proveedor {i+1} - {restaurante.nombre}",
-                categoria=random.choice(categorias),
-                direccion=f"Calle Proveedor {i+1}, Ciudad",
+                nombre=f"{p['nombre']} - {restaurante.nombre}",
+                categoria=p["categoria"],
+                direccion=f"Calle Proveedor, Ciudad",
                 telefono=f"6{random.randint(10000000, 99999999)}",
-                email_contacto=f"prov{i+1}@{clean_name}.com",
+                email_contacto=email,
                 restaurante_id=restaurante.id
             )
             db.session.add(prov)
+            lista.append(prov)
+        proveedores_por_restaurante[restaurante.id] = lista
+
     db.session.commit()
 
     print("💰 Generando gastos y ventas desde enero...")
+
     fecha_inicio = date(2025, 1, 1)
-    fecha_fin = date(2025, 6, 25)  # 📌 Generar solo hasta el 25 de junio
+    hoy = date.today()
+    ultimo_dia = monthrange(hoy.year, hoy.month)[1]
+    fecha_fin = date(hoy.year, hoy.month, ultimo_dia)
     dias = (fecha_fin - fecha_inicio).days
 
     for restaurante in restaurantes:
         chef = Usuario.query.filter_by(rol='chef', restaurante_id=restaurante.id).first()
-        proveedores = Proveedor.query.filter_by(restaurante_id=restaurante.id).all()
+        proveedores = proveedores_por_restaurante[restaurante.id]
 
         for i in range(dias):
             fecha = fecha_inicio + timedelta(days=i)
@@ -123,6 +155,7 @@ with app.app_context():
             gastos_del_dia = []
             for _ in range(8):
                 proveedor = random.choice(proveedores)
+
                 if restaurante.estado_gasto == "dentro":
                     monto = round(random.uniform(10, 50), 2)
                 elif restaurante.estado_gasto == "limite":
@@ -137,7 +170,7 @@ with app.app_context():
                     proveedor_id=proveedor.id,
                     usuario_id=chef.id,
                     restaurante_id=restaurante.id,
-                    nota=f"Gasto generado automáticamente"
+                    nota=f"Gasto de {proveedor.nombre}"
                 )
                 db.session.add(gasto)
                 gastos_del_dia.append(monto)
@@ -152,17 +185,14 @@ with app.app_context():
                 porcentaje = random.uniform(0.36, 0.42)
 
             total_venta_dia = round(total_gastos_dia / porcentaje, 2)
-            venta_m = round(total_venta_dia * 0.5, 2)
-            venta_n = round(total_venta_dia - venta_m, 2)
 
-            for turno, monto in zip(["mañana", "noche"], [venta_m, venta_n]):
-                venta = Venta(
-                    fecha=fecha,
-                    turno=turno,
-                    monto=monto,
-                    restaurante_id=restaurante.id
-                )
-                db.session.add(venta)
+            venta = Venta(
+                fecha=fecha,
+                turno="tarde",
+                monto=total_venta_dia,
+                restaurante_id=restaurante.id
+            )
+            db.session.add(venta)
 
     db.session.commit()
     print("✅ Base de datos reiniciada con éxito.")

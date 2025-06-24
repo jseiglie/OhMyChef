@@ -4,27 +4,45 @@ import { MonedaSimbolo } from "../../services/MonedaSimbolo";
 
 const VentaModal = ({ onSave, onClose }) => {
   const simbolo = MonedaSimbolo();
+
   const [form, setForm] = useState({
     fecha: new Date().toISOString().split("T")[0],
     monto: "",
     turno: "mañana",
   });
+
   const [mensaje, setMensaje] = useState("");
+
   const handleChange = (e) => {
     setForm((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
   };
+
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!form.monto || parseFloat(form.monto) < 0) {
-      setMensaje("El monto debe ser mayor o igual a 0");
-      return;
-    }
-    setMensaje("");
+  e.preventDefault();
+
+  if (!form.monto || parseFloat(form.monto) < 0) {
+    setMensaje("⚠️ El monto debe ser mayor o igual a 0.");
+    return;
+  }
+
+  setMensaje("");
+
+  try {
     await onSave(form);
-  };
+  } catch (error) {
+    const status = error?.response?.status || error?.status || error?.code;
+
+    if (status === 409) {
+      setMensaje("⚠️ Ya hay una venta registrada para ese día y turno.");
+    } else {
+      setMensaje("⚠️ Ya hay una venta registrada para ese día y turno..");
+    }
+  }
+}
+
   return (
     <div className="modaal-backdrop">
       <div className="modaal">
@@ -52,9 +70,13 @@ const VentaModal = ({ onSave, onClose }) => {
             <option value="tarde">Tarde</option>
             <option value="noche">Noche</option>
           </select>
+
           {mensaje && (
-            <p className="text-danger text-center mt-2 mb-0 fw-bold">{mensaje}</p>
+            <div className="alert alert-danger text-center mt-3 py-2 fw-bold">
+              {mensaje}
+            </div>
           )}
+
           <div className="modaal-actions mt-3">
             <button type="button" onClick={onClose} className="btn-cancelar">
               Cancelar
@@ -68,4 +90,5 @@ const VentaModal = ({ onSave, onClose }) => {
     </div>
   );
 };
+
 export default VentaModal;

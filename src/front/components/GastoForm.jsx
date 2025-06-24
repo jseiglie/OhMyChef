@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import gastoServices from "../services/GastoServices";
-
 export const GastoForm = () => {
   const { store } = useGlobalReducer();
   const user = store.user;
@@ -12,6 +11,7 @@ export const GastoForm = () => {
   const [gastos, setGastos] = useState([
     { proveedor_id: "", categoria: "", monto: "", nota: "" },
   ]);
+  const [activo, setActivo] = useState(false);
   const [proveedores, setProveedores] = useState([]);
   const [mensaje, setMensaje] = useState("");
 
@@ -37,6 +37,7 @@ export const GastoForm = () => {
 
   const agregarGasto = () => {
     setGastos([...gastos, { proveedor_id: "", categoria: "", monto: "", nota: "" }]);
+    setActivo(true);
   };
 
   const eliminarGasto = (index) => {
@@ -46,34 +47,44 @@ export const GastoForm = () => {
   };
 
   const registrarGastos = async () => {
-    const datos = {
+    const datos = gastos.map((g) => ({
+      ...g,
       fecha,
-      gastos,
+      usuario_id: user.id,
       restaurante_id: user.restaurante_id,
-    };
+    }));
 
     try {
-      await gastoServices.crearGasto(datos);
-      setMensaje("Gastos registrados correctamente");
-      setGastos([{ proveedor_id: "", categoria: "", monto: "", nota: "" }]);
+      await gastoServices.registrarGastoMultiple(datos);
+      setMensaje("Gastos registrados correctamente ✅");
+
+      setTimeout(() => {
+        navigate(`/${user.rol}/gastos`, {
+          state: { registrado: true, view: "diario" },
+        });
+      }, 1200);
     } catch (error) {
-      setMensaje("Error al registrar los gastos");
+      console.error("Error al registrar:", error);
+      setMensaje("Error al registrar los gastos ❌");
     }
   };
 
   return (
     <div className="container-fluid px-4 py-4">
-      <button onClick={() => navigate("/encargado/gastos")} className="btn btn-outline-secondary mb-3">
+      <button
+        onClick={() => navigate("/encargado/gastos")}
+        className="btn btn-outline-secondary mb-3"
+      >
         ← Volver a gastos
       </button>
 
       <h3 className="mb-2">Registrar Gastos del día</h3>
-      <div className="bg-orange text-white py-2 px-3 mb-4 rounded">
+      <div className="bg-orange d-inline-block text-white py-2 px-3 mb-4 rounded">
         Mes actual: {nombreMes.toUpperCase()}
       </div>
 
-      <div className="bg-white p-4 shadow rounded w-100">
-        <div className="mb-4">
+      <div className="bg-white col-12 col-sm-12 col-md-12 col-lg-10 col-xx-9 p-4 shadow rounded">
+        <div className="mb-4 col-12 col-sm-12 col-md-6 col-lg-3">
           <label className="form-label fw-semibold">Fecha</label>
           <input
             type="date"
@@ -151,10 +162,16 @@ export const GastoForm = () => {
         ))}
 
         <div className="d-flex gap-3 mt-4">
-          <button className="btn btn-outline-primary" onClick={agregarGasto}>
+          <button
+            className={`btn btn-outline-orange ${activo ? "active" : "nobg"}`}
+            onClick={agregarGasto}
+          >
             + Añadir otro gasto
           </button>
-          <button className="btn btn-primary" onClick={registrarGastos}>
+          <button
+            className={`btn btn-outline-orange ${!activo ? "active" : "nobg"}`}
+            onClick={registrarGastos}
+          >
             Registrar Gastos
           </button>
         </div>

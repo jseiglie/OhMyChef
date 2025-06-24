@@ -102,6 +102,21 @@ verificarVentas: async (id, token) => {
     throw error;
   }
 },
+
+getRestaurante: async (id) => {
+  const token = sessionStorage.getItem("token");
+  const response = await fetch(`${backendUrl}/api/restaurantes/${id}`, {
+    method: "GET",
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+  if (!response.ok) {
+    throw new Error("No se pudo obtener el restaurante");
+  }
+  return await response.json();
+},
+
 };
 
 export default restauranteService;

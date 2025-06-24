@@ -63,7 +63,7 @@ export const TortaCategorias = () => {
 
   return (
     <div className="row">
-      <div className="col-md-3 d-flex flex-column gap-3 ms-4">
+      <div className="col-11 col-sm-11 col-md-3 d-flex flex-column gap-3 pe-md-0 ms-4">
         {leyenda.map((item, i) => {
           let icono = "📦";
           const nombre = item.label.toLowerCase();
