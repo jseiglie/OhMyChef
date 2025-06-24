@@ -49,16 +49,26 @@ export const DetalleGastosMensual = () => {
   }, [view, mes, ano]);
 
   useEffect(() => {
-  if (view !== "diario") return;
-  gastoServices
-    .getGastos()
-    .then((all) => {
+  if (view !== "diario" || !user?.restaurante_id) return;
+
+  const fetchGastos = async () => {
+    try {
+      const all = await gastoServices.getGastos();
+      if (!Array.isArray(all)) throw new Error("Datos no válidos");
+
       const filtered = all
-        .filter((g) => g.restaurante_id === user?.restaurante_id)
+        .filter((g) => g.restaurante_id === user.restaurante_id)
         .filter((g) => g.fecha === selectedDate);
+
       setDailyData(filtered);
-    })
-    .catch(() => setMensaje("Error al obtener gastos diarios"));
+    } catch (err) {
+      console.error("❌ Error al obtener gastos:", err);
+      setMensaje("Error al obtener gastos diarios");
+      setTipoMensaje("error");
+    }
+  };
+
+  fetchGastos();
 }, [view, selectedDate, user?.restaurante_id]);
 
   useEffect(() => {
@@ -255,9 +265,26 @@ export const DetalleGastosMensual = () => {
                       </td>
                       <td>{g.nota}</td>
                       <td>
-                        <button className="action-icon-button edit-button" onClick={() => abrirModalEditar(g.id)} title="Editar gasto">
-                          ✏️
-                        </button>
+                       <button
+  className="action-icon-button edit-button"
+  onClick={() => abrirModalEditar(g.id)}
+  title="Editar gasto"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="feather feather-edit-2"
+  >
+    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+  </svg>
+</button>
                         <button className="action-icon-button delete-button" onClick={() => eliminar(g.id)} title="Eliminar gasto">
                           🗑️
                         </button>

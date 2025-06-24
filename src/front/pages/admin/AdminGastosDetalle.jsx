@@ -25,18 +25,28 @@ const AdminGastosDetalle = () => {
     gastoServices
       .getProveedores(restauranteId)
       .then((list) => setProveedoresList(list))
-      .catch(() => { });
+      .catch(() => {});
   }, [restauranteId]);
 
   useEffect(() => {
     if (!restauranteId) return;
-    gastoServices
-      .getGastos(restauranteId)
-      .then((all) => {
+
+    const fetchGastos = async () => {
+      try {
+        const all = await gastoServices.getGastos(restauranteId);
+
+        if (!Array.isArray(all)) throw new Error("Respuesta inválida");
+
         const filtered = all.filter((g) => g.fecha === selectedDate);
         setDailyData(filtered);
-      })
-      .catch(() => setMensaje("Error al obtener gastos diarios"));
+        setMensaje(""); // limpia mensaje de error si éxito
+      } catch (err) {
+        console.error("❌ Error al obtener gastos diarios:", err);
+        setMensaje("Error al obtener gastos diarios");
+      }
+    };
+
+    fetchGastos();
   }, [selectedDate, restauranteId]);
 
   useEffect(() => {
