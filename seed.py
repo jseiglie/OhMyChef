@@ -124,7 +124,7 @@ with app.app_context():
             clean_rest = limpiar_email(restaurante.nombre)
             email = f"{p['nombre'].lower().replace(' ', '').replace('&','')}@{clean_rest}.com"
             prov = Proveedor(
-                nombre=f"{p['nombre']} - {restaurante.nombre}",
+                nombre=p["nombre"],
                 categoria=p["categoria"],
                 direccion=f"Calle Proveedor, Ciudad",
                 telefono=f"6{random.randint(10000000, 99999999)}",
@@ -153,7 +153,7 @@ with app.app_context():
             fecha = fecha_inicio + timedelta(days=i)
 
             gastos_del_dia = []
-            for _ in range(8):
+            for _ in range(3):  # ← SOLO 3 gastos diarios
                 proveedor = random.choice(proveedores)
 
                 if restaurante.estado_gasto == "dentro":

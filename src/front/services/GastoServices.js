@@ -51,14 +51,13 @@ gastoServices.resumenMensual = async (mes, ano, restaurante_id) => {
 };
 
 
-gastoServices.getGastos = async (restaurante_id, fecha) => {
+gastoServices.getGastos = async () => {
   const token = sessionStorage.getItem("token");
-  const resp = await fetch(
-    `${backendUrl}/api/gastos?restaurante_id=${restaurante_id}&fecha=${fecha}`,
-    { headers: { Authorization: `Bearer ${token}` } }
-  );
-  if (!resp.ok) throw new Error("Error al obtener gastos del día");
-  return await resp.json(); 
+  const resp = await fetch(`${backendUrl}/api/gastos`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!resp.ok) throw new Error("Error al obtener gastos");
+  return await resp.json();
 };
 
 gastoServices.editarGasto = async (id, gastoData) => {

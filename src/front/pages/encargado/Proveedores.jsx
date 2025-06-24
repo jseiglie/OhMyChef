@@ -77,12 +77,15 @@ export const Proveedores = () => {
 
   return (
     <div className="dashboard-container ">
+      
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h1 className="dashboard-title">Proveedores</h1>
+        
         <button className="btn" onClick={abrirModalCrear}>
           + Nuevo Proveedor
         </button>
       </div>
+      
 
       {mensajeError && <div className="alert alert-danger">{mensajeError}</div>}
       {mensajeExito && <div className="alert alert-success">{mensajeExito}</div>}

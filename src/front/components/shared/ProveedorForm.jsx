@@ -65,12 +65,14 @@ export const ProveedorForm = ({ proveedor = null, onSuccess, onCancel }) => {
   };
 
   return (
+    
     <form onSubmit={handleSubmit}>
       <h5>{proveedor ? "Editar Proveedor" : "Nuevo Proveedor"}</h5>
       {error && <div className="alert alert-danger">{error}</div>}
       {successMsg && <div className="alert alert-success">{successMsg}</div>}
       <div className="mb-3">
         <label className="form-label">Nombre</label>
+        
         <input
           type="text"
           name="nombre"

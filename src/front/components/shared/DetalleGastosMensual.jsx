@@ -49,15 +49,17 @@ export const DetalleGastosMensual = () => {
   }, [view, mes, ano]);
 
   useEffect(() => {
-    if (view !== "diario" || !user?.restaurante_id) return;
-    gastoServices
-      .getGastos(user.restaurante_id)
-      .then((all) => {
-        const filtered = all.filter((g) => g.fecha === selectedDate);
-        setDailyData(filtered);
-      })
-      .catch(() => setMensaje("Error al obtener gastos diarios"));
-  }, [view, selectedDate]);
+  if (view !== "diario") return;
+  gastoServices
+    .getGastos()
+    .then((all) => {
+      const filtered = all
+        .filter((g) => g.restaurante_id === user?.restaurante_id)
+        .filter((g) => g.fecha === selectedDate);
+      setDailyData(filtered);
+    })
+    .catch(() => setMensaje("Error al obtener gastos diarios"));
+}, [view, selectedDate, user?.restaurante_id]);
 
   useEffect(() => {
     const el = document.getElementsByClassName("custom-sidebar")[0];
@@ -122,6 +124,13 @@ export const DetalleGastosMensual = () => {
 
   return (
     <div className="dashboard-container ">
+      <button
+  onClick={() => navigate(-1)}
+  className="btn btn-outline-secondary mb-3"
+>
+  ← Volver
+</button>
+
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h1 className="dashboard-title">Detalle de Gastos</h1>
         <button className="btn" onClick={() => navigate(`/${user.rol}/gastos/registrar`)}>

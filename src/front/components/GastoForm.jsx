@@ -72,10 +72,10 @@ export const GastoForm = () => {
   return (
     <div className="container-fluid px-4 py-4">
       <button
-        onClick={() => navigate("/encargado/gastos")}
+        onClick={() => navigate(-1)}
         className="btn btn-outline-secondary mb-3"
       >
-        ← Volver a gastos
+        ← Volver
       </button>
 
       <h3 className="mb-2">Registrar Gastos del día</h3>
